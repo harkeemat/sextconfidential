@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "778372796063",
+    "project_id": "sextconfidential",
+    "storage_bucket": "sextconfidential.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:778372796063:android:23813d603481321daf5caa",
+        "android_client_info": {
+          "package_name": "com.coderzbar.sextconfidential.sextconfidential"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "778372796063-25l34meb1rg88grpgo59lnmlhqgji4ej.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVcfsZPwwzBUAFgbFJiFwnTMzJM1yUWy0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "778372796063-25l34meb1rg88grpgo59lnmlhqgji4ej.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "778372796063-0su89i40b8e3bjjsf720svg2mukuh6pa.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.coderzbar.sextconfidential.sextconfidential",
+                "app_store_id": "6450113311"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

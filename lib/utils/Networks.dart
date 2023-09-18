@@ -1,0 +1,35 @@
+class Networks{
+  static String baseurl = "https://www.sextconfidential.com/api/";
+  // static String baseurl = "https://coderzbar.info/dev/sexo/api/";
+  static String login = "login";
+  static String changepassword = "changepassword";
+  static String getprofile = "getprofile";
+  static String deactivateaccount = "deactivateaccount";
+  static String updatetimezone = "updatetimezone";
+  static String updatepayoutinfo = "updatepayoutinfo";
+  static String updateprofile = "updateprofile";
+  static String updateonline = "updateonline";
+  static String massmessagedetail = "massmessagedetail";
+  static String massmessage = "massmessage";
+  static String getpayoutinfo = "getpayoutinfo";
+  static String newpost = "newpost";
+  static String autocompletebase = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=";
+  static String myposts = "myposts";
+  static String searchuser = "searchuser";
+  static String creategroup = "creategroup";
+  static String getgroup = "getgroup";
+  static String deletegroup = "deletegroup";
+  static String pinposts = "pinposts";
+  static String deletepost = "deletepost";
+  static String updatepost = "updatepost";
+  static String editgroup = "editgroup";
+  static String updategroup = "updategroup";
+  static String chatlist = "chat-list";
+  static String chatmessage = "chat-message";
+  static String chatmessagesend = "chat-message-send";
+  static String favorite = "favorite";
+  static String chatmedia = "chat-media";
+  static String chathide = "chat-hide";
+  static String chatblock = "chat-block";
+  static String chatreport = "chat-report";
+}
