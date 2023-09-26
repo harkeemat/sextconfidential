@@ -32,7 +32,7 @@ class LocationdenialScreenState extends State<LocationdenialScreen> {
   static const kGoogleApiKey = "AIzaSyBQtYk9yhLQ-VX3Y2dPuZ0phbE0CSBwVps";
   int suggestionsCount = 12;
   final focus = FocusNode();
-  bool? _isSelected;
+  //bool? _isSelected;
   Googleplacepojo? googleplacepojo;
   @override
   void initState() {
@@ -42,8 +42,7 @@ class LocationdenialScreenState extends State<LocationdenialScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final suggestions =
-        List.generate(suggestionsCount, (index) => 'suggestion $index');
+    //final suggestions =List.generate(suggestionsCount, (index) => 'suggestion $index');
     return Scaffold(
       backgroundColor: Appcolors().backgroundcolor,
       appBar: AppBar(

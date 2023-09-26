@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sextconfidential/utils/Appcolors.dart';
 import 'package:sizer/sizer.dart';
 
+// ignore: must_be_immutable
 class Videoscreen extends StatefulWidget {
   String videopath;
   Videoscreen({super.key, required this.videopath});

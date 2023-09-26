@@ -373,7 +373,7 @@ class SidedrawerState extends State<Sidedrawer> {
     sharedPreferences = await SharedPreferences.getInstance();
     setState((){
       usertype = sharedPreferences!.getString("usertype")!.toString();
-      username=usertype=="user" ? sharedPreferences!.getString("dname")!??"User Name" :sharedPreferences!.getString("stagename")!??"User Name";
+      username=usertype=="user" ? sharedPreferences!.getString("dname")?? "" :sharedPreferences!.getString("stagename")??"User Name";
       token=sharedPreferences!.getString("token")!;
       switchlist[0]=sharedPreferences!.getBool("phonecall")!;
       switchlist[1]=sharedPreferences!.getBool("videocall")!;

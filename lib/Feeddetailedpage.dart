@@ -17,6 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
 
+// ignore: must_be_immutable
 class Feeddetailedpage extends StatefulWidget {
   String? type, url, ago, text, views, likes, unlocks, postid, pinstatus;
   int? posttype;

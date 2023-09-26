@@ -15,6 +15,7 @@ import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
 import 'Bottomnavigation.dart';
 
+// ignore: must_be_immutable
 class UserprofileScreen extends StatefulWidget{
   String userid,userimage,username;
   UserprofileScreen({super.key,required this.userid,required this.userimage,required this.username});

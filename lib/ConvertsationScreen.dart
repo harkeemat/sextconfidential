@@ -27,6 +27,7 @@ import 'package:voice_message_package/voice_message_package.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
 
+// ignore: must_be_immutable
 class ConvertsationScreen extends StatefulWidget {
   String userid, userimage, username;
   ConvertsationScreen(
@@ -108,7 +109,7 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
           leadingWidth: 7.w,
           title: GestureDetector(
             onTap: () {
-              print("Scroll down");
+             // print("Scroll down");
               // _scrollDown();
               Navigator.push(
                   context,
@@ -207,7 +208,7 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     responsestatus
-                        ? chatmessagespojo!.data!.isNotEmpty||chatmessagespojo!.data==null 
+                        ? chatmessagespojo!.data!.isNotEmpty && chatmessagespojo!.data!=null 
                             ? Expanded(
                                 child: AnimationLimiter(
                                   child: ListView.builder(
@@ -219,7 +220,6 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
                                     itemCount: chatmessagespojo!.data!.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
-                                          print("index${chatmessagespojo!.data}");
                                       return AnimationConfiguration
                                           .staggeredList(
                                         position: index,
@@ -911,12 +911,14 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
   }
 
   Widget sendermessage(int index) {
+
     // setState((){
     chatcurrentdate = chatmessagespojo!.data!
         .elementAt(index).createdAt
         .toString()
         .substring(0, 13);
     // });
+    
     return Column(
       children: [
         Container(
@@ -1165,7 +1167,7 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
     if (pickedFile != null) {
       setState(() {
         imageFile = File(pickedFile.path);
-        print("Image path:-${pickedFile.path}");
+        //print("Image path:-${pickedFile.path}");
         sendmessage();
       });
     }
@@ -1180,7 +1182,7 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
     if (pickedFile != null) {
       setState(() {
         imageFile = File(pickedFile.path);
-        print("Image path:-${pickedFile.path}");
+       // print("Image path:-${pickedFile.path}");
         sendmessage();
       });
     }
@@ -1192,7 +1194,7 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
 
     if (pickedFile != null) {
       imageFile = File(pickedFile.path);
-      print("Video path:-${pickedFile.path}");
+     // print("Video path:-${pickedFile.path}");
       sendmessage();
       // print("Video path:-${pickedFile.path}");
     }
@@ -1259,7 +1261,7 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
       imageFile = File(filePath!);
     });
     sendmessage();
-    print("Recorded file path:${recordingaudio!.path}");
+    //print("Recorded file path:${recordingaudio!.path}");
   }
 
   Future<bool> checkPermission() async {
@@ -1291,14 +1293,14 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
       username = sharedPreferences.getString("stagename");
       chatconversationlisting();
     });
-    print("Token value:-$token");
+    //print("Token value:-$token");
     if (!mounted) { 
       return;
  }
   setState(() {
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
         chatconversationlisting();
-        print("Chat conversin api call");
+        //print("Chat conversin api call");
       });
     });
     
@@ -1318,7 +1320,7 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
     
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
-        print("323232:-$jsonResponse");
+        
         setState(() {
           responsestatus = true;
         });
@@ -1327,12 +1329,13 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
             jsonResponse["message"].toString(), context);
         Navigator.pop(context);
       } else {
-        print("jsonResponse:-$jsonResponse");
+        //print("jsonResponse:-$jsonResponse");
         setState(() {
           responsestatus = true;
           //print("Message:-${jsonResponse["message"]}");
 
           chatmessagespojo = Chatmessagespojo.fromJson(jsonResponse);
+          //print("323232:-$chatmessagespojo");
           // chatmessagespojo2=chatmessagespojonew;
           //   if(chatmessagespojo!=chatmessagespojo2){
           //     chatmessagespojo=chatmessagespojo2;
@@ -1343,7 +1346,7 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
             _controller.jumpTo(_controller.position.maxScrollExtent);
             _controller.animateTo(_controller.position.maxScrollExtent,
                 duration: const Duration(milliseconds: 1000), curve: Curves.easeOut);
-            print("New message received!");
+            //print("New message received!");
           }
           messageslength=chatmessagespojo!.data!.length;
         });
@@ -1378,14 +1381,14 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
     //print("token:-${token!}");
     //print("Message:-${messagecontroller.text.trim()}");
     if (imageFile != null) {
-      print("Image message send");
-      print("File path on api call:-${imageFile!.path}");
+      //print("Image message send");
+      //print("File path on api call:-${imageFile!.path}");
       request.files.add(
         await http.MultipartFile.fromPath("file", imageFile!.path,
             filename: imageFile!.path),
       );
     } else {
-      print("Simple message send");
+      //print("Simple message send");
       request.fields["file"] = messagecontroller.text;
     }
     var response = await request.send();
@@ -1405,12 +1408,12 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
           messagecontroller.clear();
           // Helpingwidgets.successsnackbar(
           //     jsonData["message"].toString(), context);
-          print("Response:${jsonData["message"]}");
+          //print("Response:${jsonData["message"]}");
           // Navigator.pop(context);
         }
       } else {
         Helpingwidgets.failedsnackbar(jsonData["message"].toString(), context);
-        print("Response:${jsonData["message"]}");
+       // print("Response:${jsonData["message"]}");
         // Navigator.pop(context);
       }
     });
