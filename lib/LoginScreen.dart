@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sextconfidential/Bottomnavigation.dart';
@@ -12,9 +11,12 @@ import 'package:sextconfidential/utils/StringConstants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:sizer/sizer.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   LoginScreenState createState() => LoginScreenState();
 }
@@ -24,14 +26,15 @@ class LoginScreenState extends State<LoginScreen> {
   TextEditingController passwordcontoller = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey(); // Create a key
   Getprofilepojo? getprofilepojo;
-  bool passwordobsecure=true;
+  bool passwordobsecure = true;
   String? userstatus;
-  GlobalKey<State>key=GlobalKey();
+  GlobalKey<State> key = GlobalKey();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,10 +56,10 @@ class LoginScreenState extends State<LoginScreen> {
                       height: 30.h,
                       decoration: const BoxDecoration(
                           image: DecorationImage(
-                              image:
-                                  AssetImage("assets/images/loginbgtop.png"),fit: BoxFit.fill)),
+                              image: AssetImage("assets/images/loginbgtop.png"),
+                              fit: BoxFit.fill)),
                       child: Center(
-                          child: new Image.asset(
+                          child: Image.asset(
                         "assets/images/logo.png",
                         height: 12.h,
                       )),
@@ -101,7 +104,10 @@ class LoginScreenState extends State<LoginScreen> {
                             child: TextFormField(
                               // autovalidateMode: AutovalidateMode.always,
                               cursorColor: Appcolors().loginhintcolor,
-                              style: TextStyle(color:Appcolors().whitecolor,fontSize: 12.sp,),
+                              style: TextStyle(
+                                color: Appcolors().whitecolor,
+                                fontSize: 12.sp,
+                              ),
                               controller: emailcontoller,
                               decoration: InputDecoration(
                                   // prefix: Container(
@@ -166,7 +172,10 @@ class LoginScreenState extends State<LoginScreen> {
                             margin: EdgeInsets.only(left: 3.5.w, right: 3.5.w),
                             child: TextFormField(
                               // autovalidateMode: AutovalidateMode.always,
-                              style: TextStyle(color:Appcolors().whitecolor,fontSize: 12.sp,),
+                              style: TextStyle(
+                                color: Appcolors().whitecolor,
+                                fontSize: 12.sp,
+                              ),
                               controller: passwordcontoller,
                               obscureText: passwordobsecure,
                               cursorColor: Appcolors().loginhintcolor,
@@ -188,7 +197,8 @@ class LoginScreenState extends State<LoginScreen> {
                                     borderRadius: BorderRadius.circular(15.0),
                                     borderSide: BorderSide(
                                         color: Appcolors().logintextformborder),
-                                  ),focusedErrorBorder: OutlineInputBorder(
+                                  ),
+                                  focusedErrorBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(15.0),
                                     borderSide: BorderSide(
                                         color: Appcolors().logintextformborder),
@@ -210,21 +220,20 @@ class LoginScreenState extends State<LoginScreen> {
                                         "assets/images/lockicon.svg"),
                                   ),
                                   suffixIcon: GestureDetector(
-                                    onTap: (){
+                                    onTap: () {
                                       setState(() {
-                                        if(passwordobsecure==true){
-                                          passwordobsecure=false;
-                                        }else{
-                                          passwordobsecure=true;
+                                        if (passwordobsecure == true) {
+                                          passwordobsecure = false;
+                                        } else {
+                                          passwordobsecure = true;
                                         }
                                         print("Visibility true");
                                       });
                                     },
                                     child: Icon(
-                                      !passwordobsecure?
-                                      Icons.visibility
-                                      :
-                                      Icons.visibility_off_outlined,
+                                      !passwordobsecure
+                                          ? Icons.visibility
+                                          : Icons.visibility_off_outlined,
                                       color: Appcolors().loginhintcolor,
                                     ),
                                   )
@@ -246,18 +255,19 @@ class LoginScreenState extends State<LoginScreen> {
                             height: 3.5.h,
                           ),
                           GestureDetector(
-                            onTap: (){
-                              if(_key.currentState!.validate()){
+                            onTap: () {
+                              if (_key.currentState!.validate()) {
                                 login();
                               }
                             },
                             child: Container(
                               alignment: Alignment.center,
                               width: double.infinity,
-                              margin: EdgeInsets.only(left: 3.5.w, right: 3.5.w),
+                              margin:
+                                  EdgeInsets.only(left: 3.5.w, right: 3.5.w),
                               height: 6.h,
                               decoration: BoxDecoration(
-                                image: DecorationImage(
+                                image: const DecorationImage(
                                     image: AssetImage(
                                         "assets/images/btnbackgroundgradient.png"),
                                     fit: BoxFit.fill),
@@ -283,43 +293,85 @@ class LoginScreenState extends State<LoginScreen> {
           )),
     );
   }
+
   Future<void> login() async {
     Helpingwidgets.showLoadingDialog(context, key);
-    Map data ={
-      "email":emailcontoller.text.trim(),
-      "password":passwordcontoller.text.trim(),
+    Map data = {
+      "email": emailcontoller.text.trim(),
+      "password": passwordcontoller.text.trim(),
     };
-    var jsonResponse = null;
-    var response = await http.post(
-        Uri.parse(Networks.baseurl + Networks.login),
-        body: data
-    );
+    var jsonResponse;
+    var response = await http.post(Uri.parse(Networks.baseurl + Networks.login),
+        body: data);
     jsonResponse = json.decode(response.body);
-    print("jsonResponse:-" + jsonResponse.toString());
+    print("jsonResponse$jsonResponse");
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
-        Helpingwidgets.failedsnackbar(jsonResponse["message"].toString(), context);
+        Helpingwidgets.failedsnackbar(
+            jsonResponse["message"].toString(), context);
       } else {
         Navigator.pop(context);
-        getprofilepojo=Getprofilepojo.fromJson(jsonResponse);
-        SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-        sharedPreferences.setString("token", getprofilepojo!.token!.id.toString());
-        sharedPreferences!.setString("profilepic", getprofilepojo!.token!.image==null?"":getprofilepojo!.token!.image.toString());
-        sharedPreferences!.setString("stagename", getprofilepojo!.token!.stagename.toString());
-        sharedPreferences!.setString("bio", getprofilepojo!.token!.bio.toString());
-        sharedPreferences!.setString("phone", getprofilepojo!.token!.phone.toString());
-        sharedPreferences!.setString("email", getprofilepojo!.token!.email.toString());
-        sharedPreferences!.setString("userstatus", getprofilepojo!.token!.showOnline??"0");
-        sharedPreferences.setBool("phonecall",getprofilepojo!.token!.phoneCalls.toString().toLowerCase()=="yes"?true:false);
-        sharedPreferences.setBool("videocall",getprofilepojo!.token!.videoCalls.toString().toLowerCase()=="yes"?true:false);
+        getprofilepojo = Getprofilepojo.fromJson(jsonResponse);
+
+        SharedPreferences sharedPreferences =
+            await SharedPreferences.getInstance();
+        sharedPreferences.setString(
+            "token", getprofilepojo!.token!.id.toString());
+        sharedPreferences.setString(
+            "dname",
+            getprofilepojo!.token!.dname == null
+                ? ""
+                : getprofilepojo!.token!.dname.toString());
+        sharedPreferences.setString(
+            "profilepic",
+            getprofilepojo!.token!.image == null
+                ? ""
+                : getprofilepojo!.token!.image.toString());
+                sharedPreferences.setString(
+            "usertype",
+            getprofilepojo!.token!.type == null
+                ? "set"
+                : getprofilepojo!.token!.type.toString());
+        sharedPreferences.setString(
+            "stagename", getprofilepojo!.token!.stagename.toString());
+        sharedPreferences.setString(
+            "bio", getprofilepojo!.token!.bio.toString());
+        sharedPreferences.setString(
+            "phone", getprofilepojo!.token!.phone.toString());
+        sharedPreferences.setString(
+            "email", getprofilepojo!.token!.email.toString());
+        sharedPreferences.setString(
+            "userstatus", getprofilepojo!.token!.showOnline ?? "0");
+        sharedPreferences.setBool(
+            "phonecall",
+            getprofilepojo!.token!.phoneCalls.toString().toLowerCase() == "yes"
+                ? true
+                : false);
+        sharedPreferences.setBool(
+            "videocall",
+            getprofilepojo!.token!.videoCalls.toString().toLowerCase() == "yes"
+                ? true
+                : false);
         sharedPreferences.setBool("loginstatus", true);
-        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-            Bottomnavigation()), (Route<dynamic> route) => false);
-        Helpingwidgets.successsnackbar(jsonResponse["message"].toString(), context);
-        print("Response:${jsonResponse["message"]}");
+        
+        //token update after user login
+        Map tokenupdate = {
+          "token": getprofilepojo!.token!.id.toString(),
+          "notification_token": await FirebaseMessaging.instance.getToken(),
+        };
+       // print("fdfdfdf${tokenupdate}");
+        await http.post(Uri.parse(Networks.baseurl + Networks.updatetoken),
+            body: tokenupdate);
+
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const Bottomnavigation()),
+            (Route<dynamic> route) => false);
+        Helpingwidgets.successsnackbar(
+            jsonResponse["message"].toString(), context);
       }
     } else {
-      Helpingwidgets.failedsnackbar(jsonResponse["message"].toString(), context);
+      Helpingwidgets.failedsnackbar(
+          jsonResponse["message"].toString(), context);
       Navigator.pop(context);
     }
   }

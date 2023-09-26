@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:appinio_video_player/appinio_video_player.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sextconfidential/Bottomnavigation.dart';
@@ -54,7 +53,7 @@ class FeeddetailedpageState extends State<Feeddetailedpage> {
     // TODO: implement initState
     super.initState();
     getsharedpreference();
-    print("Type:-" + widget.posttype.toString());
+    print("Type:-${widget.posttype}");
     if (widget.type == "mp4") {
       startvideo();
     }
@@ -138,7 +137,7 @@ class FeeddetailedpageState extends State<Feeddetailedpage> {
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(2.h),
                                       shape: BoxShape.rectangle,
-                                      image: DecorationImage(
+                                      image: const DecorationImage(
                                           image: AssetImage(
                                               "assets/images/imageplaceholder.png"),
                                           fit: BoxFit.cover)),
@@ -209,7 +208,7 @@ class FeeddetailedpageState extends State<Feeddetailedpage> {
                         onChanged: (value) {
                           UnpinMenuItems.onChanged(context,
                               value as UnpinCustomMenuItem);
-                          print("Value:-" + value.text);
+                          print("Value:-${value.text}");
                           if (value.text ==
                               StringConstants.editpost) {
                             setState(() {
@@ -288,7 +287,7 @@ class FeeddetailedpageState extends State<Feeddetailedpage> {
                                 onChanged: (value) {
                                   MenuItems.onChanged(
                                       context, value as CustomMenuItem);
-                                  print("Value:-" + value.text);
+                                  print("Value:-${value.text}");
                                   if (value.text == StringConstants.editpost) {
                                     setState(() {
                                       editpost = true;
@@ -353,7 +352,7 @@ class FeeddetailedpageState extends State<Feeddetailedpage> {
                                 onChanged: (value) {
                                   ScheduledMenuItems.onChanged(context,
                                       value as ScheduledCustomMenuItem);
-                                  print("Value:-" + value.text);
+                                  print("Value:-${value.text}");
                                   if (value.text == StringConstants.editpost) {
                                     setState(() {
                                       editpost = true;
@@ -406,7 +405,7 @@ class FeeddetailedpageState extends State<Feeddetailedpage> {
                           child: Helpingwidgets().customloader(),
                         )
                       : Container(
-                          padding: EdgeInsets.all(5),
+                          padding: const EdgeInsets.all(5),
                           decoration: BoxDecoration(
                               color: Colors.black,
                               borderRadius: BorderRadius.circular(20)),
@@ -422,7 +421,7 @@ class FeeddetailedpageState extends State<Feeddetailedpage> {
                             // VideoPlayer(
                             //     _controller),
                           ))
-                  : Container(
+                  : SizedBox(
                       width: double.infinity,
                       height: 50.h,
                       child: CachedNetworkImage(
@@ -538,7 +537,7 @@ class FeeddetailedpageState extends State<Feeddetailedpage> {
                                         alignment: Alignment.center,
                                         width: 30.w,
                                         decoration: BoxDecoration(
-                                            image: DecorationImage(
+                                            image: const DecorationImage(
                                                 image: AssetImage(
                                                     "assets/images/btnbackgroundgradient.png"),
                                                 fit: BoxFit.fill),
@@ -588,13 +587,13 @@ class FeeddetailedpageState extends State<Feeddetailedpage> {
                     ],
                   )),
               widget.posttype == 0
-                  ? Container(
+                  ? SizedBox(
                       width: 75.w,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Container(
+                          SizedBox(
                             width: 20.w,
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -613,7 +612,7 @@ class FeeddetailedpageState extends State<Feeddetailedpage> {
                               ],
                             ),
                           ),
-                          Container(
+                          SizedBox(
                             width: 20.w,
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.end,
@@ -632,7 +631,7 @@ class FeeddetailedpageState extends State<Feeddetailedpage> {
                               ],
                             ),
                           ),
-                          Container(
+                          SizedBox(
                             width: 20.w,
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.end,
@@ -655,7 +654,7 @@ class FeeddetailedpageState extends State<Feeddetailedpage> {
                         ],
                       ),
                     )
-                  : SizedBox(),
+                  : const SizedBox(),
               SizedBox(
                 height: 1.h,
               ),
@@ -672,8 +671,8 @@ class FeeddetailedpageState extends State<Feeddetailedpage> {
             print("Video working");
             var durationOfVideo =
                 videoPlayerController.value.position.inSeconds.round();
-            print("Duration of video:-" + durationOfVideo.toString());
-            debugPrint("========" + _controller.value.duration.toString());
+            print("Duration of video:-$durationOfVideo");
+            debugPrint("========${_controller.value.duration}");
           }));
     _customVideoPlayerController = CustomVideoPlayerController(
       context: context,
@@ -683,12 +682,12 @@ class FeeddetailedpageState extends State<Feeddetailedpage> {
       ..initialize().then(
         (_) {
           setState(() {
-            debugPrint("========" + _controller.value.duration.toString());
+            debugPrint("========${_controller.value.duration}");
             print("Video Started");
             videostatus = true;
             var durationOfVideo =
                 videoPlayerController.value.position.inSeconds.round();
-            print("Duration of videos:-" + durationOfVideo.toString());
+            print("Duration of videos:-$durationOfVideo");
           });
         },
       );
@@ -699,7 +698,7 @@ class FeeddetailedpageState extends State<Feeddetailedpage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-              shape: RoundedRectangleBorder(
+              shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10.0))),
               backgroundColor: Appcolors().dialogbgcolor,
               //title: Text("Image Picker"),
@@ -790,15 +789,15 @@ class FeeddetailedpageState extends State<Feeddetailedpage> {
       userprofilepic = sharedPreferences.getString("profilepic");
       username = sharedPreferences.getString("stagename");
     });
-    print("Token value:-" + token.toString());
-    print("Userprofile value:-" + userprofilepic.toString());
+    print("Token value:-$token");
+    print("Userprofile value:-$userprofilepic");
   }
 
   Widget pinnedpost() {
     return Container(
-        padding: EdgeInsets.all(6),
+        padding: const EdgeInsets.all(6),
         width: 6.w,
-        margin: EdgeInsets.only(right: 10),
+        margin: const EdgeInsets.only(right: 10),
         alignment: Alignment.center,
         decoration: BoxDecoration(
             border: Border.all(color: Appcolors().gradientcolorsecond),
@@ -820,12 +819,12 @@ class FeeddetailedpageState extends State<Feeddetailedpage> {
       "postid": postid.toString(),
       "text": postcontent.toString(),
     };
-    print("Data:-" + data.toString());
-    var jsonResponse = null;
+    print("Data:-$data");
+    var jsonResponse;
     var response = await http
         .post(Uri.parse(Networks.baseurl + Networks.updatepost), body: data);
     jsonResponse = json.decode(response.body);
-    print("jsonResponse:-" + jsonResponse.toString());
+    print("jsonResponse:-$jsonResponse");
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
         Navigator.pop(context);
@@ -856,12 +855,12 @@ class FeeddetailedpageState extends State<Feeddetailedpage> {
     Map data = {
       "postid": postid.toString(),
     };
-    print("Data:-" + data.toString());
-    var jsonResponse = null;
+    print("Data:-$data");
+    var jsonResponse;
     var response = await http
         .post(Uri.parse(Networks.baseurl + Networks.deletepost), body: data);
     jsonResponse = json.decode(response.body);
-    print("jsonResponse:-" + jsonResponse.toString());
+    print("jsonResponse:-$jsonResponse");
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
         Navigator.pop(context);
@@ -871,9 +870,9 @@ class FeeddetailedpageState extends State<Feeddetailedpage> {
       } else {
         Helpingwidgets.successsnackbar(
             jsonResponse["message"].toString(), context);
-        print("Message:-" + jsonResponse["message"].toString());
+        print("Message:-${jsonResponse["message"]}");
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => Bottomnavigation()),
+            MaterialPageRoute(builder: (context) => const Bottomnavigation()),
             (Route<dynamic> route) => false);
       }
     } else {
@@ -889,12 +888,12 @@ class FeeddetailedpageState extends State<Feeddetailedpage> {
       "postid": postid.toString(),
       "status": status.toString(),
     };
-    print("Data:-" + data.toString());
-    var jsonResponse = null;
+    print("Data:-$data");
+    var jsonResponse;
     var response = await http
         .post(Uri.parse(Networks.baseurl + Networks.pinposts), body: data);
     jsonResponse = json.decode(response.body);
-    print("jsonResponse:-" + jsonResponse.toString());
+    print("jsonResponse:-$jsonResponse");
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
         Navigator.pop(context);

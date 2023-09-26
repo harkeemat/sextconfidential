@@ -1,18 +1,14 @@
-import 'package:appinio_video_player/appinio_video_player.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sextconfidential/utils/Appcolors.dart';
 import 'package:sextconfidential/utils/CustomDropdownButton2.dart';
 import 'package:sextconfidential/utils/Sidedrawer.dart';
 import 'package:sextconfidential/utils/StringConstants.dart';
 import 'package:sizer/sizer.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 
 class CallsScreen extends StatefulWidget {
+  const CallsScreen({super.key});
+
   @override
   CallsScreenState createState() => CallsScreenState();
 }
@@ -42,7 +38,7 @@ class CallsScreenState extends State<CallsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _key,
-      drawer: Sidedrawer(),
+      drawer: const Sidedrawer(),
       // appBar: AppBar(
       //   elevation: 0,
       //   backgroundColor: Appcolors().bottomnavbgcolor,
@@ -74,7 +70,7 @@ class CallsScreenState extends State<CallsScreen> {
             ),
             Row(
               children: [
-                Container(
+                SizedBox(
                   width: 35.w,
                   child: CustomDropdownButton2(
                     hint: 'Select Item',
@@ -90,7 +86,7 @@ class CallsScreenState extends State<CallsScreen> {
                 SizedBox(
                   width: 3.w,
                 ),
-                Container(
+                SizedBox(
                   width: 27.w,
                   child: CustomDropdownButton2(
                     hint: "Select Item",
@@ -139,7 +135,7 @@ class CallsScreenState extends State<CallsScreen> {
                               children: [
                                 Row(
                                   children: [
-                                    Container(
+                                    SizedBox(
                                       width:40.w,
                                       child: Row(
                                         // mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -170,7 +166,7 @@ class CallsScreenState extends State<CallsScreen> {
                                         ],
                                       ),
                                     ),
-                                    Container(
+                                    SizedBox(
                                       width:45.w,
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -197,7 +193,7 @@ class CallsScreenState extends State<CallsScreen> {
                                 ),
                                 Row(
                                   children: [
-                                    Container(
+                                    SizedBox(
                                       width:40.w,
                                       child: Row(
                                         // mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -224,7 +220,7 @@ class CallsScreenState extends State<CallsScreen> {
                                         ],
                                       ),
                                     ),
-                                    Container(
+                                    SizedBox(
                                       width:45.w,
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -241,7 +237,7 @@ class CallsScreenState extends State<CallsScreen> {
                                 ),
                                 Row(
                                   children: [
-                                    Container(
+                                    SizedBox(
                                       width:40.w,
                                       child: Row(
                                         // mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -268,7 +264,7 @@ class CallsScreenState extends State<CallsScreen> {
                                         ],
                                       ),
                                     ),
-                                    Container(
+                                    SizedBox(
                                       width:45.w,
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -285,7 +281,7 @@ class CallsScreenState extends State<CallsScreen> {
                                 ),
                                 Row(
                                   children: [
-                                    Container(
+                                    SizedBox(
                                       width:40.w,
                                       child: Row(
                                         // mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -311,7 +307,7 @@ class CallsScreenState extends State<CallsScreen> {
                                         ],
                                       ),
                                     ),
-                                    Container(
+                                    SizedBox(
                                       width:45.w,
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

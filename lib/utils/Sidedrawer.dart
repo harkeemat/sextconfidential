@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_switch/flutter_switch.dart';
@@ -21,6 +20,8 @@ import 'Helpingwidgets.dart';
 import 'Networks.dart';
 
 class Sidedrawer extends StatefulWidget {
+  const Sidedrawer({super.key});
+
   @override
   SidedrawerState createState() => SidedrawerState();
 }
@@ -49,7 +50,7 @@ class SidedrawerState extends State<Sidedrawer> {
     "assets/images/deactivateacc.png",
     "assets/images/logout.png",
   ];
-  String? username,profilepic,token;
+  String? username,profilepic,token,usertype;
   SharedPreferences? sharedPreferences;
 
   @override
@@ -103,7 +104,7 @@ class SidedrawerState extends State<Sidedrawer> {
                   ),
                   height: 12.h,
                   decoration: BoxDecoration(
-                      image: DecorationImage(
+                      image: const DecorationImage(
                           image: AssetImage(
                               "assets/images/btnbackgroundgradient.png"),
                           fit: BoxFit.fill),
@@ -141,7 +142,7 @@ class SidedrawerState extends State<Sidedrawer> {
                           errorWidget: (context, url, error) => Container(
                             width: 20.w,
                             height: 10.h,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                                 image: DecorationImage(
                                     image: AssetImage("assets/images/userprofile.png")
                                 )
@@ -152,7 +153,7 @@ class SidedrawerState extends State<Sidedrawer> {
                       SizedBox(
                         width: 5.w,
                       ),
-                      Container(
+                      SizedBox(
                         width: 50.w,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -192,12 +193,10 @@ class SidedrawerState extends State<Sidedrawer> {
                                     bottom: 1.h),
                                 child: Text(
                                   onlinestatus == 0
-                                      ? StringConstants.onlinestatus + ": Off"
+                                      ? "${StringConstants.onlinestatus}: Off"
                                       : onlinestatus == 1
-                                          ? StringConstants.onlinestatus +
-                                              ": On"
-                                          : StringConstants.onlinestatus +
-                                              ": Away",
+                                          ? "${StringConstants.onlinestatus}: On"
+                                          : "${StringConstants.onlinestatus}: Away",
                                   style: TextStyle(
                                       fontSize: 1.5.h,
                                       fontFamily: "PulpDisplay",
@@ -212,7 +211,7 @@ class SidedrawerState extends State<Sidedrawer> {
                       ),
                       InkWell(
                         onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => Editprofilescreen()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const Editprofilescreen()));
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -230,7 +229,7 @@ class SidedrawerState extends State<Sidedrawer> {
                 ),
                 ListView.builder(
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: drawertitles.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Column(
@@ -239,7 +238,7 @@ class SidedrawerState extends State<Sidedrawer> {
                             ? SizedBox(
                                 height: 12.h,
                               )
-                            : SizedBox(),
+                            : const SizedBox(),
                         GestureDetector(
                           onTap: () {
                             setState(() {
@@ -248,7 +247,7 @@ class SidedrawerState extends State<Sidedrawer> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            PayoutInfoScreen()));
+                                            const PayoutInfoScreen()));
                                 break;
                                 case 3:{
                                   Navigator.pop(context);
@@ -256,7 +255,7 @@ class SidedrawerState extends State<Sidedrawer> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              TimezoneScreen()));
+                                              const TimezoneScreen()));
                                   break;
                                 }
                                   case 4:
@@ -264,7 +263,7 @@ class SidedrawerState extends State<Sidedrawer> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                LocationdenialScreen()));
+                                                const LocationdenialScreen()));
                                   break;
                                 case 5:
                                   {
@@ -273,7 +272,7 @@ class SidedrawerState extends State<Sidedrawer> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                Changepassword()));
+                                                const Changepassword()));
                                     break;
                                   }
                                   case 6:
@@ -281,7 +280,7 @@ class SidedrawerState extends State<Sidedrawer> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              Deactivateaccscreen()));
+                                              const Deactivateaccscreen()));
                                   break;
                                 case 7:{
                                   sharedPreferences!.clear();
@@ -289,7 +288,7 @@ class SidedrawerState extends State<Sidedrawer> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              LoginScreen()));
+                                              const LoginScreen()));
                                 }
                               }
                             });
@@ -354,7 +353,7 @@ class SidedrawerState extends State<Sidedrawer> {
                                           },
                                         ),
                                       )
-                                    : SizedBox()
+                                    : const SizedBox()
                               ],
                             ),
                           ),
@@ -373,15 +372,16 @@ class SidedrawerState extends State<Sidedrawer> {
   Future<void> getsharedpreference() async {
     sharedPreferences = await SharedPreferences.getInstance();
     setState((){
-      username=sharedPreferences!.getString("stagename")!??"User Name";
+      usertype = sharedPreferences!.getString("usertype")!.toString();
+      username=usertype=="user" ? sharedPreferences!.getString("dname")!??"User Name" :sharedPreferences!.getString("stagename")!??"User Name";
       token=sharedPreferences!.getString("token")!;
       switchlist[0]=sharedPreferences!.getBool("phonecall")!;
       switchlist[1]=sharedPreferences!.getBool("videocall")!;
       onlinestatus=int.parse(sharedPreferences!.getString("userstatus").toString());
       profilepic=sharedPreferences!.getString("profilepic").toString();
     });
-    print("username value:-"+username.toString());
-    print("profilepic value:-"+profilepic.toString());
+    print("username value:-$username");
+    print("profilepic value:-$profilepic");
   }
   Future<void> changestatus() async {
     Map data ={
@@ -390,14 +390,14 @@ class SidedrawerState extends State<Sidedrawer> {
       "video_calls":switchlist[0]==true?"yes":"no",
       "phone_calls":switchlist[1]==true?"yes":"no",
     };
-    print("Data:-"+data.toString());
-    var jsonResponse = null;
+    print("Data:-$data");
+    var jsonResponse;
     var response = await http.post(
         Uri.parse(Networks.baseurl + Networks.updateonline),
         body: data
     );
     jsonResponse = json.decode(response.body);
-    print("jsonResponse:-" + jsonResponse.toString());
+    print("jsonResponse:-$jsonResponse");
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
         Helpingwidgets.failedsnackbar(jsonResponse["message"].toString(), context);
@@ -405,7 +405,7 @@ class SidedrawerState extends State<Sidedrawer> {
         SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
         sharedPreferences.setBool("phonecall",switchlist[0]);
         sharedPreferences.setBool("videocall",switchlist[1]);
-        sharedPreferences!.setString("userstatus", onlinestatus.toString());
+        sharedPreferences.setString("userstatus", onlinestatus.toString());
         print("Response:${jsonResponse["message"]}");
 
       }

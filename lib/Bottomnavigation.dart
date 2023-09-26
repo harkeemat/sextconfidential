@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sextconfidential/pojo/getpayoutpojo.dart';
@@ -17,6 +16,8 @@ import 'FeedScreen.dart';
 import 'MassmessageScreen.dart';
 
 class Bottomnavigation extends StatefulWidget {
+  const Bottomnavigation({super.key});
+
   @override
   BottomnavigationState createState() => BottomnavigationState();
 }
@@ -26,10 +27,10 @@ class BottomnavigationState extends State<Bottomnavigation> {
   SharedPreferences? sharedPreferences;
   String? token;
   final pages = [
-    Chatusersscreen(),
-    MassmessageScreen(),
-    FeedScreen(),
-    CallsScreen(),
+    const Chatusersscreen(),
+    const MassmessageScreen(),
+    const FeedScreen(),
+    const CallsScreen(),
   ];
   Getpayoutpojo? getpayoutpojo;
   final GlobalKey<ScaffoldState> _key = GlobalKey(); // Create a key
@@ -46,7 +47,7 @@ class BottomnavigationState extends State<Bottomnavigation> {
     return Scaffold(
       backgroundColor: Appcolors().bottomnavbgcolor,
       key: _key,
-      drawer: Sidedrawer(),
+      drawer: const Sidedrawer(),
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Appcolors().bottomnavbgcolor,
@@ -96,7 +97,7 @@ class BottomnavigationState extends State<Bottomnavigation> {
                 },
                 child:
                 Container(
-                  padding: EdgeInsets.all(2),
+                  padding: const EdgeInsets.all(2),
                   // color: Colors.white,
                     height: 4.h,
                   width: 7.w,
@@ -116,7 +117,7 @@ class BottomnavigationState extends State<Bottomnavigation> {
                   });
                 },
                 child: Container(
-                  padding: EdgeInsets.all(2),
+                  padding: const EdgeInsets.all(2),
                   // color: Colors.white,
                   height: 4.h,
                   width: 7.w,
@@ -134,7 +135,7 @@ class BottomnavigationState extends State<Bottomnavigation> {
                   });
                 },
                 child: Container(
-                  padding: EdgeInsets.all(2),
+                  padding: const EdgeInsets.all(2),
                   // color: Colors.white,
                   height: 4.h,
                   width: 7.w,
@@ -152,7 +153,7 @@ class BottomnavigationState extends State<Bottomnavigation> {
                   });
                 },
                 child: Container(
-                  padding: EdgeInsets.all(2),
+                  padding: const EdgeInsets.all(2),
                   // color: Colors.white,
                   height: 4.h,
                   width: 7.w,
@@ -174,21 +175,21 @@ class BottomnavigationState extends State<Bottomnavigation> {
     setState((){
       token=sharedPreferences?.getString("token");
     });
-    print("Token value:-"+token.toString());
+    print("Token value:-$token");
   }
   Future<void> payoutinfo() async {
 
     Map data={
       "token":token
     };
-    print("Data:-"+data.toString());
-    var jsonResponse = null;
+    print("Data:-$data");
+    var jsonResponse;
     var response = await http.post(
         Uri.parse(Networks.baseurl + Networks.getpayoutinfo),
         body: data
     );
     jsonResponse = json.decode(response.body);
-    print("jsonResponse:-" + jsonResponse.toString());
+    print("jsonResponse:-$jsonResponse");
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
         Helpingwidgets.failedsnackbar(jsonResponse["message"].toString(), context);

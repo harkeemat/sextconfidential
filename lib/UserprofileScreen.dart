@@ -2,10 +2,8 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:favorite_button/favorite_button.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:sextconfidential/Videoscreen.dart';
 import 'package:sextconfidential/pojo/Chatmediapojo.dart';
 import 'package:sextconfidential/utils/Appcolors.dart';
@@ -131,7 +129,7 @@ class UserprofileScreenState extends State<UserprofileScreen>{
                             errorWidget: (context, url, error) => Container(
                               width: 23.w,
                               height: 10.h,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                   image: DecorationImage(
                                       image: AssetImage("assets/images/userprofile.png")
                                   )
@@ -144,13 +142,13 @@ class UserprofileScreenState extends State<UserprofileScreen>{
                             width: 20.w,
                             child: FavoriteButton(
                               iconSize: 4.h,
-                              valueChanged: (_isFavorite) {
-                                if(_isFavorite){
+                              valueChanged: (isFavorite) {
+                                if(isFavorite){
                                   favourite(1);
                                 }else{
                                   favourite(0);
                                 }
-                                print('Is Favorite $_isFavorite');
+                                print('Is Favorite $isFavorite');
                               },
                             ))
                       ],
@@ -191,7 +189,7 @@ class UserprofileScreenState extends State<UserprofileScreen>{
                         width: double.infinity,
                         height: 5.h,
                         decoration: BoxDecoration(
-                          image: DecorationImage(
+                          image: const DecorationImage(
                               image: AssetImage(
                                   "assets/images/btnbackgroundgradient.png"),
                               fit: BoxFit.fill),
@@ -286,9 +284,9 @@ class UserprofileScreenState extends State<UserprofileScreen>{
               chatmediapojo!.data!.isNotEmpty?
               GridView.builder(
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   gridDelegate:
-                  SliverGridDelegateWithFixedCrossAxisCount(
+                  const SliverGridDelegateWithFixedCrossAxisCount(
                     // maxCrossAxisExtent: 320,
                       childAspectRatio: 1 / 1,
                       crossAxisSpacing: 7,
@@ -365,7 +363,7 @@ class UserprofileScreenState extends State<UserprofileScreen>{
               :
                   Helpingwidgets.emptydatawithoutdivider("No Media!")
                   :
-                  SizedBox()
+                  const SizedBox()
             ],
           ),
         )
@@ -378,7 +376,7 @@ class UserprofileScreenState extends State<UserprofileScreen>{
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-              shape: RoundedRectangleBorder(
+              shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10.0))),
               backgroundColor: Appcolors().dialogbgcolor,
               //title: Text("Image Picker"),
@@ -462,7 +460,7 @@ class UserprofileScreenState extends State<UserprofileScreen>{
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-              shape: RoundedRectangleBorder(
+              shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10.0))),
               backgroundColor: Appcolors().dialogbgcolor,
               //title: Text("Image Picker"),
@@ -546,7 +544,7 @@ class UserprofileScreenState extends State<UserprofileScreen>{
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-              shape: RoundedRectangleBorder(
+              shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10.0))),
               backgroundColor: Appcolors().dialogbgcolor,
               //title: Text("Image Picker"),
@@ -630,7 +628,7 @@ class UserprofileScreenState extends State<UserprofileScreen>{
     setState(() {
       token = sharedPreferences.getString("token")!;
     });
-    print("Token value:-" + token.toString());
+    print("Token value:-$token");
     usermedialisting();
   }
 
@@ -641,11 +639,11 @@ class UserprofileScreenState extends State<UserprofileScreen>{
       "userid": widget.userid.toString(),
       "status": status.toString(),
     };
-    print("Data:-" + data.toString());
-    var jsonResponse = null;
+    print("Data:-$data");
+    var jsonResponse;
     var response = await http.post(Uri.parse(Networks.baseurl + Networks.favorite), body: data);
     jsonResponse = json.decode(response.body);
-    print("jsonResponse:-" + jsonResponse.toString());
+    print("jsonResponse:-$jsonResponse");
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
         Navigator.pop(context);
@@ -653,7 +651,7 @@ class UserprofileScreenState extends State<UserprofileScreen>{
             jsonResponse["message"].toString(), context);
         Navigator.pop(context);
       } else {
-        print("Message:-" + jsonResponse["message"].toString());
+        print("Message:-${jsonResponse["message"]}");
         Navigator.pop(context);
       }
     } else {
@@ -668,11 +666,11 @@ class UserprofileScreenState extends State<UserprofileScreen>{
       "token": token,
       "profileid": widget.userid.toString(),
     };
-    print("Data:-" + data.toString());
-    var jsonResponse = null;
+    print("Data:-$data");
+    var jsonResponse;
     var response = await http.post(Uri.parse(Networks.baseurl + Networks.chathide), body: data);
     jsonResponse = json.decode(response.body);
-    print("jsonResponse:-" + jsonResponse.toString());
+    print("jsonResponse:-$jsonResponse");
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
         Navigator.pop(context);
@@ -680,9 +678,9 @@ class UserprofileScreenState extends State<UserprofileScreen>{
             jsonResponse["message"].toString(), context);
         Navigator.pop(context);
       } else {
-        print("Message:-" + jsonResponse["message"].toString());
+        print("Message:-${jsonResponse["message"]}");
         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-            Bottomnavigation()), (Route<dynamic> route) => false);
+            const Bottomnavigation()), (Route<dynamic> route) => false);
       }
     } else {
       Navigator.pop(context);
@@ -696,11 +694,11 @@ class UserprofileScreenState extends State<UserprofileScreen>{
       "token": token,
       "profileid": widget.userid.toString(),
     };
-    print("Data:-" + data.toString());
-    var jsonResponse = null;
+    print("Data:-$data");
+    var jsonResponse;
     var response = await http.post(Uri.parse(Networks.baseurl + Networks.chatblock), body: data);
     jsonResponse = json.decode(response.body);
-    print("jsonResponse:-" + jsonResponse.toString());
+    print("jsonResponse:-$jsonResponse");
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
         Navigator.pop(context);
@@ -708,9 +706,9 @@ class UserprofileScreenState extends State<UserprofileScreen>{
             jsonResponse["message"].toString(), context);
         Navigator.pop(context);
       } else {
-        print("Message:-" + jsonResponse["message"].toString());
+        print("Message:-${jsonResponse["message"]}");
         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-            Bottomnavigation()), (Route<dynamic> route) => false);
+            const Bottomnavigation()), (Route<dynamic> route) => false);
       }
     } else {
       Navigator.pop(context);
@@ -724,11 +722,11 @@ class UserprofileScreenState extends State<UserprofileScreen>{
       "token": token,
       "profileid": widget.userid.toString(),
     };
-    print("Data:-" + data.toString());
-    var jsonResponse = null;
+    print("Data:-$data");
+    var jsonResponse;
     var response = await http.post(Uri.parse(Networks.baseurl + Networks.chatreport), body: data);
     jsonResponse = json.decode(response.body);
-    print("jsonResponse:-" + jsonResponse.toString());
+    print("jsonResponse:-$jsonResponse");
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
         Navigator.pop(context);
@@ -736,9 +734,9 @@ class UserprofileScreenState extends State<UserprofileScreen>{
             jsonResponse["message"].toString(), context);
         Navigator.pop(context);
       } else {
-        print("Message:-" + jsonResponse["message"].toString());
+        print("Message:-${jsonResponse["message"]}");
         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-            Bottomnavigation()), (Route<dynamic> route) => false);
+            const Bottomnavigation()), (Route<dynamic> route) => false);
       }
     } else {
       Navigator.pop(context);
@@ -752,11 +750,11 @@ class UserprofileScreenState extends State<UserprofileScreen>{
       "token": token,
       "toid": widget.userid.toString(),
     };
-    print("Data:-" + data.toString());
-    var jsonResponse = null;
+    print("Data:-$data");
+    var jsonResponse;
     var response = await http.post(Uri.parse(Networks.baseurl + Networks.chatmedia), body: data);
     jsonResponse = json.decode(response.body);
-    print("jsonResponse:-" + jsonResponse.toString());
+    print("jsonResponse:-$jsonResponse");
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
         setState(() {
@@ -770,7 +768,7 @@ class UserprofileScreenState extends State<UserprofileScreen>{
         setState(() {
           responsestatus = true;
         });
-        print("Message:-" + jsonResponse["message"].toString());
+        print("Message:-${jsonResponse["message"]}");
         chatmediapojo = Chatmediapojo.fromJson(jsonResponse);
         Navigator.pop(context);
       }

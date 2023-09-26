@@ -51,7 +51,8 @@ class Data {
       String? useriimage, 
       String? messageType, 
       String? lastmessage, 
-      String? lastmessagetime, 
+      String? lastmessagetime,
+      String? usericreateName, 
       num? messagecount,}){
     _userid = userid;
     _useriname = useriname;
@@ -59,6 +60,7 @@ class Data {
     _messageType = messageType;
     _lastmessage = lastmessage;
     _lastmessagetime = lastmessagetime;
+    _usericreateName = usericreateName;
     _messagecount = messagecount;
 }
 
@@ -69,6 +71,7 @@ class Data {
     _messageType = json['message_type'];
     _lastmessage = json['lastmessage'];
     _lastmessagetime = json['lastmessagetime'];
+    _usericreateName = json['usericreateName'];
     _messagecount = json['messagecount'];
   }
   num? _userid;
@@ -77,6 +80,7 @@ class Data {
   String? _messageType;
   String? _lastmessage;
   String? _lastmessagetime;
+  String? _usericreateName;
   num? _messagecount;
 Data copyWith({  num? userid,
   String? useriname,
@@ -84,6 +88,7 @@ Data copyWith({  num? userid,
   String? messageType,
   String? lastmessage,
   String? lastmessagetime,
+  String? usericreateName,
   num? messagecount,
 }) => Data(  userid: userid ?? _userid,
   useriname: useriname ?? _useriname,
@@ -91,6 +96,7 @@ Data copyWith({  num? userid,
   messageType: messageType ?? _messageType,
   lastmessage: lastmessage ?? _lastmessage,
   lastmessagetime: lastmessagetime ?? _lastmessagetime,
+  usericreateName: usericreateName ?? _usericreateName,
   messagecount: messagecount ?? _messagecount,
 );
   num? get userid => _userid;
@@ -99,6 +105,7 @@ Data copyWith({  num? userid,
   String? get messageType => _messageType;
   String? get lastmessage => _lastmessage;
   String? get lastmessagetime => _lastmessagetime;
+  String? get usericreateName => _usericreateName;
   num? get messagecount => _messagecount;
 
   Map<String, dynamic> toJson() {
@@ -109,6 +116,7 @@ Data copyWith({  num? userid,
     map['message_type'] = _messageType;
     map['lastmessage'] = _lastmessage;
     map['lastmessagetime'] = _lastmessagetime;
+    map['usericreateName'] = _usericreateName;
     map['messagecount'] = _messagecount;
     return map;
   }

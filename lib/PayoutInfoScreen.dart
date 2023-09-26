@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sextconfidential/utils/Appcolors.dart';
 import 'package:sextconfidential/utils/Helpingwidgets.dart';
@@ -12,6 +11,8 @@ import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
 
 class PayoutInfoScreen extends StatefulWidget {
+  const PayoutInfoScreen({super.key});
+
   @override
   PayoutInfoScreenState createState() => PayoutInfoScreenState();
 }
@@ -78,7 +79,7 @@ class PayoutInfoScreenState extends State<PayoutInfoScreen> {
                                   ],
                                   begin: const FractionalOffset(0.0, 0.0),
                                   end: const FractionalOffset(1.0, 0.0),
-                                  stops: [0.0, 1.0],
+                                  stops: const [0.0, 1.0],
                                   tileMode: TileMode.clamp),
                             )
                           : BoxDecoration(
@@ -149,7 +150,7 @@ class PayoutInfoScreenState extends State<PayoutInfoScreen> {
                                   ],
                                   begin: const FractionalOffset(0.0, 0.0),
                                   end: const FractionalOffset(1.0, 0.0),
-                                  stops: [0.0, 1.0],
+                                  stops: const [0.0, 1.0],
                                   tileMode: TileMode.clamp),
                             )
                           : BoxDecoration(
@@ -220,7 +221,7 @@ class PayoutInfoScreenState extends State<PayoutInfoScreen> {
                                   ],
                                   begin: const FractionalOffset(0.0, 0.0),
                                   end: const FractionalOffset(1.0, 0.0),
-                                  stops: [0.0, 1.0],
+                                  stops: const [0.0, 1.0],
                                   tileMode: TileMode.clamp),
                             )
                           : BoxDecoration(
@@ -290,7 +291,7 @@ class PayoutInfoScreenState extends State<PayoutInfoScreen> {
       payoutprocessedalert=sharedPreferences!.getBool("payoutprocessed")??false;
       endofpayalert=sharedPreferences!.getBool("endofpayperiod")??false;
     });
-    print("Token value:-"+token.toString());
+    print("Token value:-$token");
   }
   Future<void> payoutinfo() async {
     Map data ={
@@ -299,14 +300,14 @@ class PayoutInfoScreenState extends State<PayoutInfoScreen> {
       "processed":payoutprocessedalert.toString(),
       "endpayperiod":endofpayalert.toString(),
     };
-    print("Data:-"+data.toString());
-    var jsonResponse = null;
+    print("Data:-$data");
+    var jsonResponse;
     var response = await http.post(
         Uri.parse(Networks.baseurl + Networks.updatepayoutinfo),
         body: data
     );
     jsonResponse = json.decode(response.body);
-    print("jsonResponse:-" + jsonResponse.toString());
+    print("jsonResponse:-$jsonResponse");
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
         Helpingwidgets.failedsnackbar(jsonResponse["message"].toString(), context);

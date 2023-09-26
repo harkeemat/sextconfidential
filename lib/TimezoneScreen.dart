@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sextconfidential/utils/Appcolors.dart';
 import 'package:sextconfidential/utils/CustomDropdownButton2.dart';
@@ -12,6 +11,8 @@ import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
 
 class TimezoneScreen extends StatefulWidget{
+  const TimezoneScreen({super.key});
+
   @override
   TimezoneScreenState createState() => TimezoneScreenState();
 
@@ -34,7 +35,7 @@ class TimezoneScreenState extends State<TimezoneScreen>{
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Appcolors().backgroundcolor,
-      bottomNavigationBar: Container(
+      bottomNavigationBar: SizedBox(
         height: 20.h,
         child: Center(
           child:
@@ -49,7 +50,7 @@ class TimezoneScreenState extends State<TimezoneScreen>{
                 width: 60.w,
                 height: 5.h,
                 decoration: BoxDecoration(
-                  image: DecorationImage(
+                  image: const DecorationImage(
                       image: AssetImage(
                           "assets/images/btnbackgroundgradient.png"),
                       fit: BoxFit.fill),
@@ -102,7 +103,7 @@ class TimezoneScreenState extends State<TimezoneScreen>{
             SizedBox(
               height: 2.h,
             ),
-            Container(
+            SizedBox(
               height: 5.h,
               width: 94.w,
               child: CustomDropdownButton2(
@@ -118,7 +119,7 @@ class TimezoneScreenState extends State<TimezoneScreen>{
                     value!=userselectedzone?
                     savebtnstatus=true:
                         savebtnstatus=false;
-                    print("on change:-"+savebtnstatus.toString());
+                    print("on change:-$savebtnstatus");
 
 
                   });
@@ -137,7 +138,7 @@ class TimezoneScreenState extends State<TimezoneScreen>{
     setState((){
       token=sharedPreferences.getString("token");
     });
-    print("Token value:-"+token.toString());
+    print("Token value:-$token");
   }
   Future<void> settimezone() async {
     Helpingwidgets.showLoadingDialog(context, key);
@@ -145,13 +146,13 @@ class TimezoneScreenState extends State<TimezoneScreen>{
       "timezone":dropdownvalue,
       "token":token,
     };
-    var jsonResponse = null;
+    var jsonResponse;
     var response = await http.post(
         Uri.parse(Networks.baseurl + Networks.updatetimezone),
         body: data
     );
     jsonResponse = json.decode(response.body);
-    print("jsonResponse:-" + jsonResponse.toString());
+    print("jsonResponse:-$jsonResponse");
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
         Helpingwidgets.failedsnackbar(jsonResponse["message"].toString(), context);

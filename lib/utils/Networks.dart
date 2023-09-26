@@ -32,4 +32,5 @@ class Networks{
   static String chathide = "chat-hide";
   static String chatblock = "chat-block";
   static String chatreport = "chat-report";
+  static String updatetoken = "update-token";
 }

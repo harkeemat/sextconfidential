@@ -54,5 +54,9 @@
             <string>Needs camera access</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>FLTEnableImpeller</key>
+    <false />
+	<key>FirebaseAppDelegateProxyEnabled</key>
+    <false/>
 </dict>
 </plist>

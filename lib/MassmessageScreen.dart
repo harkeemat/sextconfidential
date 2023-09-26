@@ -4,15 +4,11 @@ import 'dart:typed_data';
 import 'package:appinio_video_player/appinio_video_player.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:sextconfidential/Bottomnavigation.dart';
 import 'package:sextconfidential/Videoscreen.dart';
-import 'package:sextconfidential/main.dart';
 import 'package:sextconfidential/pojo/Getgrouppojo.dart';
 import 'package:sextconfidential/pojo/Getgroupuserpojo.dart';
 import 'package:sextconfidential/pojo/Searchuserpojo.dart';
@@ -21,7 +17,6 @@ import 'package:sextconfidential/utils/Appcolors.dart';
 import 'package:sextconfidential/utils/CustomDropdownButton2.dart';
 import 'package:sextconfidential/utils/Helpingwidgets.dart';
 import 'package:sextconfidential/utils/Networks.dart';
-import 'package:sextconfidential/utils/Progressdialog.dart';
 import 'package:sextconfidential/utils/Sidedrawer.dart';
 import 'package:sextconfidential/utils/StringConstants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,11 +24,11 @@ import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:sizer/sizer.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:http/http.dart' as http;
-import 'package:video_thumbnail_imageview/video_thumbnail_imageview.dart';
 
-import 'LoginScreen.dart';
 
 class MassmessageScreen extends StatefulWidget {
+  const MassmessageScreen({super.key});
+
   @override
   MassmessageScreenState createState() => MassmessageScreenState();
 }
@@ -94,7 +89,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       // key: _key,
-      drawer: Sidedrawer(),
+      drawer: const Sidedrawer(),
       // appBar: AppBar(
       //   elevation: 0,
       //   backgroundColor: Appcolors().bottomnavbgcolor,
@@ -140,7 +135,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                           SizedBox(
                             width: 3.w,
                           ),
-                          Container(
+                          SizedBox(
                             width: 45.w,
                             child: CustomDropdownButton2(
                               hint: "Select Item",
@@ -163,12 +158,12 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                                     sendtotype="fav";
                                   } else{
                                     int index=massmessagetype.indexOf(value!);
-                                    print("Element index:-"+index.toString());
+                                    print("Element index:-$index");
                                     setState((){
                                       sendtotype=getgrouppojo!.data!.elementAt(index-4).id.toString();
                                     });
-                                    print("Element id:-"+sendtotype.toString());
-                                    dropdownvalue = value!;
+                                    print("Element id:-$sendtotype");
+                                    dropdownvalue = value;
                                   }
                                 });
                               },
@@ -241,25 +236,25 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                             addmediadialog(context);
                           }
                         },
-                        child: Container(
+                        child: SizedBox(
                           width: double.infinity,
                           child: DottedBorder(
                             strokeCap: StrokeCap.round,
                             strokeWidth: 1,
-                            dashPattern: [8, 4],
+                            dashPattern: const [8, 4],
                             color: Appcolors().gradientcolorfirst,
                             borderType: BorderType.RRect,
-                            radius: Radius.circular(15),
-                            padding: EdgeInsets.all(6),
+                            radius: const Radius.circular(15),
+                            padding: const EdgeInsets.all(6),
                             child: ClipRRect(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(12)),
+                                  const BorderRadius.all(Radius.circular(12)),
                               child: imageFile == null
                                   ? GestureDetector(
                                       onTap: () {
                                         addmediadialog(context);
                                       },
-                                      child: Container(
+                                      child: SizedBox(
                                           height: 5.h,
                                           width: double.infinity,
                                           child: Row(
@@ -301,7 +296,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                                             alignment: Alignment.topRight,
                                             children: [
                                               Container(
-                                                padding: EdgeInsets.all(10),
+                                                padding: const EdgeInsets.all(10),
                                                 // child: Image.file(imageFile!,height:15.h,width:25.w,fit: BoxFit.fill,)),
                                                 child: imageFile!.path.substring(
                                                             imageFile!.path
@@ -412,7 +407,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                                                 height: 2.h,
                                                 decoration: BoxDecoration(
                                                     shape: BoxShape.rectangle,
-                                                    image: DecorationImage(
+                                                    image: const DecorationImage(
                                                         image: AssetImage(
                                                             "assets/images/btnbackgroundgradient.png"),
                                                         fit: BoxFit.fill),
@@ -452,7 +447,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                           alignment: Alignment.center,
                           width: double.infinity,
                           decoration: BoxDecoration(
-                              image: DecorationImage(
+                              image: const DecorationImage(
                                   image: AssetImage(
                                       "assets/images/btnbackgroundgradient.png"),
                                   fit: BoxFit.fill),
@@ -472,7 +467,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                       SizedBox(
                         height: 1.5.h,
                       ),
-                      Container(
+                      SizedBox(
                         width: 45.w,
                         child: CustomDropdownButton2(
                           hint: "Select Item",
@@ -515,7 +510,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                               ? AnimationLimiter(
                                   child: ListView.builder(
                                     shrinkWrap: true,
-                                    physics: NeverScrollableScrollPhysics(),
+                                    physics: const NeverScrollableScrollPhysics(),
                                     itemCount: massmassagespojo!.data!.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
@@ -552,7 +547,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                                                                 "jpg"
                                                             ? Column(
                                                                 children: [
-                                                                  Container(
+                                                                  SizedBox(
                                                                     width: 40.w,
                                                                     height:
                                                                         20.h,
@@ -609,7 +604,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                                                                                 BorderRadius.circular(15),
                                                                                 shape:
                                                                                 BoxShape.rectangle,
-                                                                                image: DecorationImage(
+                                                                                image: const DecorationImage(
                                                                                     image: AssetImage("assets/images/imageplaceholder.png"),fit: BoxFit.cover
                                                                                 )
                                                                             ),
@@ -639,7 +634,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                                                                                         videopath: massmassagespojo!.data!.elementAt(index).message.toString(),
                                                                                       )));
                                                                         },
-                                                                        child: Container(
+                                                                        child: SizedBox(
                                                                             width:
                                                                                 40.w,
                                                                             height: 20.h,
@@ -687,7 +682,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                                                         SizedBox(
                                                           height: 1.h,
                                                         ),
-                                                        Container(
+                                                        SizedBox(
                                                           width:
                                                               double.infinity,
                                                           child: Text(
@@ -885,12 +880,10 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                                                                 Container(
                                                                   child:
                                                                       GradientText(
-                                                                    massmassagespojo!
+                                                                    "${massmassagespojo!
                                                                             .data!
                                                                             .elementAt(index)
-                                                                            .percentage
-                                                                            .toString() +
-                                                                        "%",
+                                                                            .percentage}%",
                                                                     style: TextStyle(
                                                                         fontSize: 16
                                                                             .sp,
@@ -998,7 +991,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                                   ),
                                 )
                           :
-                          SizedBox()
+                          const SizedBox()
                       // Helpingwidgets().customloader()
                     ],
                   ),
@@ -1016,8 +1009,8 @@ class MassmessageScreenState extends State<MassmessageScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            contentPadding: EdgeInsets.all(5),
-            shape: RoundedRectangleBorder(
+            contentPadding: const EdgeInsets.all(5),
+            shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10.0))),
             backgroundColor: Appcolors().blackcolor,
             //title: Text("Image Picker"),
@@ -1076,7 +1069,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
         builder: (BuildContext context) {
           return AlertDialog(
             contentPadding: EdgeInsets.zero,
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10.0))),
             backgroundColor: Colors.transparent,
             //title: Text("Image Picker"),
@@ -1088,14 +1081,14 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                   children: [
                     Container(
                       color: Colors.transparent,
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       child: Container(
                         width: 80.w,
                         // margin: EdgeInsets.only(left: 2.w, right: 2.w,bottom: 1.h),
                         alignment: Alignment.center,
                         height: 10.h,
                         decoration: BoxDecoration(
-                            image: DecorationImage(
+                            image: const DecorationImage(
                               image: AssetImage(
                                 "assets/images/btnbackgroundgradient.png",
                               ),
@@ -1222,7 +1215,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
           return AlertDialog(
             backgroundColor: Appcolors().backgroundcolor,
             // contentPadding: EdgeInsets.zero,
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(15.0))),
             //title: Text("Image Picker"),
             content: StatefulBuilder(
@@ -1367,7 +1360,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                             SizedBox(
                               height: 2.h,
                             ),
-                            Container(
+                            SizedBox(
                               width: double.infinity,
                               height: 45.h,
                               child:
@@ -1483,7 +1476,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                             ),
                             InkWell(
                               onTap: () {
-                                print("Selected users" + groupusers.toString());
+                                print("Selected users$groupusers");
                                 print(
                                     "Selected users${groupusers.toString().substring(1, groupusers.toString().length - 1)}");
                                 if(dialogformkey.currentState!.validate()){
@@ -1500,7 +1493,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                                 alignment: Alignment.center,
                                 width: double.infinity,
                                 decoration: BoxDecoration(
-                                    image: DecorationImage(
+                                    image: const DecorationImage(
                                         image: AssetImage(
                                             "assets/images/btnbackgroundgradient.png"),
                                         fit: BoxFit.fill),
@@ -1553,7 +1546,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
           return AlertDialog(
             backgroundColor: Appcolors().backgroundcolor,
             // contentPadding: EdgeInsets.zero,
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(15.0))),
             //title: Text("Image Picker"),
             content: StatefulBuilder(
@@ -1594,7 +1587,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                             SizedBox(
                               height: 2.h,
                             ),
-                            Container(
+                            SizedBox(
                               width: double.infinity,
                               height: 62.h,
                               child: ListView.builder(
@@ -1666,7 +1659,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                             ),
                             InkWell(
                               onTap: () {
-                                print("Selected users" + groupusers.toString());
+                                print("Selected users$groupusers");
                                 print(
                                     "Selected users${groupusers.toString().substring(1, groupusers.toString().length - 1)}");
                                 if(dialogformkey.currentState!.validate()){
@@ -1678,7 +1671,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                                 alignment: Alignment.center,
                                 width: double.infinity,
                                 decoration: BoxDecoration(
-                                    image: DecorationImage(
+                                    image: const DecorationImage(
                                         image: AssetImage(
                                             "assets/images/btnbackgroundgradient.png"),
                                         fit: BoxFit.fill),
@@ -1733,7 +1726,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
           return AlertDialog(
             backgroundColor: Appcolors().backgroundcolor,
             // contentPadding: EdgeInsets.zero,
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(15.0))),
             //title: Text("Image Picker"),
             content: StatefulBuilder(
@@ -1879,7 +1872,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                             SizedBox(
                               height: 2.h,
                             ),
-                            Container(
+                            SizedBox(
                               width: double.infinity,
                               height: 47.h,
                               child:
@@ -1995,7 +1988,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                             ),
                             InkWell(
                               onTap: () {
-                                print("Selected users" + groupusers.toString());
+                                print("Selected users$groupusers");
                                 print(
                                     "Selected users${groupusers.toString().substring(1, groupusers.toString().length - 1)}");
                                 if(dialogformkey.currentState!.validate()){
@@ -2009,7 +2002,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                                 alignment: Alignment.center,
                                 width: double.infinity,
                                 decoration: BoxDecoration(
-                                    image: DecorationImage(
+                                    image: const DecorationImage(
                                         image: AssetImage(
                                             "assets/images/btnbackgroundgradient.png"),
                                         fit: BoxFit.fill),
@@ -2063,8 +2056,8 @@ class MassmessageScreenState extends State<MassmessageScreen> {
             print("Video working");
             var durationOfVideo =
                 videoPlayerController.value.position.inSeconds.round();
-            print("Duration of video:-" + durationOfVideo.toString());
-            debugPrint("========" + _controller.value.duration.toString());
+            print("Duration of video:-$durationOfVideo");
+            debugPrint("========${_controller.value.duration}");
           }));
     _customVideoPlayerController = CustomVideoPlayerController(
       context: context,
@@ -2075,14 +2068,14 @@ class MassmessageScreenState extends State<MassmessageScreen> {
         "https://coderzbar.info/dev/worldofquotes_dev/storage/app/public/author/498330079authorimage.mp4")
       ..initialize().then(
         (_) {
-          debugPrint("========" + _controller.value.duration.toString());
+          debugPrint("========${_controller.value.duration}");
           print("Video Started");
           setState(() {
             videostatus = true;
           });
           var durationOfVideo =
               videoPlayerController.value.position.inSeconds.round();
-          print("Duration of videos:-" + durationOfVideo.toString());
+          print("Duration of videos:-$durationOfVideo");
         },
       );
   }
@@ -2125,7 +2118,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
       createthumbnail();
       // print("Video path:-${pickedFile.path}");
     }
-    return null;
+    return;
   }
 
   Future<void> createthumbnail() async {
@@ -2146,7 +2139,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
     setState(() {
       token = sharedPreferences.getString("token");
     });
-    print("Token value:-" + token.toString());
+    print("Token value:-$token");
     massmessageslisting(sorttype);
     searchuser(searchclientcontroller.text.toString());
     getgrouplist();
@@ -2158,13 +2151,13 @@ class MassmessageScreenState extends State<MassmessageScreen> {
       "token": token,
       "sort": sorttype.toString()
     };
-    print("Data:-" + data.toString());
-    var jsonResponse = null;
+    print("Data:-$data");
+    var jsonResponse;
     var response = await http.post(
         Uri.parse(Networks.baseurl + Networks.massmessagedetail),
         body: data);
     jsonResponse = json.decode(response.body);
-    print("jsonResponse:-" + jsonResponse.toString());
+    print("jsonResponse:-$jsonResponse");
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
         setState(() {
@@ -2178,7 +2171,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
         setState(() {
           responsestatus = true;
         });
-        print("Message:-" + jsonResponse["message"].toString());
+        print("Message:-${jsonResponse["message"]}");
         massmassagespojo = Massmassagespojo.fromJson(jsonResponse);
       }
     } else {
@@ -2195,14 +2188,14 @@ class MassmessageScreenState extends State<MassmessageScreen> {
     Map data = {
       "search": searchtext,
     };
-    print("Data:-" + data.toString());
-    var jsonResponse = null;
+    print("Data:-$data");
+    var jsonResponse;
     var response = await http.post(
         Uri.parse("https://www.sextconfidential.com/api/searchuser"),
         // Uri.parse(Networks.baseurl + Networks.searchuser),
         body: data);
     jsonResponse = json.decode(response.body);
-    print("Search jsonResponse:-" + jsonResponse.toString());
+    print("Search jsonResponse:-$jsonResponse");
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
         Helpingwidgets.failedsnackbar(
@@ -2213,7 +2206,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
           // responsestatus = true;
           searchuserpojo = Searchuserpojo.fromJson(jsonResponse);
         });
-        print("Message:-" + jsonResponse["message"].toString());
+        print("Message:-${jsonResponse["message"]}");
       }
     } else {
       setState(() {
@@ -2232,7 +2225,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
       "name": groupnamecontroller.text.toString(),
     };
     print("Data:-$data");
-    var jsonResponse = null;
+    var jsonResponse;
     var response = await http
         .post(Uri.parse(Networks.baseurl + Networks.creategroup), body: data);
     jsonResponse = json.decode(response.body);
@@ -2248,7 +2241,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
         Helpingwidgets.successsnackbar(
             jsonResponse["message"].toString(), context);
         Navigator.pop(context);
-        print("Message:-" + jsonResponse["message"].toString());
+        print("Message:-${jsonResponse["message"]}");
         groupusers.clear();
         groupnamecontroller.clear();
       }
@@ -2265,12 +2258,12 @@ class MassmessageScreenState extends State<MassmessageScreen> {
       "users": groupusers.toString().substring(1, groupusers.toString().length - 1),
       "name": groupnamecontroller.text.toString(),
     };
-    print("Data:-" + data.toString());
-    var jsonResponse = null;
+    print("Data:-$data");
+    var jsonResponse;
     var response = await http
         .post(Uri.parse(Networks.baseurl + Networks.updategroup), body: data);
     jsonResponse = json.decode(response.body);
-    print("Search jsonResponse:-" + jsonResponse.toString());
+    print("Search jsonResponse:-$jsonResponse");
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
         Navigator.pop(context);
@@ -2284,7 +2277,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
         Helpingwidgets.successsnackbar(
             jsonResponse["message"].toString(), context);
         Navigator.pop(context);
-        print("Message:-" + jsonResponse["message"].toString());
+        print("Message:-${jsonResponse["message"]}");
 
       }
     } else {
@@ -2303,12 +2296,12 @@ class MassmessageScreenState extends State<MassmessageScreen> {
     Map data = {
       "token": token,
     };
-    print("Data:-" + data.toString());
-    var jsonResponse = null;
+    print("Data:-$data");
+    var jsonResponse;
     var response = await http
         .post(Uri.parse(Networks.baseurl + Networks.getgroup), body: data);
     jsonResponse = json.decode(response.body);
-    print("Search jsonResponse:-" + jsonResponse.toString());
+    print("Search jsonResponse:-$jsonResponse");
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
         Helpingwidgets.failedsnackbar(
@@ -2329,7 +2322,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
           }
         });
         // Navigator.pop(context);
-        print("Message:-" + jsonResponse["message"].toString());
+        print("Message:-${jsonResponse["message"]}");
 
       }
     } else {
@@ -2343,12 +2336,12 @@ class MassmessageScreenState extends State<MassmessageScreen> {
     Map data = {
       "group": groupid,
     };
-    print("Data:-" + data.toString());
-    var jsonResponse = null;
+    print("Data:-$data");
+    var jsonResponse;
     var response = await http
         .post(Uri.parse(Networks.baseurl + Networks.editgroup), body: data);
     jsonResponse = json.decode(response.body);
-    print("Search jsonResponse:-" + jsonResponse.toString());
+    print("Search jsonResponse:-$jsonResponse");
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
         Helpingwidgets.failedsnackbar(
@@ -2363,7 +2356,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
           }
         });
         updategroup(context,getgroupuserpojo!.data!.groupname.toString(),getgroupuserpojo!.data!.id.toString());
-        print("Success Message:-" + jsonResponse["message"].toString());
+        print("Success Message:-${jsonResponse["message"]}");
 
       }
     } else {
@@ -2378,7 +2371,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
       "group": groupid,
     };
     print("Data:-$data");
-    var jsonResponse = null;
+    var jsonResponse;
     var response = await http
         .post(Uri.parse(Networks.baseurl + Networks.deletegroup), body: data);
     jsonResponse = json.decode(response.body);
@@ -2403,7 +2396,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
         Helpingwidgets.successsnackbar(
             jsonResponse["message"].toString(), context);
         Navigator.pop(context);
-        print("Message:-" + jsonResponse["message"].toString());
+        print("Message:-${jsonResponse["message"]}");
 
       }
     } else {
@@ -2422,16 +2415,16 @@ class MassmessageScreenState extends State<MassmessageScreen> {
       'post',
       Uri.parse(Networks.baseurl + Networks.massmessage),
     );
-    var jsonData = null;
+    var jsonData;
     request.headers["Content-Type"] = "multipart/form-data";
     request.fields["text"] = messagecontroller.text.trim();
     request.fields["token"] = token!;
-    request.fields["price"] = imagecredit!.toString();
+    request.fields["price"] = imagecredit.toString();
     request.fields["message_to"] = sendtotype.toString();
-    print("token:-" + token!);
-    print("Message:-" + messagecontroller.text.trim());
-    print("token:-" + token.toString());
-    print("Message to:-" + sendtotype.toString());
+    print("token:-${token!}");
+    print("Message:-${messagecontroller.text.trim()}");
+    print("token:-$token");
+    print("Message to:-$sendtotype");
     // print("Image path:-"+imageFile!.path.toString());
     if (imageFile != null) {
       request.files.add(
@@ -2442,7 +2435,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
     var response = await request.send();
     response.stream.transform(utf8.decoder).listen((value) {
       jsonData = json.decode(value);
-      print("Json:-" + jsonData.toString());
+      print("Json:-$jsonData");
       if (response.statusCode == 200) {
         if (jsonData["status"] == false) {
           Helpingwidgets.failedsnackbar(

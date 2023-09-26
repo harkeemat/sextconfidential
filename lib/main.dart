@@ -1,38 +1,43 @@
-import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_switch/flutter_switch.dart';
-import 'package:sextconfidential/Chatusersscreen.dart';
-import 'package:sextconfidential/utils/Appcolors.dart';
-import 'package:sextconfidential/utils/StringConstants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'Bottomnavigation.dart';
-import 'CallsScreen.dart';
-import 'Changepassword.dart';
-import 'ConvertsationScreen.dart';
-import 'Deactivateaccscreen.dart';
-import 'Editprofilescreen.dart';
-import 'FeedScreen.dart';
-import 'Feeddetailedpage.dart';
 import 'LoginScreen.dart';
-import 'MassmessageScreen.dart';
-import 'PayoutInfoScreen.dart';
-import 'Recorddemo.dart';
-import 'TimezoneScreen.dart';
-import 'UserprofileScreen.dart';
-import 'package:firebase_core/firebase_core.dart'; //
 import 'firebase_options.dart';
+import 'service/NotificationService.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message)async {
+  await Firebase.initializeApp();
+}
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();//
+  
+  //WidgetsFlutterBinding.ensureInitialized();
+  //await Firebase.initializeApp();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(const MyApp());
+  
+    
+final fcmToken = await FirebaseMessaging.instance.getToken();
+
+print("FCMToken $fcmToken");
+await Permission.notification.isDenied.then(
+(bool value) {
+if (value) {
+Permission.notification.request();
+}
+},
+);
+
 }
 
 class MyApp extends StatelessWidget {
@@ -48,7 +53,7 @@ class MyApp extends StatelessWidget {
               primarySwatch: Colors.blue,
             ),
             // home: Recorddemo(),
-            home: MyHomePage(),
+            home: const MyHomePage(),
           );
         }
     );
@@ -63,21 +68,26 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
+  NotificationServices notificationServices = NotificationServices();
   String? token;
   bool? loginstatus=false;
 
   @override
   void initState() {
     super.initState();
+    notificationServices.requestNotificationPermission();
+    notificationServices.forgroundMessage();
+    notificationServices.firebaseInit(context);
+    notificationServices.setupInteractMessage(context);
     initDynamicLinks();
     getsharedpreference();
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 3), () {
       if(loginstatus==false){
         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-            LoginScreen()), (Route<dynamic> route) => false);
+            const LoginScreen()), (Route<dynamic> route) => false);
       }else{
         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-            Bottomnavigation()), (Route<dynamic> route) => false);
+            const Bottomnavigation()), (Route<dynamic> route) => false);
       }
     });
   }
@@ -103,10 +113,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> initDynamicLinks() async {
     dynamicLinks.onLink.listen((dynamicLinkData) {
       // Navigator.pushNamed(context, dynamicLinkData.link.path);
-      print("Dynamic link:-"+dynamicLinkData.link.path.toString());
-    }).onError((error) {
-      print('onLink error');
-      print(error.message);
+      print("Dynamic link:-${dynamicLinkData.link.path}");
+    }).onError((e) {
     });
   }
 }

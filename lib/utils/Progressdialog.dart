@@ -10,7 +10,7 @@ class Progressdialog {
         context: context,
         barrierDismissible: true,
         builder: (BuildContext context) {
-          return new WillPopScope(
+          return WillPopScope(
               onWillPop: () async => false,
               child: SimpleDialog(
                   key: key,

@@ -1,5 +1,4 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sextconfidential/utils/Appcolors.dart';
 import 'package:sizer/sizer.dart';
@@ -127,7 +126,7 @@ class CustomDropdownButton2 extends StatelessWidget {
           decoration: dropdownDecoration ??
               BoxDecoration(
                 color: Appcolors().bottomnavbgcolor,
-                  borderRadius: BorderRadius.all(Radius.circular(14)),
+                  borderRadius: const BorderRadius.all(Radius.circular(14)),
               ),
           elevation: dropdownElevation ?? 8,
           //Null or Offset(0, 0) will open just under the button. You can edit as you want.

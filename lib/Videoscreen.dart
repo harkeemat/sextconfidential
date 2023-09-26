@@ -1,5 +1,4 @@
 import 'package:appinio_video_player/appinio_video_player.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sextconfidential/utils/Appcolors.dart';
 import 'package:sizer/sizer.dart';
@@ -79,8 +78,8 @@ class VideoscreenState extends State<Videoscreen> {
             print("Video working");
             var durationOfVideo =
                 videoPlayerController.value.position.inSeconds.round();
-            print("Duration of video:-" + durationOfVideo.toString());
-            debugPrint("========" + _controller.value.duration.toString());
+            print("Duration of video:-$durationOfVideo");
+            debugPrint("========${_controller.value.duration}");
           }));
     _customVideoPlayerController = CustomVideoPlayerController(
       context: context,
@@ -91,11 +90,11 @@ class VideoscreenState extends State<Videoscreen> {
       ..initialize().then(
         (_) {
           videoPlayerController.play();
-          debugPrint("========" + _controller.value.duration.toString());
+          debugPrint("========${_controller.value.duration}");
           print("Video Started");
           var durationOfVideo =
               videoPlayerController.value.position.inSeconds.round();
-          print("Duration of videos:-" + durationOfVideo.toString());
+          print("Duration of videos:-$durationOfVideo");
         },
       );
   }

@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sextconfidential/LoginScreen.dart';
 import 'package:sextconfidential/utils/Appcolors.dart';
@@ -11,9 +10,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
 
-import 'Bottomnavigation.dart';
 
 class Changepassword extends StatefulWidget{
+  const Changepassword({super.key});
+
   @override
   ChangepasswordState createState() => ChangepasswordState();
 
@@ -24,7 +24,7 @@ class ChangepasswordState extends State<Changepassword>{
   TextEditingController passwordcontroller=TextEditingController();
   TextEditingController newpasswordcontroller=TextEditingController();
   TextEditingController confirmnewpasswordcontroller=TextEditingController();
-  GlobalKey<FormState>_key=GlobalKey();
+  final GlobalKey<FormState>_key=GlobalKey();
   GlobalKey<State>key=GlobalKey();
   String? token;
   @override
@@ -288,7 +288,7 @@ class ChangepasswordState extends State<Changepassword>{
                       width: 60.w,
                       height: 5.h,
                       decoration: BoxDecoration(
-                        image: DecorationImage(
+                        image: const DecorationImage(
                             image: AssetImage(
                                 "assets/images/btnbackgroundgradient.png"),
                             fit: BoxFit.fill),
@@ -317,7 +317,7 @@ class ChangepasswordState extends State<Changepassword>{
     setState((){
       token=sharedPreferences.getString("token");
     });
-    print("Token value:-"+token.toString());
+    print("Token value:-$token");
   }
   Future<void> changepassword() async {
     Helpingwidgets.showLoadingDialog(context, key);
@@ -327,13 +327,13 @@ class ChangepasswordState extends State<Changepassword>{
       "cpassword":confirmnewpasswordcontroller.text,
       "token":token,
     };
-    var jsonResponse = null;
+    var jsonResponse;
     var response = await http.post(
         Uri.parse(Networks.baseurl + Networks.changepassword),
         body: data
     );
     jsonResponse = json.decode(response.body);
-    print("jsonResponse:-" + jsonResponse.toString());
+    print("jsonResponse:-$jsonResponse");
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
         Helpingwidgets.failedsnackbar(jsonResponse["message"].toString(), context);
@@ -342,7 +342,7 @@ class ChangepasswordState extends State<Changepassword>{
         Helpingwidgets.successsnackbar(jsonResponse["message"].toString(), context);
         print("Response:${jsonResponse["message"]}");
         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-            LoginScreen()), (Route<dynamic> route) => false);
+            const LoginScreen()), (Route<dynamic> route) => false);
 
       }
     } else {

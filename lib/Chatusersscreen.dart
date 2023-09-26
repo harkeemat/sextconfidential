@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -19,11 +18,14 @@ import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
 
 class Chatusersscreen extends StatefulWidget {
+  const Chatusersscreen({super.key});
+
   @override
   ChatusersscreenState createState() => ChatusersscreenState();
 }
 
 class ChatusersscreenState extends State<Chatusersscreen> {
+  
   TextEditingController searchcontroller = TextEditingController();
   List<String> chattype = [
     StringConstants.mostrecent,
@@ -41,6 +43,7 @@ class ChatusersscreenState extends State<Chatusersscreen> {
   String chatselectedtype = StringConstants.mostrecent;
   final GlobalKey<ScaffoldState> _key = GlobalKey(); // Create a key
   late String token;
+  String usertype ='';
   GlobalKey<State> key = GlobalKey();
   bool? responsestatus=false;
   @override
@@ -54,7 +57,7 @@ class ChatusersscreenState extends State<Chatusersscreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _key,
-      drawer: Sidedrawer(),
+      drawer: const Sidedrawer(),
       // appBar: AppBar(
       //   elevation: 0,
       //   backgroundColor: Appcolors().bottomnavbgcolor,
@@ -131,7 +134,7 @@ class ChatusersscreenState extends State<Chatusersscreen> {
                   ),
                 ),
                 onChanged: (value) {
-                  print("On change");
+                  //print("On change");
                   // onSearchTextChanged(value);
                 },
               ),
@@ -194,7 +197,7 @@ class ChatusersscreenState extends State<Chatusersscreen> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              ConvertsationScreen(userid: chatuserpojo!.data!.elementAt(index).userid.toString(),userimage: chatuserpojo!.data!.elementAt(index).useriimage.toString(),username: chatuserpojo!.data!.elementAt(index).useriname.toString(),)));
+                                              ConvertsationScreen(userid: chatuserpojo!.data!.elementAt(index).userid.toString(),userimage: chatuserpojo!.data!.elementAt(index).useriimage.toString(),username:  usertype=="user" ? chatuserpojo!.data!.elementAt(index).usericreateName.toString() : chatuserpojo!.data!.elementAt(index).useriname.toString(),)));
                                 },
                                 child: Container(
                                   padding: EdgeInsets.all(1.h),
@@ -206,7 +209,7 @@ class ChatusersscreenState extends State<Chatusersscreen> {
                                   child: Row(
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
-                                      Container(
+                                      SizedBox(
                                         width: 14.w,
                                         height: 7.h,
                                         child: CachedNetworkImage(
@@ -236,7 +239,7 @@ class ChatusersscreenState extends State<Chatusersscreen> {
                                                 ),
                                               ),
                                           errorWidget: (context, url, error) => Container(
-                                            decoration: BoxDecoration(
+                                            decoration: const BoxDecoration(
                                               image: DecorationImage(
                                                 image: AssetImage("assets/images/userprofile.png")
                                               )
@@ -247,7 +250,7 @@ class ChatusersscreenState extends State<Chatusersscreen> {
                                       SizedBox(
                                         width: 5.w,
                                       ),
-                                      Container(
+                                      SizedBox(
                                         width: 72.w,
                                         child: Column(
                                           mainAxisAlignment:
@@ -262,10 +265,11 @@ class ChatusersscreenState extends State<Chatusersscreen> {
                                               mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                               children: [
-                                                Container(
+                                                SizedBox(
                                                   width: 30.w,
-                                                  child: Text(
-                                                    chatuserpojo!.data!.elementAt(index).useriname.toString(),
+                                                  child:
+                                                  Text(
+                                                     usertype=="user" ? chatuserpojo!.data!.elementAt(index).usericreateName.toString() : chatuserpojo!.data!.elementAt(index).useriname.toString(),
                                                     style: TextStyle(
                                                         fontSize: 12.sp,
                                                         fontFamily: "PulpDisplay",
@@ -277,33 +281,14 @@ class ChatusersscreenState extends State<Chatusersscreen> {
                                                             .whitecolor),
                                                   ),
                                                 ),
-                                                GradientText(
-                                                  // chatuserpojo!.data!.elementAt(index).lastmessagetime.toString().substring(13,22),
-                                                  chatuserpojo!.data!.elementAt(index).lastmessagetime.toString(),
-                                                  style: TextStyle(
-                                                      fontSize: 10.sp,
-                                                      fontFamily: "PulpDisplay",
-                                                      fontWeight:
-                                                      FontWeight.w400),
-                                                  gradientType:
-                                                  GradientType.linear,
-                                                  gradientDirection:
-                                                  GradientDirection.ttb,
-                                                  radius: 6,
-                                                  colors: [
-                                                    Appcolors()
-                                                        .gradientcolorfirst,
-                                                    Appcolors()
-                                                        .gradientcolorsecond,
-                                                  ],
-                                                ),
+                                                
                                               ],
                                             ),
                                             Row(
                                               mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                               children: [
-                                                Container(
+                                                SizedBox(
                                                   width: 60.w,
                                                   child: Text(
                                                     chatuserpojo!.data!.elementAt(index).messageType.toString()=="jpg"?"Image":chatuserpojo!.data!.elementAt(index).messageType.toString()=="mp4"?"Video":chatuserpojo!.data!.elementAt(index).messageType.toString()=="mp3"?"Audio Message":chatuserpojo!.data!.elementAt(index).lastmessage.toString(),
@@ -334,7 +319,7 @@ class ChatusersscreenState extends State<Chatusersscreen> {
                                                         Alignment.topCenter,
                                                         end: Alignment
                                                             .bottomCenter,
-                                                        stops: [0.0, 1.0],
+                                                        stops: const [0.0, 1.0],
                                                         tileMode: TileMode.clamp),
                                                   ),
                                                   child: Text(
@@ -347,7 +332,7 @@ class ChatusersscreenState extends State<Chatusersscreen> {
                                                         color: Appcolors()
                                                             .blackcolor),
                                                   ),
-                                                ):SizedBox()
+                                                ):const SizedBox()
                                               ],
                                             ),
                                           ],
@@ -403,7 +388,7 @@ class ChatusersscreenState extends State<Chatusersscreen> {
                                   child: Row(
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
-                                      Container(
+                                      SizedBox(
                                         width: 14.w,
                                         height: 7.h,
                                         child: CachedNetworkImage(
@@ -433,7 +418,7 @@ class ChatusersscreenState extends State<Chatusersscreen> {
                                                 ),
                                               ),
                                           errorWidget: (context, url, error) => Container(
-                                            decoration: BoxDecoration(
+                                            decoration: const BoxDecoration(
                                                 image: DecorationImage(
                                                     image: AssetImage("assets/images/userprofile.png")
                                                 )
@@ -444,7 +429,7 @@ class ChatusersscreenState extends State<Chatusersscreen> {
                                       SizedBox(
                                         width: 5.w,
                                       ),
-                                      Container(
+                                      SizedBox(
                                         width: 72.w,
                                         child: Column(
                                           mainAxisAlignment:
@@ -459,9 +444,9 @@ class ChatusersscreenState extends State<Chatusersscreen> {
                                               mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                               children: [
-                                                Container(
+                                                SizedBox(
                                                   width: 30.w,
-                                                  child: Text(
+                                                  child: Text(usertype=="user" ? chatuserpojo!.data!.elementAt(index).usericreateName.toString() :
                                                     searchchatuserpojo!.data!.elementAt(index).useriname.toString(),
                                                     style: TextStyle(
                                                         fontSize: 12.sp,
@@ -499,7 +484,7 @@ class ChatusersscreenState extends State<Chatusersscreen> {
                                               mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                               children: [
-                                                Container(
+                                                SizedBox(
                                                   width: 60.w,
                                                   child: Text(
                                                     searchchatuserpojo!.data!.elementAt(index).messageType.toString()=="jpg"?"Image":searchchatuserpojo!.data!.elementAt(index).messageType.toString()=="mp4"?"Video":searchchatuserpojo!.data!.elementAt(index).lastmessage.toString(),
@@ -530,7 +515,7 @@ class ChatusersscreenState extends State<Chatusersscreen> {
                                                         Alignment.topCenter,
                                                         end: Alignment
                                                             .bottomCenter,
-                                                        stops: [0.0, 1.0],
+                                                        stops: const [0.0, 1.0],
                                                         tileMode: TileMode.clamp),
                                                   ),
                                                   child: Text(
@@ -543,7 +528,7 @@ class ChatusersscreenState extends State<Chatusersscreen> {
                                                         color: Appcolors()
                                                             .blackcolor),
                                                   ),
-                                                ):SizedBox()
+                                                ):const SizedBox()
                                               ],
                                             ),
                                           ],
@@ -568,7 +553,7 @@ class ChatusersscreenState extends State<Chatusersscreen> {
             :
                 Helpingwidgets.emptydatawithoutdivider("No Chat!")
                 :
-            SizedBox()
+            const SizedBox()
           ],
         ),
       ),
@@ -578,12 +563,18 @@ class ChatusersscreenState extends State<Chatusersscreen> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
       token = sharedPreferences.getString("token")!;
+      usertype = sharedPreferences.getString("usertype")!.toString();//
+      //usertype = sharedPreferences.getString("type")??'';
+     // print("Token value:-" + token);
     });
-    print("Token value:-" + token.toString());
+    //setState(() {
+      
+      print("usertype$usertype");
+    //});
     var dateUtc = DateTime.now().toUtc();
-    print("dateUtc: $dateUtc");
+   // print("dateUtc: $dateUtc");
     var dateLocal = dateUtc.toLocal();
-    print("local: $dateLocal");
+   // print("local: $dateLocal");
     chatuserlisting(2);
   }
 
@@ -593,11 +584,11 @@ class ChatusersscreenState extends State<Chatusersscreen> {
       "token": token,
       "sort": sorttype.toString(),
     };
-    print("Data:-" + data.toString());
-    var jsonResponse = null;
+    //print("Data:-" + data.toString());
+    var jsonResponse;
     var response = await http.post(Uri.parse(Networks.baseurl + Networks.chatlist), body: data);
     jsonResponse = json.decode(response.body);
-    print("jsonResponse:-" + jsonResponse.toString());
+    //print("jsonResponse:-" + jsonResponse.toString());
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
         setState(() {
@@ -610,7 +601,7 @@ class ChatusersscreenState extends State<Chatusersscreen> {
         setState(() {
           responsestatus = true;
         });
-        print("Message:-" + jsonResponse["message"].toString());
+        //print("Message:-" + jsonResponse["message"].toString());
         chatuserpojo = Chatuserpojo.fromJson(jsonResponse);
         Navigator.pop(context);
       }

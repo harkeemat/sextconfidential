@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_sound/public/flutter_sound_recorder.dart';
@@ -12,7 +11,6 @@ import 'package:flutter_sound/public/tau.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:record/record.dart';
 // import 'package:record_mp3/record_mp3.dart';
 import 'package:sextconfidential/UserprofileScreen.dart';
 import 'package:sextconfidential/Videoscreen.dart';
@@ -24,12 +22,8 @@ import 'package:sextconfidential/utils/StringConstants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter/foundation.dart' as foundation;
-import 'package:social_media_recorder/audio_encoder_type.dart';
-import 'package:social_media_recorder/screen/social_media_recorder.dart';
 import 'package:voice_message_package/voice_message_package.dart';
 // import 'package:voice_message_package/voice_message_package.dart';
-import 'package:audioplayers/audioplayers.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
 
@@ -64,7 +58,7 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
   GlobalKey<State> key = GlobalKey();
   Timer? _timer;
   bool condition = false;
-  ScrollController _controller = ScrollController();
+  final ScrollController _controller = ScrollController();
   String? chatcurrentdate;
   int messageslength=0;
   FlutterSound flutterSound=FlutterSound();
@@ -73,9 +67,10 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    getsharedpreference();
     initRecorder();
     checkPermission();
-    getsharedpreference();
+    
   }
 
   @override
@@ -103,7 +98,7 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
             onTap: () {
               _timer!.cancel();
               Navigator.pop(context);
-              print("Click back");
+              //print("Click back");
             },
             child: Container(
                 // color: Colors.white,
@@ -133,7 +128,7 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Container(
+                      SizedBox(
                         height: 5.h,
                         width: 16.w,
                         child: CachedNetworkImage(
@@ -161,7 +156,7 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
                           errorWidget: (context, url, error) => Container(
                             width: 16.w,
                             height: 5.h,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                                 image: DecorationImage(
                                     image: AssetImage(
                                         "assets/images/userprofile.png"))),
@@ -212,7 +207,7 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     responsestatus
-                        ? chatmessagespojo!.data!.isNotEmpty||chatmessagespojo!.data==null
+                        ? chatmessagespojo!.data!.isNotEmpty||chatmessagespojo!.data==null 
                             ? Expanded(
                                 child: AnimationLimiter(
                                   child: ListView.builder(
@@ -224,6 +219,7 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
                                     itemCount: chatmessagespojo!.data!.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
+                                          print("index${chatmessagespojo!.data}");
                                       return AnimationConfiguration
                                           .staggeredList(
                                         position: index,
@@ -260,8 +256,7 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
                                                                 chatmessagespojo!
                                                                     .data!
                                                                     .elementAt(
-                                                                        index)!
-                                                                    .createdAt
+                                                                        index).createdAt
                                                                     .toString()
                                                                     .substring(
                                                                         0, 13)
@@ -269,16 +264,14 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
                                                                 chatmessagespojo!
                                                                     .data!
                                                                     .elementAt(
-                                                                        index)!
-                                                                    .createdAt
+                                                                        index).createdAt
                                                                     .toString()
                                                                     .substring(
                                                                         0, 13))
-                                                            : SizedBox(),
+                                                            : const SizedBox(),
                                                         chatmessagespojo!.data!
                                                                     .elementAt(
-                                                                        index)!
-                                                                    .fromId
+                                                                        index).fromId
                                                                     .toString() !=
                                                                 token
                                                             ? sendermessage(
@@ -305,7 +298,7 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
                             : Center(
                                 child: Helpingwidgets.emptydatawithoutdivider(
                                     "No Message!"))
-                        : SizedBox(),
+                        : const SizedBox(),
                     SizedBox(
                       height: 7.h,
                     )
@@ -318,7 +311,7 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
                       offstage: !micstatus,
                       child: miccontainer(),
                     ),
-                    showuploaddialog ? uploadcontainer() : SizedBox(),
+                    showuploaddialog ? uploadcontainer() : const SizedBox(),
                     Container(
                         margin: EdgeInsets.only(left: 2.w, right: 2.w),
                         color: Appcolors().backgroundcolor,
@@ -341,7 +334,7 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               // !micstatus?
-                              Container(
+                              SizedBox(
                                 height: 5.h,
                                 width: 80.w,
                                 child: Row(
@@ -538,7 +531,7 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
       alignment: Alignment.center,
       height: 10.h,
       decoration: BoxDecoration(
-          image: DecorationImage(
+          image: const DecorationImage(
             image: AssetImage(
               "assets/images/btnbackgroundgradient.png",
             ),
@@ -656,7 +649,7 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
       alignment: Alignment.center,
       height: 10.h,
       decoration: BoxDecoration(
-          image: DecorationImage(
+          image: const DecorationImage(
             image: AssetImage(
               "assets/images/btnbackgroundgradient.png",
             ),
@@ -749,8 +742,7 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
   Widget receivermessage(int index) {
     // setState((){
     chatcurrentdate = chatmessagespojo!.data!
-        .elementAt(index)!
-        .createdAt
+        .elementAt(index).createdAt
         .toString()
         .substring(0, 13);
     // });
@@ -767,7 +759,7 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
                     Container(
                       padding: EdgeInsets.all(1.5.h),
                       decoration: BoxDecoration(
-                          image: DecorationImage(
+                          image: const DecorationImage(
                               image: AssetImage(
                                 "assets/images/btnbackgroundgradient.png",
                               ),
@@ -842,8 +834,8 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
                       ],
                     ),
                   ):
-        chatmessagespojo!.data!.elementAt(index)!.messageType.toString()=="mp3"?
-        voicemessage(chatmessagespojo!.data!.elementAt(index)!.message.toString(),index)
+        chatmessagespojo!.data!.elementAt(index).messageType.toString()=="mp3"?
+        voicemessage(chatmessagespojo!.data!.elementAt(index).message.toString(),index)
                 : Container(
                     margin: EdgeInsets.only(left: 2.w, right: 2.w),
                     width: double.infinity,
@@ -861,7 +853,7 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
                                     .message
                                     .toString());
                           },
-                          child: Container(
+                          child: SizedBox(
                             height: 15.h,
                             width: 40.w,
                             child: CachedNetworkImage(
@@ -896,7 +888,7 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
                                 width: 40.w,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
-                                    image: DecorationImage(
+                                    image: const DecorationImage(
                                         image: AssetImage(
                                             "assets/images/imageplaceholder.png"),
                                         fit: BoxFit.cover)),
@@ -921,8 +913,7 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
   Widget sendermessage(int index) {
     // setState((){
     chatcurrentdate = chatmessagespojo!.data!
-        .elementAt(index)!
-        .createdAt
+        .elementAt(index).createdAt
         .toString()
         .substring(0, 13);
     // });
@@ -1011,8 +1002,8 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
                             ],
                           ),
                         ):
-                  chatmessagespojo!.data!.elementAt(index)!.messageType.toString()=="mp3"?
-                  voicemessage(chatmessagespojo!.data!.elementAt(index)!.message.toString(),index)
+                  chatmessagespojo!.data!.elementAt(index).messageType.toString()=="mp3"?
+                  voicemessage(chatmessagespojo!.data!.elementAt(index).message.toString(),index)
                       : Container(
                           margin: EdgeInsets.only(left: 6.w),
                           padding: EdgeInsets.only(
@@ -1066,7 +1057,7 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15),
                                     shape: BoxShape.rectangle,
-                                    image: DecorationImage(
+                                    image: const DecorationImage(
                                         image: AssetImage(
                                             "assets/images/imageplaceholder.png"),
                                         fit: BoxFit.cover)),
@@ -1105,7 +1096,7 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
                   errorWidget: (context, url, error) => Container(
                     height: 15.h,
                     width: 40.w,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         image: DecorationImage(
                             image: AssetImage(
                                 "assets/images/userprofile.png"))),
@@ -1201,11 +1192,11 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
 
     if (pickedFile != null) {
       imageFile = File(pickedFile.path);
-      print("Video path:-${pickedFile?.path}");
+      print("Video path:-${pickedFile.path}");
       sendmessage();
       // print("Video path:-${pickedFile.path}");
     }
-    return null;
+    return;
   }
 
   Widget voicemessage(String audiosrc,int index) {
@@ -1268,7 +1259,7 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
       imageFile = File(filePath!);
     });
     sendmessage();
-    print("Recorded file path:"+ recordingaudio!.path.toString());
+    print("Recorded file path:${recordingaudio!.path}");
   }
 
   Future<bool> checkPermission() async {
@@ -1292,21 +1283,25 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
   // }
 
   Future<void> getsharedpreference() async {
+    
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
       token = sharedPreferences.getString("token")!;
       userprofilepic = sharedPreferences.getString("profilepic");
       username = sharedPreferences.getString("stagename");
+      chatconversationlisting();
     });
-    print("Token value:-" + token.toString());
-    chatconversationlisting();
-    _timer = Timer.periodic(Duration(seconds: 10), (timer) {
-      print(DateTime.now());
-      setState(() {
+    print("Token value:-$token");
+    if (!mounted) { 
+      return;
+ }
+  setState(() {
+    _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
         chatconversationlisting();
         print("Chat conversin api call");
       });
     });
+    
   }
 
   Future<void> chatconversationlisting() async {
@@ -1315,14 +1310,15 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
       "token": token,
       "toid": widget.userid.toString(),
     };
-    print("Data:-" + data.toString());
-    var jsonResponse = null;
+    //print("Data:-$data");
+    var jsonResponse;
     var response = await http
         .post(Uri.parse(Networks.baseurl + Networks.chatmessage), body: data);
     jsonResponse = json.decode(response.body);
-    print("jsonResponse:-" + jsonResponse.toString());
+    
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
+        print("323232:-$jsonResponse");
         setState(() {
           responsestatus = true;
         });
@@ -1331,9 +1327,10 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
             jsonResponse["message"].toString(), context);
         Navigator.pop(context);
       } else {
+        print("jsonResponse:-$jsonResponse");
         setState(() {
           responsestatus = true;
-          print("Message:-" + jsonResponse["message"].toString());
+          //print("Message:-${jsonResponse["message"]}");
 
           chatmessagespojo = Chatmessagespojo.fromJson(jsonResponse);
           // chatmessagespojo2=chatmessagespojonew;
@@ -1344,8 +1341,8 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
           //   }
           if(messageslength<chatmessagespojo!.data!.length && messageslength!=0){
             _controller.jumpTo(_controller.position.maxScrollExtent);
-            _controller!.animateTo(_controller.position.maxScrollExtent,
-                duration: Duration(milliseconds: 1), curve: Curves.easeOut);
+            _controller.animateTo(_controller.position.maxScrollExtent,
+                duration: const Duration(milliseconds: 1000), curve: Curves.easeOut);
             print("New message received!");
           }
           messageslength=chatmessagespojo!.data!.length;
@@ -1355,8 +1352,8 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
               _controller.position.pixels ==
                   _controller.position.maxScrollExtent) {
             _controller.jumpTo(_controller.position.maxScrollExtent);
-            _controller!.animateTo(_controller.position.maxScrollExtent,
-                duration: Duration(milliseconds: 1), curve: Curves.easeOut);
+            _controller.animateTo(_controller.position.maxScrollExtent,
+                duration: const Duration(milliseconds: 10), curve: Curves.easeOut);
           }
       }
     } else {
@@ -1374,32 +1371,32 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
       'post',
       Uri.parse(Networks.baseurl + Networks.chatmessagesend),
     );
-    var jsonData = null;
+    var jsonData;
     request.headers["Content-Type"] = "multipart/form-data";
     request.fields["toid"] = widget.userid.toString();
     request.fields["token"] = token!;
-    print("token:-" + token!.toString());
-    print("Message:-" + messagecontroller.text.trim());
+    //print("token:-${token!}");
+    //print("Message:-${messagecontroller.text.trim()}");
     if (imageFile != null) {
       print("Image message send");
-      print("File path on api call:-"+imageFile!.path.toString());
+      print("File path on api call:-${imageFile!.path}");
       request.files.add(
         await http.MultipartFile.fromPath("file", imageFile!.path,
             filename: imageFile!.path),
       );
     } else {
       print("Simple message send");
-      request.fields["file"] = messagecontroller.text!;
+      request.fields["file"] = messagecontroller.text;
     }
     var response = await request.send();
     response.stream.transform(utf8.decoder).listen((value) {
       jsonData = json.decode(value);
-      print("Json:-" + jsonData.toString());
+      //print("Json:-$jsonData");
       if (response.statusCode == 200) {
         if (jsonData["status"] == false) {
           Helpingwidgets.failedsnackbar(
               jsonData["message"].toString(), context);
-          print("Response:${jsonData["message"]}");
+          //print("Response:${jsonData["message"]}");
           Navigator.pop(context);
         } else {
           setState(() {
@@ -1423,17 +1420,16 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
     while (scrollController.position.pixels !=
         scrollController.position.maxScrollExtent) {
       scrollController.jumpTo(scrollController.position.maxScrollExtent);
-      await SchedulerBinding.instance!.endOfFrame;
+      await SchedulerBinding.instance.endOfFrame;
     }
   }
 
   Widget messagetime(int index){
     return  Text(
-      "Sent  "+chatmessagespojo!.data!
+      "Sent  ${chatmessagespojo!.data!
           .elementAt(index)
           .createdAt
-          .toString()
-          .substring(14, 22),
+          .toString().substring(14, 22)}",
       // "Send for ${chatmessagespojo!.data!.elementAt(index).type}"=="free"?+chatmessagespojo!.data!.elementAt(index).createdAt.toString().substring(0,10),
       style: TextStyle(
           fontSize: 10.sp,

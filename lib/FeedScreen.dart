@@ -6,7 +6,6 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/svg.dart';
@@ -22,25 +21,24 @@ import 'package:sextconfidential/utils/Unpindropdown.dart';
 // import 'package:sextconfidential/utils/CustomMenu.dart';
 import 'package:sextconfidential/utils/Helpingwidgets.dart';
 import 'package:sextconfidential/utils/Networks.dart';
-import 'package:sextconfidential/utils/Scheduleddropdown.dart';
 import 'package:sextconfidential/utils/Sidedrawer.dart';
 import 'package:sextconfidential/utils/StringConstants.dart';
-import 'package:sextconfidential/utils/Unpindropdown.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:sizer/sizer.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:http/http.dart' as http;
-import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(FeedScreen());
+  runApp(const FeedScreen());
 }
 
 
 class FeedScreen extends StatefulWidget {
+  const FeedScreen({super.key});
+
   @override
   FeedScreenState createState() => FeedScreenState();
 }
@@ -105,7 +103,7 @@ class FeedScreenState extends State<FeedScreen> {
     return Scaffold(
       backgroundColor: Appcolors().backgroundcolor,
       key: _key,
-      drawer: Sidedrawer(),
+      drawer: const Sidedrawer(),
       // appBar: AppBar(
       //   elevation: 0,
       //   backgroundColor: Appcolors().bottomnavbgcolor,
@@ -143,7 +141,7 @@ class FeedScreenState extends State<FeedScreen> {
                   SizedBox(
                     width: 3.w,
                   ),
-                  Container(
+                  SizedBox(
                     width: 45.w,
                     child: CustomDropdownButton2(
                       hint: "Select Item",
@@ -195,7 +193,7 @@ class FeedScreenState extends State<FeedScreen> {
                           print(pickedDate);
                           formattedDate =
                               DateFormat('yyyy-MM-dd').format(pickedDate);
-                          print("Selected date:-" + formattedDate!);
+                          print("Selected date:-${formattedDate!}");
                           timepicker();
                           setState(() {
                             // dateInput.text =
@@ -207,7 +205,7 @@ class FeedScreenState extends State<FeedScreen> {
                         decoration: BoxDecoration(
                             color: Appcolors().bottomnavbgcolor,
                             borderRadius: BorderRadius.circular(15)),
-                        padding: EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         child: Text(
                           formattedDate == null
                               ? "YYYY/MM/DD HH:MM"
@@ -287,24 +285,24 @@ class FeedScreenState extends State<FeedScreen> {
                     addmediadialog(context);
                   }
                 },
-                child: Container(
+                child: SizedBox(
                   width: double.infinity,
                   child: DottedBorder(
                     strokeCap: StrokeCap.round,
                     strokeWidth: 1,
-                    dashPattern: [8, 4],
+                    dashPattern: const [8, 4],
                     color: Appcolors().gradientcolorfirst,
                     borderType: BorderType.RRect,
-                    radius: Radius.circular(15),
-                    padding: EdgeInsets.all(6),
+                    radius: const Radius.circular(15),
+                    padding: const EdgeInsets.all(6),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                      borderRadius: const BorderRadius.all(Radius.circular(12)),
                       child: imageFile == null
                           ? GestureDetector(
                               onTap: () {
                                 addmediadialog(context);
                               },
-                              child: Container(
+                              child: SizedBox(
                                   height: 5.h,
                                   width: double.infinity,
                                   child: Row(
@@ -342,7 +340,7 @@ class FeedScreenState extends State<FeedScreen> {
                                     alignment: Alignment.topRight,
                                     children: [
                                       Container(
-                                        padding: EdgeInsets.all(10),
+                                        padding: const EdgeInsets.all(10),
                                         // child: Image.file(imageFile!,height:15.h,width:25.w,fit: BoxFit.fill,)),
                                         child: imageFile!.path.substring(
                                                     imageFile!.path.length - 3,
@@ -368,7 +366,7 @@ class FeedScreenState extends State<FeedScreen> {
                                           });
                                         },
                                         child: Container(
-                                          margin: EdgeInsets.only(right: 3,top: 5),
+                                          margin: const EdgeInsets.only(right: 3,top: 5),
                                           child: CircleAvatar(
                                             radius: 1.5.h,
                                             backgroundColor: Colors.white,
@@ -447,7 +445,7 @@ class FeedScreenState extends State<FeedScreen> {
                                         height: 2.h,
                                         decoration: BoxDecoration(
                                             shape: BoxShape.rectangle,
-                                            image: DecorationImage(
+                                            image: const DecorationImage(
                                                 image: AssetImage(
                                                     "assets/images/btnbackgroundgradient.png"),
                                                 fit: BoxFit.fill),
@@ -498,7 +496,7 @@ class FeedScreenState extends State<FeedScreen> {
                   alignment: Alignment.center,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                      image: DecorationImage(
+                      image: const DecorationImage(
                           image: AssetImage(
                               "assets/images/btnbackgroundgradient.png"),
                           fit: BoxFit.fill),
@@ -526,7 +524,7 @@ class FeedScreenState extends State<FeedScreen> {
                 decoration: BoxDecoration(
                     color: Appcolors().bottomnavbgcolor,
                     borderRadius: BorderRadius.circular(12)),
-                padding: EdgeInsets.all(6),
+                padding: const EdgeInsets.all(6),
                 alignment: Alignment.center,
                 height: 5.h,
                 child: Row(
@@ -649,13 +647,13 @@ class FeedScreenState extends State<FeedScreen> {
                 height: 1.h,
               ),
               selectedposttype == 0
-                  ? Container(
+                  ? SizedBox(
                       width: double.infinity,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Container(
+                          SizedBox(
                             width: 45.w,
                             child: CustomDropdownButton2(
                               hint: "Select Item",
@@ -690,7 +688,7 @@ class FeedScreenState extends State<FeedScreen> {
                         ],
                       ),
                     )
-                  : SizedBox(),
+                  : const SizedBox(),
               SizedBox(
                 height: 1.h,
               ),
@@ -700,7 +698,7 @@ class FeedScreenState extends State<FeedScreen> {
                       : selectedposttype == 1
                           ? scheduledlistview()
                           : savetodraft()
-                  : SizedBox()
+                  : const SizedBox()
               // : Helpingwidgets().customloader()
             ],
           ),
@@ -714,7 +712,7 @@ class FeedScreenState extends State<FeedScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-              shape: RoundedRectangleBorder(
+              shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10.0))),
               backgroundColor: Appcolors().dialogbgcolor,
               //title: Text("Image Picker"),
@@ -804,7 +802,7 @@ class FeedScreenState extends State<FeedScreen> {
         builder: (BuildContext context) {
           return AlertDialog(
             contentPadding: EdgeInsets.zero,
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10.0))),
             backgroundColor: Colors.transparent,
             //title: Text("Image Picker"),
@@ -816,14 +814,14 @@ class FeedScreenState extends State<FeedScreen> {
                   children: [
                     Container(
                       color: Colors.transparent,
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       child: Container(
                         width: 80.w,
                         // margin: EdgeInsets.only(left: 2.w, right: 2.w,bottom: 1.h),
                         alignment: Alignment.center,
                         height: 10.h,
                         decoration: BoxDecoration(
-                            image: DecorationImage(
+                            image: const DecorationImage(
                               image: AssetImage(
                                 "assets/images/btnbackgroundgradient.png",
                               ),
@@ -983,7 +981,7 @@ class FeedScreenState extends State<FeedScreen> {
       // print("Video path:-${pickedFile.path}");
     }
 
-    return null;
+    return;
   }
 
   Future<void> getsharedpreference() async {
@@ -993,8 +991,8 @@ class FeedScreenState extends State<FeedScreen> {
       userprofilepic = sharedPreferences.getString("profilepic");
       username = sharedPreferences.getString("stagename");
     });
-    print("Token value:-" + token.toString());
-    print("profile value:-" + userprofilepic.toString());
+    print("Token value:-$token");
+    print("profile value:-$userprofilepic");
     feedlisting(sorttype!);
   }
 
@@ -1004,7 +1002,7 @@ class FeedScreenState extends State<FeedScreen> {
       'post',
       Uri.parse(Networks.baseurl + Networks.newpost),
     );
-    var jsonData = null;
+    var jsonData;
     request.headers["Content-Type"] = "multipart/form-data";
     request.fields["text"] = messagecontroller.text.trim();
     request.fields["token"] = token!;
@@ -1020,15 +1018,15 @@ class FeedScreenState extends State<FeedScreen> {
         postselectedvalue == StringConstants.scheduledpost
             ? "${formattedDate!} $timezone"
             : "";
-    print("token:-" + token!);
-    print("Message:-" + messagecontroller.text.trim());
-    print("token:-" + token.toString());
-    print("Post type:-" + postselectedvalue == StringConstants.scheduledpost
+    print("token:-${token!}");
+    print("Message:-${messagecontroller.text.trim()}");
+    print("token:-$token");
+    print("Post type:-$postselectedvalue" == StringConstants.scheduledpost
         ? "Schedule"
         : postselectedvalue == StringConstants.saveasdraft
             ? "Save Draft"
             : "Post");
-    print("scdate:-" + "${formattedDate!} $timezone");
+    print("scdate:-" "${formattedDate!} $timezone");
     // print("Image path:-"+imageFile!.path.toString());
     if (imageFile != null) {
       request.files.add(
@@ -1039,7 +1037,7 @@ class FeedScreenState extends State<FeedScreen> {
     var response = await request.send();
     response.stream.transform(utf8.decoder).listen((value) {
       jsonData = json.decode(value);
-      print("Json:-" + jsonData.toString());
+      print("Json:-$jsonData");
       if (response.statusCode == 200) {
         if (jsonData["status"] == false) {
           Helpingwidgets.failedsnackbar(
@@ -1071,12 +1069,12 @@ class FeedScreenState extends State<FeedScreen> {
       "token": token,
       "sort": sorttype.toString(),
     };
-    print("Data:-" + data.toString());
-    var jsonResponse = null;
+    print("Data:-$data");
+    var jsonResponse;
     var response = await http
         .post(Uri.parse(Networks.baseurl + Networks.myposts), body: data);
     jsonResponse = json.decode(response.body);
-    print("jsonResponse:-" + jsonResponse.toString());
+    print("jsonResponse:-$jsonResponse");
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
         setState(() {
@@ -1090,7 +1088,7 @@ class FeedScreenState extends State<FeedScreen> {
         setState(() {
           responsestatus = true;
         });
-        print("Message:-" + jsonResponse["message"].toString());
+        print("Message:-${jsonResponse["message"]}");
         feedpostspojo = Feedpostspojo.fromJson(jsonResponse);
         Navigator.pop(context);
       }
@@ -1109,12 +1107,12 @@ class FeedScreenState extends State<FeedScreen> {
     Map data = {
       "postid": postid.toString(),
     };
-    print("Data:-" + data.toString());
-    var jsonResponse = null;
+    print("Data:-$data");
+    var jsonResponse;
     var response = await http
         .post(Uri.parse(Networks.baseurl + Networks.deletepost), body: data);
     jsonResponse = json.decode(response.body);
-    print("jsonResponse:-" + jsonResponse.toString());
+    print("jsonResponse:-$jsonResponse");
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
         Navigator.pop(context);
@@ -1124,7 +1122,7 @@ class FeedScreenState extends State<FeedScreen> {
       } else {
         Helpingwidgets.successsnackbar(
             jsonResponse["message"].toString(), context);
-        print("Message:-" + jsonResponse["message"].toString());
+        print("Message:-${jsonResponse["message"]}");
         feedlisting(0);
         Navigator.pop(context);
       }
@@ -1141,12 +1139,12 @@ class FeedScreenState extends State<FeedScreen> {
       "postid": postid.toString(),
       "status": status.toString(),
     };
-    print("Data:-" + data.toString());
-    var jsonResponse = null;
+    print("Data:-$data");
+    var jsonResponse;
     var response = await http
         .post(Uri.parse(Networks.baseurl + Networks.pinposts), body: data);
     jsonResponse = json.decode(response.body);
-    print("jsonResponse:-" + jsonResponse.toString());
+    print("jsonResponse:-$jsonResponse");
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
         Navigator.pop(context);
@@ -1170,12 +1168,12 @@ class FeedScreenState extends State<FeedScreen> {
       "postid": postid.toString(),
       "text": postcontent.toString(),
     };
-    print("Data:-" + data.toString());
-    var jsonResponse = null;
+    print("Data:-$data");
+    var jsonResponse;
     var response = await http
         .post(Uri.parse(Networks.baseurl + Networks.updatepost), body: data);
     jsonResponse = json.decode(response.body);
-    print("jsonResponse:-" + jsonResponse.toString());
+    print("jsonResponse:-$jsonResponse");
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
         Navigator.pop(context);
@@ -1227,7 +1225,7 @@ class FeedScreenState extends State<FeedScreen> {
       // String formattedTime1 =
       // DateFormat('HH:mma')
       //     .format(parsedTime());
-      print("24 hour time:-" + parsedTime.toString());
+      print("24 hour time:-$parsedTime");
       // print(timezone2.toString());
       // //DateFormat() is from intl package, you can format the time on any pattern you need.
       setState(() {
@@ -1245,7 +1243,7 @@ class FeedScreenState extends State<FeedScreen> {
         ? AnimationLimiter(
             child: ListView.builder(
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: feedpostspojo!.message!.post!.length,
               itemBuilder: (BuildContext context, int index) {
                 return AnimationConfiguration.staggeredList(
@@ -1285,7 +1283,7 @@ class FeedScreenState extends State<FeedScreen> {
                                                 "assets/images/userprofile.png",
                                                 width: 15.w,
                                                 height: 4.5.h)
-                                            : Container(
+                                            : SizedBox(
                                                 height: 4.5.h,
                                                 width: 15.w,
                                                 child: CachedNetworkImage(
@@ -1399,7 +1397,7 @@ class FeedScreenState extends State<FeedScreen> {
                                             onChanged: (value) {
                                               UnpinMenuItems.onChanged(context,
                                                   value as UnpinCustomMenuItem);
-                                              print("Value:-" + value.text);
+                                              print("Value:-${value.text}");
                                               if (value.text ==
                                                   StringConstants.editpost) {
                                                 setState(() {
@@ -1506,7 +1504,7 @@ class FeedScreenState extends State<FeedScreen> {
                                             onChanged: (value) {
                                               MenuItems.onChanged(context,
                                                   value as CustomMenuItem);
-                                              print("Value:-" + value.text);
+                                              print("Value:-${value.text}");
                                               if (value.text ==
                                                   StringConstants.editpost) {
                                                 setState(() {
@@ -1649,7 +1647,7 @@ class FeedScreenState extends State<FeedScreen> {
                                                         .toString(),
                                                   )));
                                     },
-                                    child: Container(
+                                    child: SizedBox(
                                         width: double.infinity,
                                         height: 30.h,
                                         child: feedpostspojo!.message!.post!
@@ -1698,7 +1696,7 @@ class FeedScreenState extends State<FeedScreen> {
                                                 BorderRadius.circular(20),
                                                 shape:
                                                 BoxShape.rectangle,
-                                                image: DecorationImage(
+                                                image: const DecorationImage(
                                                     image: AssetImage("assets/images/imageplaceholder.png"),fit: BoxFit.cover
                                                 )
                                             ),
@@ -1728,7 +1726,7 @@ class FeedScreenState extends State<FeedScreen> {
                                                       size: 6.h,
                                                     ),
                                                   )
-                                                : SizedBox()),
+                                                : const SizedBox()),
                                   ),
                                 ),
                                 SizedBox(
@@ -1847,7 +1845,7 @@ class FeedScreenState extends State<FeedScreen> {
                                                               Alignment.center,
                                                           width: 30.w,
                                                           decoration: BoxDecoration(
-                                                              image: DecorationImage(
+                                                              image: const DecorationImage(
                                                                   image: AssetImage(
                                                                       "assets/images/btnbackgroundgradient.png"),
                                                                   fit: BoxFit
@@ -1911,7 +1909,7 @@ class FeedScreenState extends State<FeedScreen> {
                                         ),
                                       ],
                                     )),
-                                Container(
+                                SizedBox(
                                   width: 75.w,
                                   child: Row(
                                     mainAxisAlignment:
@@ -1919,7 +1917,7 @@ class FeedScreenState extends State<FeedScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      Container(
+                                      SizedBox(
                                         width: 20.w,
                                         child: Row(
                                           crossAxisAlignment:
@@ -1945,7 +1943,7 @@ class FeedScreenState extends State<FeedScreen> {
                                           ],
                                         ),
                                       ),
-                                      Container(
+                                      SizedBox(
                                         width: 20.w,
                                         child: Row(
                                           crossAxisAlignment:
@@ -1971,7 +1969,7 @@ class FeedScreenState extends State<FeedScreen> {
                                           ],
                                         ),
                                       ),
-                                      Container(
+                                      SizedBox(
                                         width: 20.w,
                                         child: Row(
                                           crossAxisAlignment:
@@ -2025,7 +2023,7 @@ class FeedScreenState extends State<FeedScreen> {
         ? AnimationLimiter(
             child: ListView.builder(
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: feedpostspojo!.message!.schedule!.length,
               itemBuilder: (BuildContext context, int index) {
                 return AnimationConfiguration.staggeredList(
@@ -2058,7 +2056,7 @@ class FeedScreenState extends State<FeedScreen> {
                                                 "assets/images/userprofile.png",
                                                 width: 15.w,
                                                 height: 4.5.h)
-                                            : Container(
+                                            : SizedBox(
                                                 height: 4.5.h,
                                                 width: 15.w,
                                                 child: CachedNetworkImage(
@@ -2097,7 +2095,7 @@ class FeedScreenState extends State<FeedScreen> {
                                                         BorderRadius.circular(15),
                                                         shape:
                                                         BoxShape.circle,
-                                                        image: DecorationImage(
+                                                        image: const DecorationImage(
                                                             image: AssetImage("assets/images/userprofile.png"),fit: BoxFit.cover
                                                         )
                                                     ),
@@ -2164,7 +2162,7 @@ class FeedScreenState extends State<FeedScreen> {
                                         onChanged: (value) {
                                           ScheduledMenuItems.onChanged(context,
                                               value as ScheduledCustomMenuItem);
-                                          print("Value:-" + value.text);
+                                          print("Value:-${value.text}");
                                           if (value.text ==
                                               StringConstants.editpost) {
                                             setState(() {
@@ -2276,7 +2274,7 @@ class FeedScreenState extends State<FeedScreen> {
                                                         .toString(),
                                                   )));
                                     },
-                                    child: Container(
+                                    child: SizedBox(
                                         width: double.infinity,
                                         height: 30.h,
                                         child: feedpostspojo!.message!.schedule!
@@ -2343,7 +2341,7 @@ class FeedScreenState extends State<FeedScreen> {
                                                       size: 6.h,
                                                     ),
                                                   )
-                                                : SizedBox()),
+                                                : const SizedBox()),
                                   ),
                                 ),
                                 SizedBox(
@@ -2450,7 +2448,7 @@ class FeedScreenState extends State<FeedScreen> {
                                                             Alignment.center,
                                                         width: 30.w,
                                                         decoration: BoxDecoration(
-                                                            image: DecorationImage(
+                                                            image: const DecorationImage(
                                                                 image: AssetImage(
                                                                     "assets/images/btnbackgroundgradient.png"),
                                                                 fit: BoxFit
@@ -2624,7 +2622,7 @@ class FeedScreenState extends State<FeedScreen> {
         ? AnimationLimiter(
             child: ListView.builder(
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: feedpostspojo!.message!.saveDraft!.length,
               itemBuilder: (BuildContext context, int index) {
                 return AnimationConfiguration.staggeredList(
@@ -2664,7 +2662,7 @@ class FeedScreenState extends State<FeedScreen> {
                                                 "assets/images/userprofile.png",
                                                 width: 15.w,
                                                 height: 4.5.h)
-                                            : Container(
+                                            : SizedBox(
                                                 height: 4.5.h,
                                                 width: 15.w,
                                                 child: CachedNetworkImage(
@@ -2758,7 +2756,7 @@ class FeedScreenState extends State<FeedScreen> {
                                         onChanged: (value) {
                                           ScheduledMenuItems.onChanged(
                                               context, value as ScheduledCustomMenuItem);
-                                          print("Value:-" + value.text);
+                                          print("Value:-${value.text}");
                                           if (value.text ==
                                               StringConstants.editpost) {
                                             setState(() {
@@ -2869,7 +2867,7 @@ class FeedScreenState extends State<FeedScreen> {
                                                     pinstatus: "",
                                                   )));
                                     },
-                                    child: Container(
+                                    child: SizedBox(
                                         width: double.infinity,
                                         height: 30.h,
                                         child: feedpostspojo!
@@ -2938,7 +2936,7 @@ class FeedScreenState extends State<FeedScreen> {
                                                       size: 6.h,
                                                     ),
                                                   )
-                                                : SizedBox()),
+                                                : const SizedBox()),
                                   ),
                                 ),
                                 SizedBox(
@@ -3046,7 +3044,7 @@ class FeedScreenState extends State<FeedScreen> {
                                                           Alignment.center,
                                                       width: 30.w,
                                                       decoration: BoxDecoration(
-                                                          image: DecorationImage(
+                                                          image: const DecorationImage(
                                                               image: AssetImage(
                                                                   "assets/images/btnbackgroundgradient.png"),
                                                               fit: BoxFit.fill),
@@ -3252,9 +3250,9 @@ class FeedScreenState extends State<FeedScreen> {
 
   Widget pinnedpost() {
     return Container(
-        padding: EdgeInsets.all(6),
+        padding: const EdgeInsets.all(6),
         width: 6.w,
-        margin: EdgeInsets.only(right: 10),
+        margin: const EdgeInsets.only(right: 10),
         alignment: Alignment.center,
         decoration: BoxDecoration(
             border: Border.all(color: Appcolors().gradientcolorsecond),
@@ -3274,7 +3272,7 @@ class FeedScreenState extends State<FeedScreen> {
     final DynamicLinkParameters parameters = DynamicLinkParameters(
       uriPrefix: DynamicLink,
       longDynamicLink: Uri.parse(
-        'https://sextconfidential.page.link/?link=https://sextconfidential.com&isi=6450113311&ibi=com.coderzbar.sextconfidential.sextconfidential&efr=1'+"10",
+        'https://sextconfidential.page.link/?link=https://sextconfidential.com&isi=6450113311&ibi=com.coderzbar.sextconfidential.sextconfidential&efr=1'"10",
       ),
       link: Uri.parse(DynamicLink),
       // androidParameters: const AndroidParameters(
@@ -3295,6 +3293,6 @@ class FeedScreenState extends State<FeedScreen> {
     } else {
       url = await dynamicLinks.buildLink(parameters);
     }
-    print("Url:-"+url.toString());
+    print("Url:-$url");
   }
 }

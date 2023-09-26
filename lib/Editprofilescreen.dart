@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,6 +15,8 @@ import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
 
 class Editprofilescreen extends StatefulWidget {
+  const Editprofilescreen({super.key});
+
   @override
   EditprofilescreenState createState() => EditprofilescreenState();
 }
@@ -29,7 +30,7 @@ class EditprofilescreenState extends State<Editprofilescreen> {
   Getprofilepojo? getprofilepojo;
   String? token;
   File? imageFile;
-  GlobalKey<FormState>_key=GlobalKey();
+  final GlobalKey<FormState>_key=GlobalKey();
   GlobalKey<State>key=GlobalKey();
   String? profilepic;
   @override
@@ -85,7 +86,7 @@ class EditprofilescreenState extends State<Editprofilescreen> {
                           imageFile==null?
                           profilepic==null||profilepic==""?
                           Image.asset("assets/images/userprofile.png",height: 10.h,width: 20.w,):
-                          Container(
+                          SizedBox(
                             width: 30.w,
                             child: CachedNetworkImage(
                               alignment: Alignment.topCenter,
@@ -114,7 +115,7 @@ class EditprofilescreenState extends State<Editprofilescreen> {
                               errorWidget: (context, url, error) => Container(
                                 width: 30.w,
                                 height: 15.h,
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                     image: DecorationImage(
                                         image: AssetImage("assets/images/userprofile.png")
                                     )
@@ -483,7 +484,7 @@ class EditprofilescreenState extends State<Editprofilescreen> {
                         width: 60.w,
                         height: 5.h,
                         decoration: BoxDecoration(
-                          image: DecorationImage(
+                          image: const DecorationImage(
                               image: AssetImage(
                                   "assets/images/btnbackgroundgradient.png"),
                               fit: BoxFit.fill),
@@ -530,26 +531,26 @@ class EditprofilescreenState extends State<Editprofilescreen> {
       emailcontroller.text=sharedPreferences!.getString("email")!;
       profilepic=sharedPreferences!.getString("profilepic")!;
     });
-    print("Token value:-"+token.toString());
-    print("profilepic value:-"+profilepic.toString());
+    print("Token value:-$token");
+    print("profilepic value:-$profilepic");
   }
 
   Future<void> updateprofile() async {
     Helpingwidgets.showLoadingDialog(context, key);
     var request = http.MultipartRequest('post', Uri.parse(
         Networks.baseurl+Networks.updateprofile),);
-    var jsonData = null;
+    var jsonData;
     request.headers["Content-Type"] = "multipart/form-data";
     request.fields["stagename"] = namecontroller.text.trim();
     request.fields["bio"] = biocontroller.text.trim();
     request.fields["email"] = emailcontroller.text.trim();
     request.fields["phone"] = phonenumbercontroller.text.trim();
     request.fields["token"] = token!;
-    print("User name:-"+namecontroller.text.trim());
-    print("Bio:-"+biocontroller.text.trim());
-    print("email:-"+emailcontroller.text.trim());
-    print("phone:-"+phonenumbercontroller.text.trim());
-    print("token:-"+token.toString());
+    print("User name:-${namecontroller.text.trim()}");
+    print("Bio:-${biocontroller.text.trim()}");
+    print("email:-${emailcontroller.text.trim()}");
+    print("phone:-${phonenumbercontroller.text.trim()}");
+    print("token:-$token");
     // print("Image path:-"+imageFile!.path.toString());
     if(imageFile!=null){
       request.files.add(await http.MultipartFile.fromPath("image", imageFile!.path,
@@ -558,7 +559,7 @@ class EditprofilescreenState extends State<Editprofilescreen> {
     var response = await request.send();
     response.stream.transform(utf8.decoder).listen((value) {
       jsonData = json.decode(value);
-      print("Json:-" + jsonData.toString());
+      print("Json:-$jsonData");
       if (response.statusCode == 200) {
         if (jsonData["status"] == false) {
           Helpingwidgets.failedsnackbar(jsonData["message"].toString(), context);
@@ -566,7 +567,7 @@ class EditprofilescreenState extends State<Editprofilescreen> {
           Navigator.pop(context);
         } else {
           Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-              Bottomnavigation()), (Route<dynamic> route) => false);
+              const Bottomnavigation()), (Route<dynamic> route) => false);
           Helpingwidgets.successsnackbar("Data Saved!", context);
           getprofilepojo=Getprofilepojo.fromJson(jsonData);
           sharedPreferences!.setString("profilepic", jsonData["data"]["image"]==null?"":jsonData["data"]["image"].toString());

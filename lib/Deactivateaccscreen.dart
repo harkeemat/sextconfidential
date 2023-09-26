@@ -1,10 +1,7 @@
 import 'dart:convert';
 
-import 'package:appinio_video_player/appinio_video_player.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:sextconfidential/Bottomnavigation.dart';
 import 'package:sextconfidential/LoginScreen.dart';
 import 'package:sextconfidential/utils/Appcolors.dart';
 import 'package:sextconfidential/utils/CustomDropdownButton2.dart';
@@ -16,6 +13,8 @@ import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
 
 class Deactivateaccscreen extends StatefulWidget{
+  const Deactivateaccscreen({super.key});
+
   @override
   DeactivateaccscreenState createState() => DeactivateaccscreenState();
 
@@ -29,7 +28,7 @@ class DeactivateaccscreenState extends State<Deactivateaccscreen>{
   String dropdownvalue="Not Sure Why";
   SharedPreferences? sharedPreferences;
   String? token;
-  GlobalKey<FormState>_key=GlobalKey();
+  final GlobalKey<FormState>_key=GlobalKey();
   GlobalKey<State>progresskey=GlobalKey();
 
   @override
@@ -148,7 +147,7 @@ class DeactivateaccscreenState extends State<Deactivateaccscreen>{
                 SizedBox(
                   height: 2.h,
                 ),
-                Container(
+                SizedBox(
                   height: 7.h,
                   width: 94.w,
                   child: CustomDropdownButton2(
@@ -271,7 +270,7 @@ class DeactivateaccscreenState extends State<Deactivateaccscreen>{
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-              shape: RoundedRectangleBorder(
+              shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10.0))),
               backgroundColor: Appcolors().dialogbgcolor,
               //title: Text("Image Picker"),
@@ -342,7 +341,7 @@ class DeactivateaccscreenState extends State<Deactivateaccscreen>{
     setState((){
       token=sharedPreferences!.getString("token");
     });
-    print("Token value:-"+token.toString());
+    print("Token value:-$token");
   }
   Future<void> deactivateaccount() async {
     Helpingwidgets.showLoadingDialog(context, progresskey);
@@ -352,14 +351,14 @@ class DeactivateaccscreenState extends State<Deactivateaccscreen>{
       "reason_text":notecontroller.text,
       "token":token,
     };
-    print("Data:-"+data.toString());
-    var jsonResponse = null;
+    print("Data:-$data");
+    var jsonResponse;
     var response = await http.post(
         Uri.parse(Networks.baseurl + Networks.deactivateaccount),
         body: data
     );
     jsonResponse = json.decode(response.body);
-    print("jsonResponse:-" + jsonResponse.toString());
+    print("jsonResponse:-$jsonResponse");
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
         Helpingwidgets.failedsnackbar(jsonResponse["message"].toString(), context);
@@ -367,7 +366,7 @@ class DeactivateaccscreenState extends State<Deactivateaccscreen>{
       } else {
         sharedPreferences!.clear();
         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-            LoginScreen()), (Route<dynamic> route) => false);
+            const LoginScreen()), (Route<dynamic> route) => false);
         Helpingwidgets.successsnackbar(jsonResponse["message"].toString(), context);
         print("Response:${jsonResponse["message"]}");
 

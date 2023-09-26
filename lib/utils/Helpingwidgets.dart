@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
@@ -9,7 +8,7 @@ import 'Appcolors.dart';
 
 class Helpingwidgets{
   Widget customloader(){
-    return Container(
+    return SizedBox(
       height: 10.h,
       child: Center(
         child: LoadingAnimationWidget.staggeredDotsWave(
@@ -22,14 +21,14 @@ class Helpingwidgets{
   static void successsnackbar(String content,BuildContext context){
     var snackbar = SnackBar(
         backgroundColor: Appcolors().bottomnavbgcolor,
-        content: Text(content,textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.w600,color: Colors.white),));
+        content: Text(content,textAlign: TextAlign.center,style: const TextStyle(fontWeight: FontWeight.w600,color: Colors.white),));
     ScaffoldMessenger.of(context)
         .showSnackBar(snackbar);
   }
   static void failedsnackbar(String content,BuildContext context){
     var snackbar = SnackBar(
         backgroundColor: Appcolors().bottomnavbgcolor,
-        content: Text(content,textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.w600,color:Colors.red),));
+        content: Text(content,textAlign: TextAlign.center,style: const TextStyle(fontWeight: FontWeight.w600,color:Colors.red),));
     ScaffoldMessenger.of(context)
         .showSnackBar(snackbar);
   }
@@ -38,7 +37,7 @@ class Helpingwidgets{
         context: context,
         barrierDismissible: true,
         builder: (BuildContext context) {
-          return new WillPopScope(
+          return WillPopScope(
               onWillPop: () async => false,
               child: SimpleDialog(
                   key: key,
@@ -134,11 +133,11 @@ class Helpingwidgets{
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-              shape: RoundedRectangleBorder(
+              shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10.0))),
               backgroundColor: Colors.transparent,
               //title: Text("Image Picker"),
-              content: Container(
+              content: SizedBox(
                 height: 30.h,
                 width: double.infinity,
                 child: Stack(
@@ -182,7 +181,7 @@ class Helpingwidgets{
                           width: 40.w,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              image: DecorationImage(
+                              image: const DecorationImage(
                                   image: AssetImage(
                                       "assets/images/imageplaceholder.png"),fit: BoxFit.cover)),
                         ),
@@ -197,7 +196,7 @@ class Helpingwidgets{
                       child: CircleAvatar(
                           radius: 1.5.h,
                           backgroundColor: Appcolors().dialogbgcolor,
-                          child: Icon(Icons.close,color: Colors.white,)),
+                          child: const Icon(Icons.close,color: Colors.white,)),
                     ),
 
                   ],

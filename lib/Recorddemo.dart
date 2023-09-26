@@ -5,6 +5,8 @@ import 'package:flutter_sound/flutter_sound.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class Recorddemo extends StatefulWidget {
+  const Recorddemo({super.key});
+
   @override
   RecordemoState createState() => RecordemoState();
 }

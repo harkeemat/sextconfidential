@@ -1,22 +1,20 @@
 import 'dart:convert';
 
-import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:google_places_flutter/google_places_flutter.dart';
 import 'package:google_places_flutter/model/prediction.dart';
 import 'package:sextconfidential/pojo/googleplacepojo.dart';
 // import 'package:searchfield/searchfield.dart';
 import 'package:sextconfidential/utils/Appcolors.dart';
-import 'package:sextconfidential/utils/Helpingwidgets.dart';
 import 'package:sextconfidential/utils/Networks.dart';
 import 'package:sextconfidential/utils/StringConstants.dart';
 import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
 
 class LocationdenialScreen extends StatefulWidget {
+  const LocationdenialScreen({super.key});
+
   @override
   LocationdenialScreenState createState() => LocationdenialScreenState();
 }
@@ -85,7 +83,7 @@ class LocationdenialScreenState extends State<LocationdenialScreen> {
               textFieldConfiguration: TextFieldConfiguration(
                   autofocus: false,
                   // focusNode: FocusNode(canRequestFocus: false),
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 15,
                       color: Colors.white,
                       overflow: TextOverflow.ellipsis),
@@ -130,7 +128,7 @@ class LocationdenialScreenState extends State<LocationdenialScreen> {
                                 color: Appcolors().whitecolor,
                               )),
                           child: Text(
-                            "Seleted:" + selectedItems!.length.toString() + "  ",
+                            "Seleted:${selectedItems.length}  ",
                             style: TextStyle(
                               color: Appcolors().whitecolor,
                             ),
@@ -154,7 +152,7 @@ class LocationdenialScreenState extends State<LocationdenialScreen> {
               itemBuilder: (context, sone) {
                 return Container(
                   color: Appcolors().bottomnavbgcolor,
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: Row(
                     children: [
                       selectedItems.contains(sone)
@@ -164,11 +162,11 @@ class LocationdenialScreenState extends State<LocationdenialScreen> {
                             )
                           : Icon(Icons.check_box_outline_blank,
                               color: Appcolors().whitecolor),
-                      Container(
+                      SizedBox(
                         width: 80.w,
                         child: Text(
                           sone.toString(),
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontFamily: "PulpDisplay",
                               color: Colors.white,
                               overflow: TextOverflow.ellipsis),
@@ -184,7 +182,7 @@ class LocationdenialScreenState extends State<LocationdenialScreen> {
                       ? selectedItems.remove(suggestion)
                       : selectedItems.add(suggestion);
                 });
-                print("Suggestions:-" + suggestion);
+                print("Suggestions:-$suggestion");
               },
             ),
             Expanded(
@@ -208,12 +206,12 @@ class LocationdenialScreenState extends State<LocationdenialScreen> {
                             border: Border.all(
                               color: Appcolors().whitecolor,
                             )),
-                        padding: EdgeInsets.only(
+                        padding: const EdgeInsets.only(
                             left: 15, right: 15, top: 7, bottom: 7),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
+                            SizedBox(
                               width:75.w,
                               child: Text(
                                 selectedItems.elementAt(index),
@@ -348,19 +346,19 @@ class LocationdenialScreenState extends State<LocationdenialScreen> {
   placesAutoCompleteTextField() {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: GooglePlaceAutoCompleteTextField(
-          textStyle: TextStyle(color: Colors.white),
+          textStyle: const TextStyle(color: Colors.white),
           textEditingController: addresscontroller,
           googleAPIKey: "AIzaSyBQtYk9yhLQ-VX3Y2dPuZ0phbE0CSBwVps",
-          inputDecoration: InputDecoration(
+          inputDecoration: const InputDecoration(
               hintText: "Search your location",
               hintStyle: TextStyle(color: Colors.white)),
           debounceTime: 800,
           // countries: ["in", "fr"],
           isLatLngRequired: true,
           getPlaceDetailWithLatLng: (Prediction prediction) {
-            print("placeDetails" + prediction.lng.toString());
+            print("placeDetails${prediction.lng}");
           },
           itemClick: (Prediction prediction) {
             addresscontroller.text = prediction.description!;
@@ -374,16 +372,16 @@ class LocationdenialScreenState extends State<LocationdenialScreen> {
 
   Future<void> searchlocation(String searchdata) async {
     // Helpingwidgets.showLoadingDialog(context, key);
-    var jsonResponse = null;
+    var jsonResponse;
     var response = await http.get(
       Uri.parse(
           "${Networks.autocompletebase}$searchdata&key=$kGoogleApiKey"),
     );
     jsonResponse = json.decode(response.body);
-    print("jsonResponse:-" + jsonResponse.toString());
+    print("jsonResponse:-$jsonResponse");
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
-        print("Response message:-" + jsonResponse["message"].toString());
+        print("Response message:-${jsonResponse["message"]}");
         // Helpingwidgets.failedsnackbar(jsonResponse["message"].toString(), context);
       } else {
         setState(() {
@@ -401,7 +399,7 @@ class LocationdenialScreenState extends State<LocationdenialScreen> {
         print("Response:${jsonResponse["message"]}");
       }
     } else {
-      print("Response message:-" + jsonResponse["message"].toString());
+      print("Response message:-${jsonResponse["message"]}");
       // Helpingwidgets.failedsnackbar(jsonResponse["message"].toString(), context);
       // Navigator.pop(context);
     }
