@@ -8,32 +8,28 @@ class PushNotificationService {
   Future<void> setupInteractedMessage() async {
     await Firebase.initializeApp();
 
-
 // This function is called when ios app is opened, for android case `onDidReceiveNotificationResponse` function is called
-
 
     FirebaseMessaging.onMessageOpenedApp.listen(
       (RemoteMessage message) {
         print("onMessageOpenedApp${message.data}");
 
-
 //notificationRedirect(message.data[keyTypeValue], message.data[keyType]);
-
-
       },
     );
     enableIOSNotifications();
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     await registerNotificationListeners();
   }
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
+  Future<void> _firebaseMessagingBackgroundHandler(
+      RemoteMessage message) async {
+    // If you're going to use other Firebase services in the background, such as Firestore,
+    // make sure you call `initializeApp` before using other Firebase services.
 
-  // If you're going to use other Firebase services in the background, such as Firestore,
-  // make sure you call `initializeApp` before using other Firebase services.
+    print('Handling a background message ${message.messageId}');
+  }
 
-  print('Handling a background message ${message.messageId}');
-}
   Future<void> registerNotificationListeners() async {
     final AndroidNotificationChannel channel = androidNotificationChannel();
     final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -55,12 +51,9 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     flutterLocalNotificationsPlugin.initialize(
       initSettings,
       onDidReceiveNotificationResponse: (NotificationResponse details) {
-
-
 // We're receiving the payload as string that looks like this
 // {buttontext: Button Text, subtitle: Subtitle, imageurl: , typevalue: 14, type: course_details}
 // So the code below is used to convert string to map and read whatever property you want
-
 
         final List<String> str =
             details.payload!.replaceAll('{', '').replaceAll('}', '').split(',');
@@ -71,14 +64,11 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
         }
         print("result$result");
 
-
 //notificationRedirect(result[keyTypeValue], result[keyType]);
       },
     );
 
-
 // onMessage is called when the app is in foreground and a notification is received
-
 
     FirebaseMessaging.onMessage.listen((RemoteMessage? message) {
       print("message$message");
@@ -86,10 +76,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       final RemoteNotification? notification = message!.notification;
       final AndroidNotification? android = message.notification?.android;
 
-
 // If `onMessage` is triggered with a notification, construct our own
 // local notification to show to users using the created channel.
-
 
       if (notification != null && android != null) {
         flutterLocalNotificationsPlugin.show(
