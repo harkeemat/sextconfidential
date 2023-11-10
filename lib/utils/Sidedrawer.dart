@@ -4,15 +4,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-import 'package:sextconfidential/Changepassword.dart';
-import 'package:sextconfidential/Deactivateaccscreen.dart';
-import 'package:sextconfidential/Editprofilescreen.dart';
-import 'package:sextconfidential/LocationdenialScreen.dart';
-import 'package:sextconfidential/LoginScreen.dart';
-import 'package:sextconfidential/PayoutInfoScreen.dart';
-import 'package:sextconfidential/TimezoneScreen.dart';
-import 'package:sextconfidential/utils/Appcolors.dart';
-import 'package:sextconfidential/utils/StringConstants.dart';
+import '/Changepassword.dart';
+import '/Deactivateaccscreen.dart';
+import '/Editprofilescreen.dart';
+import '/LocationdenialScreen.dart';
+import '/LoginScreen.dart';
+import '/PayoutInfoScreen.dart';
+import '/TimezoneScreen.dart';
+import '/utils/Appcolors.dart';
+import '/utils/StringConstants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
@@ -29,16 +29,9 @@ class Sidedrawer extends StatefulWidget {
 class SidedrawerState extends State<Sidedrawer> {
   static bool phonecallbool = false;
   static List<bool> switchlist = [false, false];
-  static List<String> drawertitles = [
-    StringConstants.phonecalls,
-    StringConstants.videocalls,
-    StringConstants.payoutinformation,
-    StringConstants.timezone,
-    StringConstants.locationdeniel,
-    StringConstants.changepassword,
-    StringConstants.deactivateaccount,
-    StringConstants.logout,
-  ];
+
+  static List<String> drawertitles = [];
+
   int onlinestatus = 0;
   static List<String> drawerimages = [
     "assets/images/callunselecticon.png",
@@ -50,7 +43,7 @@ class SidedrawerState extends State<Sidedrawer> {
     "assets/images/deactivateacc.png",
     "assets/images/logout.png",
   ];
-  String? username,profilepic,token,usertype;
+  String? username, profilepic, token, usertype;
   SharedPreferences? sharedPreferences;
 
   @override
@@ -59,6 +52,7 @@ class SidedrawerState extends State<Sidedrawer> {
     super.initState();
     getsharedpreference();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,7 +79,7 @@ class SidedrawerState extends State<Sidedrawer> {
                           Navigator.pop(context);
                         },
                         child: Container(
-                          margin: EdgeInsets.only(right: 0.5.w,top: 0.5.h),
+                          margin: EdgeInsets.only(right: 0.5.w, top: 0.5.h),
                           child: Image.asset(
                             "assets/images/crossicon.png",
                             width: 5.w,
@@ -114,42 +108,45 @@ class SidedrawerState extends State<Sidedrawer> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        child:
-                        profilepic==null ||profilepic==""?
-                        Image.asset("assets/images/userprofile.png",height: 10.h,width: 20.w,):
-                        CachedNetworkImage(
-                          imageUrl:profilepic.toString(),
-                          imageBuilder: (context, imageProvider) => Container(
-                            width: 20.w,
-                            alignment: Alignment.centerLeft,
-                            height: 10.h,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                image: imageProvider,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          placeholder: (context, url) => Container(
-                            child: Center(
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Appcolors().bottomnavbgcolor,
-                              ),
-                            ),
-                          ),
-                          errorWidget: (context, url, error) => Container(
-                            width: 20.w,
-                            height: 10.h,
-                            decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage("assets/images/userprofile.png")
+                          child: profilepic == null || profilepic == ""
+                              ? Image.asset(
+                                  "assets/images/userprofile.png",
+                                  height: 10.h,
+                                  width: 20.w,
                                 )
-                            ),
-                          ),
-                        )
-                      ),
+                              : CachedNetworkImage(
+                                  imageUrl: profilepic.toString(),
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
+                                    width: 20.w,
+                                    alignment: Alignment.centerLeft,
+                                    height: 10.h,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  placeholder: (context, url) => Container(
+                                    child: Center(
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        color: Appcolors().bottomnavbgcolor,
+                                      ),
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      Container(
+                                    width: 20.w,
+                                    height: 10.h,
+                                    decoration: const BoxDecoration(
+                                        image: DecorationImage(
+                                            image: AssetImage(
+                                                "assets/images/userprofile.png"))),
+                                  ),
+                                )),
                       SizedBox(
                         width: 5.w,
                       ),
@@ -172,19 +169,23 @@ class SidedrawerState extends State<Sidedrawer> {
                               height: 1.h,
                             ),
                             InkWell(
-                              onTap: (){
+                              onTap: () {
                                 setState(() {
-                                  onlinestatus==0?
-                                      onlinestatus=1
-                                      :onlinestatus==1?
-                                      onlinestatus=2
-                                      :onlinestatus=0;
+                                  onlinestatus == 0
+                                      ? onlinestatus = 1
+                                      : onlinestatus == 1
+                                          ? onlinestatus = 2
+                                          : onlinestatus = 0;
                                   changestatus();
                                 });
                               },
                               child: Container(
                                 decoration: BoxDecoration(
-                                    color: onlinestatus==0?Appcolors().loginhintcolor : onlinestatus == 1?Appcolors().onlinecolor :Appcolors().deactivatecolor,
+                                    color: onlinestatus == 0
+                                        ? Appcolors().loginhintcolor
+                                        : onlinestatus == 1
+                                            ? Appcolors().onlinecolor
+                                            : Appcolors().deactivatecolor,
                                     borderRadius: BorderRadius.circular(20)),
                                 padding: EdgeInsets.only(
                                     left: 3.w,
@@ -201,7 +202,9 @@ class SidedrawerState extends State<Sidedrawer> {
                                       fontSize: 1.5.h,
                                       fontFamily: "PulpDisplay",
                                       fontWeight: FontWeight.w500,
-                                      color: onlinestatus==2?Appcolors().whitecolor:Appcolors().bottomnavbgcolor),
+                                      color: onlinestatus == 2
+                                          ? Appcolors().whitecolor
+                                          : Appcolors().bottomnavbgcolor),
                                   textAlign: TextAlign.center,
                                 ),
                               ),
@@ -210,8 +213,12 @@ class SidedrawerState extends State<Sidedrawer> {
                         ),
                       ),
                       InkWell(
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const Editprofilescreen()));
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const Editprofilescreen()));
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -242,28 +249,30 @@ class SidedrawerState extends State<Sidedrawer> {
                         GestureDetector(
                           onTap: () {
                             setState(() {
-                              switch(index){
-                                case 2: Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const PayoutInfoScreen()));
-                                break;
-                                case 3:{
-                                  Navigator.pop(context);
+                              switch (index) {
+                                case 2:
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const TimezoneScreen()));
+                                              const PayoutInfoScreen()));
                                   break;
-                                }
-                                  case 4:
+                                case 3:
+                                  {
+                                    Navigator.pop(context);
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                const LocationdenialScreen()));
+                                                const TimezoneScreen()));
+                                    break;
+                                  }
+                                case 4:
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const LocationdenialScreen()));
                                   break;
                                 case 5:
                                   {
@@ -275,24 +284,24 @@ class SidedrawerState extends State<Sidedrawer> {
                                                 const Changepassword()));
                                     break;
                                   }
-                                  case 6:
+                                case 6:
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               const Deactivateaccscreen()));
                                   break;
-                                case 7:{
-                                  sharedPreferences!.clear();
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const LoginScreen()));
-                                }
+                                case 7:
+                                  {
+                                    sharedPreferences!.clear();
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const LoginScreen()));
+                                  }
                               }
                             });
-
                           },
                           child: Container(
                             margin: EdgeInsets.only(left: 4.w),
@@ -369,48 +378,71 @@ class SidedrawerState extends State<Sidedrawer> {
       ),
     );
   }
+
   Future<void> getsharedpreference() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    setState((){
+    setState(() {
       usertype = sharedPreferences!.getString("usertype")!.toString();
-      username=usertype=="user" ? sharedPreferences!.getString("dname")?? "" :sharedPreferences!.getString("stagename")??"User Name";
-      token=sharedPreferences!.getString("token")!;
-      switchlist[0]=sharedPreferences!.getBool("phonecall")!;
-      switchlist[1]=sharedPreferences!.getBool("videocall")!;
-      onlinestatus=int.parse(sharedPreferences!.getString("userstatus").toString());
-      profilepic=sharedPreferences!.getString("profilepic").toString();
+      username = usertype == "user"
+          ? sharedPreferences!.getString("dname") ?? ""
+          : sharedPreferences!.getString("stagename") ?? "User Name";
+      token = sharedPreferences!.getString("token")!;
+      switchlist[0] = sharedPreferences!.getBool("phonecall")!;
+      switchlist[1] = sharedPreferences!.getBool("videocall")!;
+      onlinestatus =
+          int.parse(sharedPreferences!.getString("userstatus").toString());
+      profilepic = sharedPreferences!.getString("profilepic").toString();
     });
-    print("username value:-$username");
-    print("profilepic value:-$profilepic");
+    if (usertype == "user") {
+      drawertitles = [
+        StringConstants.timezone,
+        StringConstants.locationdeniel,
+        StringConstants.changepassword,
+        StringConstants.deactivateaccount,
+        StringConstants.logout,
+      ];
+    } else {
+      drawertitles = [
+        StringConstants.phonecalls,
+        StringConstants.videocalls,
+        StringConstants.payoutinformation,
+        StringConstants.timezone,
+        StringConstants.locationdeniel,
+        StringConstants.changepassword,
+        StringConstants.deactivateaccount,
+        StringConstants.logout,
+      ];
+    }
   }
+
   Future<void> changestatus() async {
-    Map data ={
-      "token":token,
-      "show_online":onlinestatus.toString(),
-      "video_calls":switchlist[0]==true?"yes":"no",
-      "phone_calls":switchlist[1]==true?"yes":"no",
+    Map data = {
+      "token": token,
+      "show_online": onlinestatus.toString(),
+      "video_calls": switchlist[0] == true ? "yes" : "no",
+      "phone_calls": switchlist[1] == true ? "yes" : "no",
     };
     print("Data:-$data");
     var jsonResponse;
-    var response = await http.post(
-        Uri.parse(Networks.baseurl + Networks.updateonline),
-        body: data
-    );
+    var response = await http
+        .post(Uri.parse(Networks.baseurl + Networks.updateonline), body: data);
     jsonResponse = json.decode(response.body);
     print("jsonResponse:-$jsonResponse");
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
-        Helpingwidgets.failedsnackbar(jsonResponse["message"].toString(), context);
+        Helpingwidgets.failedsnackbar(
+            jsonResponse["message"].toString(), context);
       } else {
-        SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-        sharedPreferences.setBool("phonecall",switchlist[0]);
-        sharedPreferences.setBool("videocall",switchlist[1]);
+        SharedPreferences sharedPreferences =
+            await SharedPreferences.getInstance();
+        sharedPreferences.setBool("phonecall", switchlist[0]);
+        sharedPreferences.setBool("videocall", switchlist[1]);
         sharedPreferences.setString("userstatus", onlinestatus.toString());
         print("Response:${jsonResponse["message"]}");
-
       }
     } else {
-      Helpingwidgets.failedsnackbar(jsonResponse["message"].toString(), context);
+      Helpingwidgets.failedsnackbar(
+          jsonResponse["message"].toString(), context);
     }
   }
 }

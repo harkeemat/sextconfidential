@@ -11,18 +11,18 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:sextconfidential/Feeddetailedpage.dart';
-import 'package:sextconfidential/pojo/Feedpostspojo.dart';
-import 'package:sextconfidential/utils/Appcolors.dart';
-import 'package:sextconfidential/utils/CustomDropdownButton2.dart';
-import 'package:sextconfidential/utils/CustomMenu.dart';
-import 'package:sextconfidential/utils/Scheduleddropdown.dart';
-import 'package:sextconfidential/utils/Unpindropdown.dart';
-// import 'package:sextconfidential/utils/CustomMenu.dart';
-import 'package:sextconfidential/utils/Helpingwidgets.dart';
-import 'package:sextconfidential/utils/Networks.dart';
-import 'package:sextconfidential/utils/Sidedrawer.dart';
-import 'package:sextconfidential/utils/StringConstants.dart';
+import '/Feeddetailedpage.dart';
+import '/pojo/Feedpostspojo.dart';
+import '/utils/Appcolors.dart';
+import '/utils/CustomDropdownButton2.dart';
+import '/utils/CustomMenu.dart';
+import '/utils/Scheduleddropdown.dart';
+import '/utils/Unpindropdown.dart';
+// import '/utils/CustomMenu.dart';
+import '/utils/Helpingwidgets.dart';
+import '/utils/Networks.dart';
+import '/utils/Sidedrawer.dart';
+import '/utils/StringConstants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:sizer/sizer.dart';
@@ -34,7 +34,6 @@ Future<void> main() async {
   await Firebase.initializeApp();
   runApp(const FeedScreen());
 }
-
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({super.key});
@@ -66,6 +65,7 @@ class FeedScreenState extends State<FeedScreen> {
     StringConstants.deletepost,
   ];
   String? token;
+  String? usertype;
   String postselectedvalue = StringConstants.post;
   String selectedmenu = StringConstants.editpost;
   String postfiltervalue = StringConstants.mostrecent;
@@ -88,7 +88,6 @@ class FeedScreenState extends State<FeedScreen> {
   //Dynamic Linking
   FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
   final String DynamicLink = 'https://sextconfidential.page.link';
-
 
   @override
   void initState() {
@@ -127,399 +126,433 @@ class FeedScreenState extends State<FeedScreen> {
               SizedBox(
                 height: 2.h,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    StringConstants.posttoprofile,
-                    style: TextStyle(
-                        fontSize: 11.sp,
-                        fontFamily: "PulpDisplay",
-                        fontWeight: FontWeight.w400,
-                        color: Appcolors().whitecolor),
-                  ),
-                  SizedBox(
-                    width: 3.w,
-                  ),
-                  SizedBox(
-                    width: 45.w,
-                    child: CustomDropdownButton2(
-                      hint: "Select Item",
-                      dropdownItems: posttypes,
-                      value: postselectedvalue,
-                      dropdownWidth: 45.w,
-                      dropdownHeight: 60.h,
-                      buttonWidth: 27.w,
-                      onChanged: (value) {
-                        setState(() {
-                          postselectedvalue = value!;
-                        });
-                      },
-                    ),
-                  ),
-                ],
-              ),
+              usertype != 'user'
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          StringConstants.posttoprofile,
+                          style: TextStyle(
+                              fontSize: 11.sp,
+                              fontFamily: "PulpDisplay",
+                              fontWeight: FontWeight.w400,
+                              color: Appcolors().whitecolor),
+                        ),
+                        SizedBox(
+                          width: 3.w,
+                        ),
+                        SizedBox(
+                          width: 45.w,
+                          child: CustomDropdownButton2(
+                            hint: "Select Item",
+                            dropdownItems: posttypes,
+                            value: postselectedvalue,
+                            dropdownWidth: 45.w,
+                            dropdownHeight: 60.h,
+                            buttonWidth: 27.w,
+                            onChanged: (value) {
+                              setState(() {
+                                postselectedvalue = value!;
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    )
+                  : SizedBox(),
               SizedBox(
                 height: 1.h,
               ),
-              Offstage(
-                offstage: postselectedvalue != StringConstants.scheduledpost,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                      child: Text(
-                        StringConstants.selectdateandtime,
-                        style: TextStyle(
-                            fontSize: 10.sp,
-                            // fontFamily: "PulpDisplay",
-                            fontWeight: FontWeight.w500,
-                            color: Appcolors().loginhintcolor),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 2.w,
-                    ),
-                    GestureDetector(
-                      onTap: () async {
-                        DateTime? pickedDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(1950),
-                            //DateTime.now() - not to allow to choose before today.
-                            lastDate: DateTime(2100));
-                        if (pickedDate != null) {
-                          print(pickedDate);
-                          formattedDate =
-                              DateFormat('yyyy-MM-dd').format(pickedDate);
-                          print("Selected date:-${formattedDate!}");
-                          timepicker();
-                          setState(() {
-                            // dateInput.text =
-                            //     formattedDate;
-                          });
-                        } else {}
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Appcolors().bottomnavbgcolor,
-                            borderRadius: BorderRadius.circular(15)),
-                        padding: const EdgeInsets.all(10),
-                        child: Text(
-                          formattedDate == null
-                              ? "YYYY/MM/DD HH:MM"
-                              : "${formattedDate!} ${timezone!}",
-                          style: TextStyle(
-                              fontSize: 10.sp,
-                              // fontFamily: "PulpDisplay",
-                              fontWeight: FontWeight.w500,
-                              color: Appcolors().whitecolor),
-                          textAlign: TextAlign.center,
+              usertype != 'user'
+                  ? Column(children: [
+                      Offstage(
+                        offstage:
+                            postselectedvalue != StringConstants.scheduledpost,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Container(
+                              child: Text(
+                                StringConstants.selectdateandtime,
+                                style: TextStyle(
+                                    fontSize: 10.sp,
+                                    // fontFamily: "PulpDisplay",
+                                    fontWeight: FontWeight.w500,
+                                    color: Appcolors().loginhintcolor),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 2.w,
+                            ),
+                            GestureDetector(
+                              onTap: () async {
+                                DateTime? pickedDate = await showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(1950),
+                                    //DateTime.now() - not to allow to choose before today.
+                                    lastDate: DateTime(2100));
+                                if (pickedDate != null) {
+                                  print(pickedDate);
+                                  formattedDate = DateFormat('yyyy-MM-dd')
+                                      .format(pickedDate);
+                                  print("Selected date:-${formattedDate!}");
+                                  timepicker();
+                                  setState(() {
+                                    // dateInput.text =
+                                    //     formattedDate;
+                                  });
+                                } else {}
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Appcolors().bottomnavbgcolor,
+                                    borderRadius: BorderRadius.circular(15)),
+                                padding: const EdgeInsets.all(10),
+                                child: Text(
+                                  formattedDate == null
+                                      ? "YYYY/MM/DD HH:MM"
+                                      : "${formattedDate!} ${timezone!}",
+                                  style: TextStyle(
+                                      fontSize: 10.sp,
+                                      // fontFamily: "PulpDisplay",
+                                      fontWeight: FontWeight.w500,
+                                      color: Appcolors().whitecolor),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            )
+                          ],
                         ),
                       ),
-                    )
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 2.h,
-              ),
-              Container(
-                child: TextFormField(
-                  minLines: 3,
-                  maxLines: 3,
-                  cursorColor: Appcolors().loginhintcolor,
-                  style: TextStyle(
-                    color: Appcolors().whitecolor,
-                    fontSize: 12.sp,
-                  ),
-                  textInputAction: TextInputAction.done,
-                  controller: messagecontroller,
-                  decoration: InputDecoration(
-                    // prefix: Container(
-                    //   child: SvgPicture.asset("assets/images/astrickicon.svg",width: 5.w,),
-                    // ),
-                    border: InputBorder.none,
-                    // focusedBorder: InputBorder.none,
-                    disabledBorder: InputBorder.none,
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                      borderSide:
-                          BorderSide(color: Appcolors().logintextformborder),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                      borderSide:
-                          BorderSide(color: Appcolors().logintextformborder),
-                    ),
-                    filled: true,
-                    fillColor: Appcolors().messageboxbgcolor,
-                    hintText: StringConstants.writesomething,
-                    hintStyle: TextStyle(
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 12.sp,
-                      // fontFamily: 'PulpDisplay',
-                      color: Appcolors().loginhintcolor,
-                    ),
-                  ),
-                  onChanged: (value) {
-                    setState(() {});
-                  },
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Please enter Message";
-                    } else {
-                      return null;
-                    }
-                  },
-                ),
-              ),
-              SizedBox(
-                height: 1.5.h,
-              ),
-              GestureDetector(
-                onTap: () {
-                  if (imageFile == null) {
-                    addmediadialog(context);
-                  }
-                },
-                child: SizedBox(
-                  width: double.infinity,
-                  child: DottedBorder(
-                    strokeCap: StrokeCap.round,
-                    strokeWidth: 1,
-                    dashPattern: const [8, 4],
-                    color: Appcolors().gradientcolorfirst,
-                    borderType: BorderType.RRect,
-                    radius: const Radius.circular(15),
-                    padding: const EdgeInsets.all(6),
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.all(Radius.circular(12)),
-                      child: imageFile == null
-                          ? GestureDetector(
-                              onTap: () {
-                                addmediadialog(context);
-                              },
-                              child: SizedBox(
-                                  height: 5.h,
-                                  width: double.infinity,
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Center(
-                                          child: SvgPicture.asset(
-                                        "assets/images/uploadimageicon.svg",
-                                        height: 3.h,
-                                        width: 3.w,
-                                      )),
-                                      SizedBox(
-                                        width: 2.w,
-                                      ),
-                                      Text(
-                                        StringConstants.addphotosorvideo,
-                                        style: TextStyle(
-                                            fontSize: 10.sp,
-                                            // fontFamily: "PulpDisplay",
-                                            fontWeight: FontWeight.w500,
-                                            color: Appcolors().loginhintcolor),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
-                                  )
-                                  ),
-                            )
-                          : Column(
-                              children: [
-                                Container(
-                                  alignment: Alignment.center,
-                                  child: Stack(
-                                    alignment: Alignment.topRight,
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.all(10),
-                                        // child: Image.file(imageFile!,height:15.h,width:25.w,fit: BoxFit.fill,)),
-                                        child: imageFile!.path.substring(
-                                                    imageFile!.path.length - 3,
-                                                    imageFile!.path.length) =="mp4"?
-                                            Image.asset("assets/images/thumbnaildefault.png",height: 15.h,width: 30.w,fit: BoxFit.fill,)
-                                        // Image.memory(
-                                        //         thumbnail!,
-                                        //         height: 15.h,
-                                        //         width: 25.w,
-                                        //         fit: BoxFit.fill,
-                                        //       )
-                                            : Image.file(
-                                                imageFile!,
-                                                height: 15.h,
-                                                width: 25.w,
-                                                fit: BoxFit.fill,
+                      SizedBox(
+                        height: 2.h,
+                      ),
+                      Container(
+                        child: TextFormField(
+                          minLines: 3,
+                          maxLines: 3,
+                          cursorColor: Appcolors().loginhintcolor,
+                          style: TextStyle(
+                            color: Appcolors().whitecolor,
+                            fontSize: 12.sp,
+                          ),
+                          textInputAction: TextInputAction.done,
+                          controller: messagecontroller,
+                          decoration: InputDecoration(
+                            // prefix: Container(
+                            //   child: SvgPicture.asset("assets/images/astrickicon.svg",width: 5.w,),
+                            // ),
+                            border: InputBorder.none,
+                            // focusedBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                              borderSide: BorderSide(
+                                  color: Appcolors().logintextformborder),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                              borderSide: BorderSide(
+                                  color: Appcolors().logintextformborder),
+                            ),
+                            filled: true,
+                            fillColor: Appcolors().messageboxbgcolor,
+                            hintText: StringConstants.writesomething,
+                            hintStyle: TextStyle(
+                              decoration: TextDecoration.none,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 12.sp,
+                              // fontFamily: 'PulpDisplay',
+                              color: Appcolors().loginhintcolor,
+                            ),
+                          ),
+                          onChanged: (value) {
+                            setState(() {});
+                          },
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter Message";
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        height: 1.5.h,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          if (imageFile == null) {
+                            addmediadialog(context);
+                          }
+                        },
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: DottedBorder(
+                            strokeCap: StrokeCap.round,
+                            strokeWidth: 1,
+                            dashPattern: const [8, 4],
+                            color: Appcolors().gradientcolorfirst,
+                            borderType: BorderType.RRect,
+                            radius: const Radius.circular(15),
+                            padding: const EdgeInsets.all(6),
+                            child: ClipRRect(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(12)),
+                              child: imageFile == null
+                                  ? GestureDetector(
+                                      onTap: () {
+                                        addmediadialog(context);
+                                      },
+                                      child: SizedBox(
+                                          height: 5.h,
+                                          width: double.infinity,
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Center(
+                                                  child: SvgPicture.asset(
+                                                "assets/images/uploadimageicon.svg",
+                                                height: 3.h,
+                                                width: 3.w,
+                                              )),
+                                              SizedBox(
+                                                width: 2.w,
                                               ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            imageFile = null;
-                                          });
-                                        },
-                                        child: Container(
-                                          margin: const EdgeInsets.only(right: 3,top: 5),
-                                          child: CircleAvatar(
-                                            radius: 1.5.h,
-                                            backgroundColor: Colors.white,
-                                            child: Image.asset(
-                                              "assets/images/crossicon.png",
-                                              height: 1.h,
-                                            ),
+                                              Text(
+                                                StringConstants
+                                                    .addphotosorvideo,
+                                                style: TextStyle(
+                                                    fontSize: 10.sp,
+                                                    // fontFamily: "PulpDisplay",
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Appcolors()
+                                                        .loginhintcolor),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ],
+                                          )),
+                                    )
+                                  : Column(
+                                      children: [
+                                        Container(
+                                          alignment: Alignment.center,
+                                          child: Stack(
+                                            alignment: Alignment.topRight,
+                                            children: [
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.all(10),
+                                                // child: Image.file(imageFile!,height:15.h,width:25.w,fit: BoxFit.fill,)),
+                                                child: imageFile!.path.substring(
+                                                            imageFile!.path
+                                                                    .length -
+                                                                3,
+                                                            imageFile!
+                                                                .path.length) ==
+                                                        "mp4"
+                                                    ? Image.asset(
+                                                        "assets/images/thumbnaildefault.png",
+                                                        height: 15.h,
+                                                        width: 30.w,
+                                                        fit: BoxFit.fill,
+                                                      )
+                                                    // Image.memory(
+                                                    //         thumbnail!,
+                                                    //         height: 15.h,
+                                                    //         width: 25.w,
+                                                    //         fit: BoxFit.fill,
+                                                    //       )
+                                                    : Image.file(
+                                                        imageFile!,
+                                                        height: 15.h,
+                                                        width: 25.w,
+                                                        fit: BoxFit.fill,
+                                                      ),
+                                              ),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  setState(() {
+                                                    imageFile = null;
+                                                  });
+                                                },
+                                                child: Container(
+                                                  margin: const EdgeInsets.only(
+                                                      right: 3, top: 5),
+                                                  child: CircleAvatar(
+                                                    radius: 1.5.h,
+                                                    backgroundColor:
+                                                        Colors.white,
+                                                    child: Image.asset(
+                                                      "assets/images/crossicon.png",
+                                                      height: 1.h,
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
                                           ),
                                         ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    Container(
-                                      height: 4.h,
-                                      alignment: Alignment.center,
-                                      width: 20.w,
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color:
-                                                  Appcolors().loginhintcolor),
-                                          borderRadius:
-                                              BorderRadius.circular(8)),
-                                      child: Text(
-                                        imagecredit == 0
-                                            ? "Free"
-                                            : imagecredit.toString(),
-                                        style: TextStyle(
-                                            fontSize: 8.sp,
-                                            fontFamily: "PulpDisplay",
-                                            fontWeight: FontWeight.w400,
-                                            color: Appcolors().whitecolor),
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          if (imagecredit > 0) {
-                                            imagecredit = imagecredit - 1;
-                                          }
-                                        });
-                                      },
-                                      child: Container(
-                                        margin: EdgeInsets.only(right: 20.w),
-                                        alignment: Alignment.center,
-                                        width: 4.w,
-                                        height: 2.h,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          color: Colors.white,
+                                        Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            Container(
+                                              height: 4.h,
+                                              alignment: Alignment.center,
+                                              width: 20.w,
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Appcolors()
+                                                          .loginhintcolor),
+                                                  borderRadius:
+                                                      BorderRadius.circular(8)),
+                                              child: Text(
+                                                imagecredit == 0
+                                                    ? "Free"
+                                                    : imagecredit.toString(),
+                                                style: TextStyle(
+                                                    fontSize: 8.sp,
+                                                    fontFamily: "PulpDisplay",
+                                                    fontWeight: FontWeight.w400,
+                                                    color:
+                                                        Appcolors().whitecolor),
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  if (imagecredit > 0) {
+                                                    imagecredit =
+                                                        imagecredit - 1;
+                                                  }
+                                                });
+                                              },
+                                              child: Container(
+                                                margin: EdgeInsets.only(
+                                                    right: 20.w),
+                                                alignment: Alignment.center,
+                                                width: 4.w,
+                                                height: 2.h,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                  color: Colors.white,
+                                                ),
+                                                child: Text(
+                                                  "-",
+                                                  style: TextStyle(
+                                                      fontSize: 8.sp,
+                                                      fontFamily: "PulpDisplay",
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      color: Appcolors()
+                                                          .blackcolor),
+                                                ),
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  imagecredit = imagecredit + 1;
+                                                });
+                                              },
+                                              child: Container(
+                                                margin:
+                                                    EdgeInsets.only(left: 20.w),
+                                                alignment: Alignment.center,
+                                                width: 4.w,
+                                                height: 2.h,
+                                                decoration: BoxDecoration(
+                                                    shape: BoxShape.rectangle,
+                                                    image: const DecorationImage(
+                                                        image: AssetImage(
+                                                            "assets/images/btnbackgroundgradient.png"),
+                                                        fit: BoxFit.fill),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5)),
+                                                child: Text(
+                                                  "+",
+                                                  style: TextStyle(
+                                                      fontSize: 8.sp,
+                                                      fontFamily: "PulpDisplay",
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      color: Appcolors()
+                                                          .blackcolor),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        child: Text(
-                                          "-",
-                                          style: TextStyle(
-                                              fontSize: 8.sp,
-                                              fontFamily: "PulpDisplay",
-                                              fontWeight: FontWeight.w400,
-                                              color: Appcolors().blackcolor),
-                                        ),
-                                      ),
+                                        SizedBox(
+                                          height: 1.h,
+                                        )
+                                      ],
                                     ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          imagecredit = imagecredit + 1;
-                                        });
-                                      },
-                                      child: Container(
-                                        margin: EdgeInsets.only(left: 20.w),
-                                        alignment: Alignment.center,
-                                        width: 4.w,
-                                        height: 2.h,
-                                        decoration: BoxDecoration(
-                                            shape: BoxShape.rectangle,
-                                            image: const DecorationImage(
-                                                image: AssetImage(
-                                                    "assets/images/btnbackgroundgradient.png"),
-                                                fit: BoxFit.fill),
-                                            borderRadius:
-                                                BorderRadius.circular(5)),
-                                        child: Text(
-                                          "+",
-                                          style: TextStyle(
-                                              fontSize: 8.sp,
-                                              fontFamily: "PulpDisplay",
-                                              fontWeight: FontWeight.w400,
-                                              color: Appcolors().blackcolor),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 1.h,
-                                )
-                              ],
                             ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 1.5.h,
-              ),
-              GestureDetector(
-                onTap: () {
-                  if (postselectedvalue == StringConstants.scheduledpost) {
-                    if (timezone == "HH:MM" || formattedDate == "YYYY/MM/DD") {
-                      Helpingwidgets.failedsnackbar(
-                          "Choose Schedule date and time!", context);
-                    } else if (messagecontroller.text.isEmpty &&
-                        imageFile == null) {
-                      Helpingwidgets.failedsnackbar(
-                          "Enter description or Upload image", context);
-                    } else {
-                      postfeed();
-                    }
-                  } else {
-                    postfeed();
-                  }
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      image: const DecorationImage(
-                          image: AssetImage(
-                              "assets/images/btnbackgroundgradient.png"),
-                          fit: BoxFit.fill),
-                      borderRadius: BorderRadius.circular(10)),
-                  height: 5.h,
-                  child: Text(
-                    postselectedvalue == StringConstants.scheduledpost
-                        ? StringConstants.scheduledpost
-                        : postselectedvalue == StringConstants.saveasdraft
-                            ? StringConstants.saveasdraft
-                            : "Post Feed",
-                    style: TextStyle(
-                        fontSize: 12.sp,
-                        fontFamily: "PulpDisplay",
-                        fontWeight: FontWeight.w400,
-                        color: Appcolors().backgroundcolor),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 2.h,
-              ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 1.5.h,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          if (postselectedvalue ==
+                              StringConstants.scheduledpost) {
+                            if (timezone == "HH:MM" ||
+                                formattedDate == "YYYY/MM/DD") {
+                              Helpingwidgets.failedsnackbar(
+                                  "Choose Schedule date and time!", context);
+                            } else if (messagecontroller.text.isEmpty &&
+                                imageFile == null) {
+                              Helpingwidgets.failedsnackbar(
+                                  "Enter description or Upload image", context);
+                            } else {
+                              postfeed();
+                            }
+                          } else {
+                            postfeed();
+                          }
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                              image: const DecorationImage(
+                                  image: AssetImage(
+                                      "assets/images/btnbackgroundgradient.png"),
+                                  fit: BoxFit.fill),
+                              borderRadius: BorderRadius.circular(10)),
+                          height: 5.h,
+                          child: Text(
+                            postselectedvalue == StringConstants.scheduledpost
+                                ? StringConstants.scheduledpost
+                                : postselectedvalue ==
+                                        StringConstants.saveasdraft
+                                    ? StringConstants.saveasdraft
+                                    : "Post Feed",
+                            style: TextStyle(
+                                fontSize: 12.sp,
+                                fontFamily: "PulpDisplay",
+                                fontWeight: FontWeight.w400,
+                                color: Appcolors().backgroundcolor),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 2.h,
+                      ),
+                    ])
+                  : SizedBox(),
               Container(
                 decoration: BoxDecoration(
                     color: Appcolors().bottomnavbgcolor,
@@ -990,6 +1023,7 @@ class FeedScreenState extends State<FeedScreen> {
       token = sharedPreferences.getString("token");
       userprofilepic = sharedPreferences.getString("profilepic");
       username = sharedPreferences.getString("stagename");
+      usertype = sharedPreferences.getString("usertype")!.toString();
     });
     print("Token value:-$token");
     print("profile value:-$userprofilepic");
@@ -1162,6 +1196,7 @@ class FeedScreenState extends State<FeedScreen> {
           jsonResponse["message"].toString(), context);
     }
   }
+
   Future<void> editpost(String postid, int index, String postcontent) async {
     Helpingwidgets.showLoadingDialog(context, key);
     Map data = {
@@ -1186,8 +1221,8 @@ class FeedScreenState extends State<FeedScreen> {
         print("Message:-${jsonResponse["message"]}");
         // feedpostspojo!.message!.post!.elementAt(index).="true";
         feedlisting(0);
-        setState((){
-          editedpostid=null;
+        setState(() {
+          editedpostid = null;
         });
         Navigator.pop(context);
       }
@@ -1246,6 +1281,7 @@ class FeedScreenState extends State<FeedScreen> {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: feedpostspojo!.message!.post!.length,
               itemBuilder: (BuildContext context, int index) {
+                print("pic${feedpostspojo!.message!.post![index]}");
                 return AnimationConfiguration.staggeredList(
                   position: index,
                   duration: const Duration(milliseconds: 300),
@@ -1310,7 +1346,8 @@ class FeedScreenState extends State<FeedScreen> {
                                                       child:
                                                           CircularProgressIndicator(
                                                         strokeWidth: 2,
-                                                            color: Appcolors().gradientcolorfirst,
+                                                        color: Appcolors()
+                                                            .gradientcolorfirst,
                                                       ),
                                                     ),
                                                   ),
@@ -1361,225 +1398,255 @@ class FeedScreenState extends State<FeedScreen> {
                                           child: pinnedpost(),
                                         ),
                                         DropdownButtonHideUnderline(
-                                          child:
-                                          feedpostspojo!
-                                              .message!.post!
-                                              .elementAt(index)
-                                              .pinned
-                                              .toString() ==
-                                              "true"?
-                                          DropdownButton2(
-                                            customButton: Image.asset(
-                                              "assets/images/menubtn.png",
-                                              height: 4.h,
-                                              fit: BoxFit.fill,
-                                            ),
-                                            items: [
-                                              ...UnpinMenuItems.unpinfirstItems.map(
-                                                    (item) => DropdownMenuItem<UnpinCustomMenuItem>(
-                                                  value: item,
-                                                  child:
-                                                  UnpinMenuItems.buildItem(item),
+                                          child: feedpostspojo!.message!.post!
+                                                      .elementAt(index)
+                                                      .pinned
+                                                      .toString() ==
+                                                  "true"
+                                              ? DropdownButton2(
+                                                  customButton: Image.asset(
+                                                    "assets/images/menubtn.png",
+                                                    height: 4.h,
+                                                    fit: BoxFit.fill,
+                                                  ),
+                                                  items: [
+                                                    ...UnpinMenuItems
+                                                        .unpinfirstItems
+                                                        .map(
+                                                      (item) => DropdownMenuItem<
+                                                          UnpinCustomMenuItem>(
+                                                        value: item,
+                                                        child: UnpinMenuItems
+                                                            .buildItem(item),
+                                                      ),
+                                                    ),
+                                                    const DropdownMenuItem<
+                                                            Divider>(
+                                                        enabled: false,
+                                                        child: Divider()),
+                                                    ...UnpinMenuItems
+                                                        .unpinsecondItems
+                                                        .map(
+                                                      (item) => DropdownMenuItem<
+                                                          UnpinCustomMenuItem>(
+                                                        value: item,
+                                                        child: UnpinMenuItems
+                                                            .buildItem(item),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                  onChanged: (value) {
+                                                    UnpinMenuItems.onChanged(
+                                                        context,
+                                                        value
+                                                            as UnpinCustomMenuItem);
+                                                    print(
+                                                        "Value:-${value.text}");
+                                                    if (value.text ==
+                                                        StringConstants
+                                                            .editpost) {
+                                                      setState(() {
+                                                        editedpostid = index;
+                                                        postcontentcontoller
+                                                                .text =
+                                                            feedpostspojo!
+                                                                .message!.post!
+                                                                .elementAt(
+                                                                    index)
+                                                                .text
+                                                                .toString();
+                                                      });
+                                                    } else if (value.text ==
+                                                        StringConstants
+                                                            .deletepost) {
+                                                      showdeletealert(
+                                                          context,
+                                                          feedpostspojo!
+                                                              .message!.post!
+                                                              .elementAt(index)
+                                                              .id
+                                                              .toString(),
+                                                          index);
+                                                    } else if (value.text ==
+                                                        StringConstants
+                                                            .pinpost) {
+                                                      pinpost(
+                                                          feedpostspojo!
+                                                              .message!.post!
+                                                              .elementAt(index)
+                                                              .id
+                                                              .toString(),
+                                                          index,
+                                                          true);
+                                                    } else if (value.text ==
+                                                        StringConstants
+                                                            .unpinpost) {
+                                                      pinpost(
+                                                          feedpostspojo!
+                                                              .message!.post!
+                                                              .elementAt(index)
+                                                              .id
+                                                              .toString(),
+                                                          index,
+                                                          false);
+                                                    } else {}
+                                                  },
+                                                  dropdownStyleData:
+                                                      DropdownStyleData(
+                                                    width: 160,
+                                                    padding: const EdgeInsets
+                                                        .symmetric(vertical: 5),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                      color: Appcolors()
+                                                          .bottomnavbgcolor,
+                                                    ),
+                                                    elevation: 8,
+                                                    offset: const Offset(0, 8),
+                                                  ),
+                                                  menuItemStyleData:
+                                                      MenuItemStyleData(
+                                                    customHeights: [
+                                                      ...List<double>.filled(
+                                                          UnpinMenuItems
+                                                              .unpinfirstItems
+                                                              .length,
+                                                          35),
+                                                      8,
+                                                      ...List<double>.filled(
+                                                          UnpinMenuItems
+                                                              .unpinsecondItems
+                                                              .length,
+                                                          48),
+                                                    ],
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 16,
+                                                            right: 16),
+                                                  ),
+                                                )
+                                              : DropdownButton2(
+                                                  customButton: Image.asset(
+                                                    "assets/images/menubtn.png",
+                                                    height: 4.h,
+                                                    fit: BoxFit.fill,
+                                                  ),
+                                                  items: [
+                                                    ...MenuItems.firstItems.map(
+                                                      (item) =>
+                                                          DropdownMenuItem<
+                                                              CustomMenuItem>(
+                                                        value: item,
+                                                        child:
+                                                            MenuItems.buildItem(
+                                                                item),
+                                                      ),
+                                                    ),
+                                                    const DropdownMenuItem<
+                                                            Divider>(
+                                                        enabled: false,
+                                                        child: Divider()),
+                                                    // ...MenuItems.secondItems.map(
+                                                    //   (item) => DropdownMenuItem<
+                                                    //       CustomMenuItem>(
+                                                    //     value: item,
+                                                    //     child:
+                                                    //         MenuItems.buildItem(item),
+                                                    //   ),
+                                                    // ),
+                                                  ],
+                                                  onChanged: (value) {
+                                                    MenuItems.onChanged(
+                                                        context,
+                                                        value
+                                                            as CustomMenuItem);
+                                                    print(
+                                                        "Value:-${value.text}");
+                                                    if (value.text ==
+                                                        StringConstants
+                                                            .editpost) {
+                                                      setState(() {
+                                                        editedpostid = index;
+                                                        postcontentcontoller
+                                                                .text =
+                                                            feedpostspojo!
+                                                                .message!.post!
+                                                                .elementAt(
+                                                                    index)
+                                                                .text
+                                                                .toString();
+                                                      });
+                                                    } else if (value.text ==
+                                                        StringConstants
+                                                            .deletepost) {
+                                                      showdeletealert(
+                                                          context,
+                                                          feedpostspojo!
+                                                              .message!.post!
+                                                              .elementAt(index)
+                                                              .id
+                                                              .toString(),
+                                                          index);
+                                                    } else if (value.text ==
+                                                        StringConstants
+                                                            .pinpost) {
+                                                      pinpost(
+                                                          feedpostspojo!
+                                                              .message!.post!
+                                                              .elementAt(index)
+                                                              .id
+                                                              .toString(),
+                                                          index,
+                                                          true);
+                                                    } else if (value.text ==
+                                                        StringConstants
+                                                            .unpinpost) {
+                                                      pinpost(
+                                                          feedpostspojo!
+                                                              .message!.post!
+                                                              .elementAt(index)
+                                                              .id
+                                                              .toString(),
+                                                          index,
+                                                          false);
+                                                    } else {}
+                                                  },
+                                                  dropdownStyleData:
+                                                      DropdownStyleData(
+                                                    width: 160,
+                                                    padding: const EdgeInsets
+                                                        .symmetric(vertical: 5),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                      color: Appcolors()
+                                                          .bottomnavbgcolor,
+                                                    ),
+                                                    elevation: 8,
+                                                    offset: const Offset(0, 8),
+                                                  ),
+                                                  menuItemStyleData:
+                                                      MenuItemStyleData(
+                                                    customHeights: [
+                                                      ...List<double>.filled(
+                                                          MenuItems.firstItems
+                                                              .length,
+                                                          35),
+                                                      8,
+                                                      ...List<double>.filled(
+                                                          MenuItems.secondItems
+                                                              .length,
+                                                          48),
+                                                    ],
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 16,
+                                                            right: 16),
+                                                  ),
                                                 ),
-                                              ),
-                                              const DropdownMenuItem<Divider>(
-                                                  enabled: false,
-                                                  child: Divider()),
-                                              ...UnpinMenuItems.unpinsecondItems.map(
-                                                (item) => DropdownMenuItem<
-                                                    UnpinCustomMenuItem>(
-                                                  value: item,
-                                                  child:
-                                                  UnpinMenuItems.buildItem(item),
-                                                ),
-                                              ),
-                                            ],
-                                            onChanged: (value) {
-                                              UnpinMenuItems.onChanged(context,
-                                                  value as UnpinCustomMenuItem);
-                                              print("Value:-${value.text}");
-                                              if (value.text ==
-                                                  StringConstants.editpost) {
-                                                setState(() {
-                                                  editedpostid = index;
-                                                  postcontentcontoller.text =
-                                                      feedpostspojo!
-                                                          .message!.post!
-                                                          .elementAt(index)
-                                                          .text
-                                                          .toString();
-                                                });
-                                              } else if (value.text ==
-                                                  StringConstants.deletepost) {
-                                                showdeletealert(
-                                                    context,
-                                                    feedpostspojo!
-                                                        .message!.post!
-                                                        .elementAt(index)
-                                                        .id
-                                                        .toString(),
-                                                    index);
-                                              } else if (value.text ==
-                                                  StringConstants.pinpost) {
-                                                pinpost(
-                                                    feedpostspojo!
-                                                        .message!.post!
-                                                        .elementAt(index)
-                                                        .id
-                                                        .toString(),
-                                                    index,
-                                                    true);
-                                              }else if(value.text ==StringConstants.unpinpost){
-                                                pinpost(
-                                                    feedpostspojo!
-                                                        .message!.post!
-                                                        .elementAt(index)
-                                                        .id
-                                                        .toString(),
-                                                    index,
-                                                    false);
-                                              }else{
-
-                                              }
-                                            },
-                                            dropdownStyleData:
-                                                DropdownStyleData(
-                                              width: 160,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 5),
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                color: Appcolors()
-                                                    .bottomnavbgcolor,
-                                              ),
-                                              elevation: 8,
-                                              offset: const Offset(0, 8),
-                                            ),
-                                            menuItemStyleData:
-                                                MenuItemStyleData(
-                                              customHeights: [
-                                                ...List<double>.filled(
-                                                    UnpinMenuItems.unpinfirstItems.length,
-                                                    35),
-                                                8,
-                                                ...List<double>.filled(
-                                                    UnpinMenuItems
-                                                        .unpinsecondItems.length,
-                                                    48),
-                                              ],
-                                              padding: const EdgeInsets.only(
-                                                  left: 16, right: 16),
-                                            ),
-                                          )
-                                          :
-                                          DropdownButton2(
-                                            customButton: Image.asset(
-                                              "assets/images/menubtn.png",
-                                              height: 4.h,
-                                              fit: BoxFit.fill,
-                                            ),
-                                            items: [
-                                              ...MenuItems.firstItems.map(
-                                                    (item) => DropdownMenuItem<
-                                                    CustomMenuItem>(
-                                                  value: item,
-                                                  child:
-                                                  MenuItems.buildItem(item),
-                                                ),
-                                              ),
-                                              const DropdownMenuItem<Divider>(
-                                                  enabled: false,
-                                                  child: Divider()),
-                                              // ...MenuItems.secondItems.map(
-                                              //   (item) => DropdownMenuItem<
-                                              //       CustomMenuItem>(
-                                              //     value: item,
-                                              //     child:
-                                              //         MenuItems.buildItem(item),
-                                              //   ),
-                                              // ),
-                                            ],
-                                            onChanged: (value) {
-                                              MenuItems.onChanged(context,
-                                                  value as CustomMenuItem);
-                                              print("Value:-${value.text}");
-                                              if (value.text ==
-                                                  StringConstants.editpost) {
-                                                setState(() {
-                                                  editedpostid = index;
-                                                  postcontentcontoller.text =
-                                                      feedpostspojo!
-                                                          .message!.post!
-                                                          .elementAt(index)
-                                                          .text
-                                                          .toString();
-                                                });
-                                              } else if (value.text ==
-                                                  StringConstants.deletepost) {
-                                                showdeletealert(
-                                                    context,
-                                                    feedpostspojo!
-                                                        .message!.post!
-                                                        .elementAt(index)
-                                                        .id
-                                                        .toString(),
-                                                    index);
-                                              } else if (value.text ==
-                                                  StringConstants.pinpost) {
-                                                pinpost(
-                                                    feedpostspojo!
-                                                        .message!.post!
-                                                        .elementAt(index)
-                                                        .id
-                                                        .toString(),
-                                                    index,
-                                                    true);
-                                              }else if(value.text ==StringConstants.unpinpost){
-                                                pinpost(
-                                                    feedpostspojo!
-                                                        .message!.post!
-                                                        .elementAt(index)
-                                                        .id
-                                                        .toString(),
-                                                    index,
-                                                    false);
-                                              }else{
-
-                                              }
-                                            },
-                                            dropdownStyleData:
-                                            DropdownStyleData(
-                                              width: 160,
-                                              padding:
-                                              const EdgeInsets.symmetric(
-                                                  vertical: 5),
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                BorderRadius.circular(10),
-                                                color: Appcolors()
-                                                    .bottomnavbgcolor,
-                                              ),
-                                              elevation: 8,
-                                              offset: const Offset(0, 8),
-                                            ),
-                                            menuItemStyleData:
-                                            MenuItemStyleData(
-                                              customHeights: [
-                                                ...List<double>.filled(
-                                                    MenuItems.firstItems.length,
-                                                    35),
-                                                8,
-                                                ...List<double>.filled(
-                                                    MenuItems
-                                                        .secondItems.length,
-                                                    48),
-                                              ],
-                                              padding: const EdgeInsets.only(
-                                                  left: 16, right: 16),
-                                            ),
-                                          ),
                                         ),
                                       ],
                                     ),
@@ -1684,23 +1751,26 @@ class FeedScreenState extends State<FeedScreen> {
                                                     child:
                                                         CircularProgressIndicator(
                                                       strokeWidth: 2,
-                                                          color: Appcolors().gradientcolorfirst,
-                                                        ),
+                                                      color: Appcolors()
+                                                          .gradientcolorfirst,
+                                                    ),
                                                   ),
                                                 ),
-                                          errorWidget: (context, url, error) => Container(
-                                            width: 15.w,
-                                            height: 4.5.h,
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                BorderRadius.circular(20),
-                                                shape:
-                                                BoxShape.rectangle,
-                                                image: const DecorationImage(
-                                                    image: AssetImage("assets/images/imageplaceholder.png"),fit: BoxFit.cover
-                                                )
-                                            ),
-                                          ),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Container(
+                                                  width: 15.w,
+                                                  height: 4.5.h,
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20),
+                                                      shape: BoxShape.rectangle,
+                                                      image: const DecorationImage(
+                                                          image: AssetImage(
+                                                              "assets/images/imageplaceholder.png"),
+                                                          fit: BoxFit.cover)),
+                                                ),
                                               )
                                             : feedpostspojo!.message!.post!
                                                         .elementAt(index)
@@ -1759,7 +1829,8 @@ class FeedScreenState extends State<FeedScreen> {
                                                   TextFormField(
                                                     minLines: 3,
                                                     maxLines: 3,
-                                                    textInputAction: TextInputAction.done,
+                                                    textInputAction:
+                                                        TextInputAction.done,
                                                     cursorColor: Appcolors()
                                                         .loginhintcolor,
                                                     style: TextStyle(
@@ -1835,10 +1906,18 @@ class FeedScreenState extends State<FeedScreen> {
                                                     children: [
                                                       InkWell(
                                                         onTap: () {
-                                                          editpost(feedpostspojo!.message!.post!
-                                                              .elementAt(index)
-                                                              .id
-                                                              .toString(), index, postcontentcontoller.text.toString());
+                                                          editpost(
+                                                              feedpostspojo!
+                                                                  .message!
+                                                                  .post!
+                                                                  .elementAt(
+                                                                      index)
+                                                                  .id
+                                                                  .toString(),
+                                                              index,
+                                                              postcontentcontoller
+                                                                  .text
+                                                                  .toString());
                                                         },
                                                         child: Container(
                                                           alignment:
@@ -2083,22 +2162,25 @@ class FeedScreenState extends State<FeedScreen> {
                                                       child:
                                                           CircularProgressIndicator(
                                                         strokeWidth: 2,
-                                                            color: Appcolors().gradientcolorfirst,
-                                                          ),
+                                                        color: Appcolors()
+                                                            .gradientcolorfirst,
+                                                      ),
                                                     ),
                                                   ),
-                                                  errorWidget: (context, url, error) => Container(
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          Container(
                                                     width: 15.w,
                                                     height: 4.5.h,
                                                     decoration: BoxDecoration(
                                                         borderRadius:
-                                                        BorderRadius.circular(15),
-                                                        shape:
-                                                        BoxShape.circle,
+                                                            BorderRadius
+                                                                .circular(15),
+                                                        shape: BoxShape.circle,
                                                         image: const DecorationImage(
-                                                            image: AssetImage("assets/images/userprofile.png"),fit: BoxFit.cover
-                                                        )
-                                                    ),
+                                                            image: AssetImage(
+                                                                "assets/images/userprofile.png"),
+                                                            fit: BoxFit.cover)),
                                                   ),
                                                 ),
                                               ),
@@ -2142,20 +2224,28 @@ class FeedScreenState extends State<FeedScreen> {
                                           fit: BoxFit.fill,
                                         ),
                                         items: [
-                                          ...ScheduledMenuItems.schedulefirstItems.map(
-                                                (item) => DropdownMenuItem<
+                                          ...ScheduledMenuItems
+                                              .schedulefirstItems
+                                              .map(
+                                            (item) => DropdownMenuItem<
                                                 ScheduledCustomMenuItem>(
                                               value: item,
-                                              child: ScheduledMenuItems.buildItem(item),
+                                              child:
+                                                  ScheduledMenuItems.buildItem(
+                                                      item),
                                             ),
                                           ),
                                           const DropdownMenuItem<Divider>(
                                               enabled: false, child: Divider()),
-                                          ...ScheduledMenuItems.schedulesecondItems.map(
-                                                (item) => DropdownMenuItem<
+                                          ...ScheduledMenuItems
+                                              .schedulesecondItems
+                                              .map(
+                                            (item) => DropdownMenuItem<
                                                 ScheduledCustomMenuItem>(
                                               value: item,
-                                              child: ScheduledMenuItems.buildItem(item),
+                                              child:
+                                                  ScheduledMenuItems.buildItem(
+                                                      item),
                                             ),
                                           ),
                                         ],
@@ -2168,43 +2258,38 @@ class FeedScreenState extends State<FeedScreen> {
                                             setState(() {
                                               editedpostid = index;
                                               postcontentcontoller.text =
-                                                  feedpostspojo!
-                                                      .message!.post!
+                                                  feedpostspojo!.message!.post!
                                                       .elementAt(index)
                                                       .text
                                                       .toString();
                                             });
-                                          } else{
+                                          } else {
                                             showdeletealert(
                                                 context,
-                                                feedpostspojo!
-                                                    .message!.post!
+                                                feedpostspojo!.message!.post!
                                                     .elementAt(index)
                                                     .id
                                                     .toString(),
                                                 index);
                                           }
                                         },
-                                        dropdownStyleData:
-                                        DropdownStyleData(
+                                        dropdownStyleData: DropdownStyleData(
                                           width: 160,
-                                          padding:
-                                          const EdgeInsets.symmetric(
+                                          padding: const EdgeInsets.symmetric(
                                               vertical: 5),
                                           decoration: BoxDecoration(
                                             borderRadius:
-                                            BorderRadius.circular(10),
-                                            color: Appcolors()
-                                                .bottomnavbgcolor,
+                                                BorderRadius.circular(10),
+                                            color: Appcolors().bottomnavbgcolor,
                                           ),
                                           elevation: 8,
                                           offset: const Offset(0, 8),
                                         ),
-                                        menuItemStyleData:
-                                        MenuItemStyleData(
+                                        menuItemStyleData: MenuItemStyleData(
                                           customHeights: [
                                             ...List<double>.filled(
-                                                ScheduledMenuItems.schedulefirstItems.length,
+                                                ScheduledMenuItems
+                                                    .schedulefirstItems.length,
                                                 35),
                                             8,
                                             ...List<double>.filled(
@@ -2217,7 +2302,6 @@ class FeedScreenState extends State<FeedScreen> {
                                         ),
                                       ),
                                     ),
-
                                   ],
                                 ),
                                 SizedBox(
@@ -2311,8 +2395,9 @@ class FeedScreenState extends State<FeedScreen> {
                                                     child:
                                                         CircularProgressIndicator(
                                                       strokeWidth: 2,
-                                                          color: Appcolors().gradientcolorfirst,
-                                                        ),
+                                                      color: Appcolors()
+                                                          .gradientcolorfirst,
+                                                    ),
                                                   ),
                                                 ),
                                                 // errorWidget: (context, url, error) => errorWidget,
@@ -2689,8 +2774,9 @@ class FeedScreenState extends State<FeedScreen> {
                                                       child:
                                                           CircularProgressIndicator(
                                                         strokeWidth: 2,
-                                                            color: Appcolors().gradientcolorfirst,
-                                                          ),
+                                                        color: Appcolors()
+                                                            .gradientcolorfirst,
+                                                      ),
                                                     ),
                                                   ),
                                                   // errorWidget: (context, url, error) => errorWidget,
@@ -2736,26 +2822,34 @@ class FeedScreenState extends State<FeedScreen> {
                                           fit: BoxFit.fill,
                                         ),
                                         items: [
-                                          ...ScheduledMenuItems.schedulefirstItems.map(
+                                          ...ScheduledMenuItems
+                                              .schedulefirstItems
+                                              .map(
                                             (item) => DropdownMenuItem<
                                                 ScheduledCustomMenuItem>(
                                               value: item,
-                                              child: ScheduledMenuItems.buildItem(item),
+                                              child:
+                                                  ScheduledMenuItems.buildItem(
+                                                      item),
                                             ),
                                           ),
                                           const DropdownMenuItem<Divider>(
                                               enabled: false, child: Divider()),
-                                          ...ScheduledMenuItems.schedulesecondItems.map(
+                                          ...ScheduledMenuItems
+                                              .schedulesecondItems
+                                              .map(
                                             (item) => DropdownMenuItem<
                                                 ScheduledCustomMenuItem>(
                                               value: item,
-                                              child: ScheduledMenuItems.buildItem(item),
+                                              child:
+                                                  ScheduledMenuItems.buildItem(
+                                                      item),
                                             ),
                                           ),
                                         ],
                                         onChanged: (value) {
-                                          ScheduledMenuItems.onChanged(
-                                              context, value as ScheduledCustomMenuItem);
+                                          ScheduledMenuItems.onChanged(context,
+                                              value as ScheduledCustomMenuItem);
                                           print("Value:-${value.text}");
                                           if (value.text ==
                                               StringConstants.editpost) {
@@ -2789,11 +2883,13 @@ class FeedScreenState extends State<FeedScreen> {
                                         menuItemStyleData: MenuItemStyleData(
                                           customHeights: [
                                             ...List<double>.filled(
-                                                ScheduledMenuItems.schedulefirstItems.length,
+                                                ScheduledMenuItems
+                                                    .schedulefirstItems.length,
                                                 35),
                                             8,
                                             ...List<double>.filled(
-                                                ScheduledMenuItems.schedulesecondItems.length,
+                                                ScheduledMenuItems
+                                                    .schedulesecondItems.length,
                                                 48),
                                           ],
                                           padding: const EdgeInsets.only(
@@ -3272,7 +3368,8 @@ class FeedScreenState extends State<FeedScreen> {
     final DynamicLinkParameters parameters = DynamicLinkParameters(
       uriPrefix: DynamicLink,
       longDynamicLink: Uri.parse(
-        'https://sextconfidential.page.link/?link=https://sextconfidential.com&isi=6450113311&ibi=com.coderzbar.sextconfidential.sextconfidential&efr=1'"10",
+        'https://sextconfidential.page.link/?link=https://sextconfidential.com&isi=6450113311&ibi=com.coderzbar.sextconfidential.sextconfidential&efr=1'
+        "10",
       ),
       link: Uri.parse(DynamicLink),
       // androidParameters: const AndroidParameters(
@@ -3288,7 +3385,7 @@ class FeedScreenState extends State<FeedScreen> {
     Uri url;
     if (short) {
       final ShortDynamicLink shortLink =
-      await dynamicLinks.buildShortLink(parameters);
+          await dynamicLinks.buildShortLink(parameters);
       url = shortLink.shortUrl;
     } else {
       url = await dynamicLinks.buildLink(parameters);

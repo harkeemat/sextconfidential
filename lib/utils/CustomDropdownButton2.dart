@@ -1,6 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:sextconfidential/utils/Appcolors.dart';
+import '/utils/Appcolors.dart';
 import 'package:sizer/sizer.dart';
 
 class CustomDropdownButton2 extends StatelessWidget {
@@ -83,20 +83,20 @@ class CustomDropdownButton2 extends StatelessWidget {
         value: value,
         items: dropdownItems
             .map((item) => DropdownMenuItem<String>(
-          value: item,
-          child: Container(
-            alignment: valueAlignment,
-            child: Text(
-              item,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-              style: TextStyle(
-                color: Appcolors().whitecolor,
-                fontSize: 14,
-              ),
-            ),
-          ),
-        ))
+                  value: item,
+                  child: Container(
+                    alignment: valueAlignment,
+                    child: Text(
+                      item,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: TextStyle(
+                        color: Appcolors().whitecolor,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ))
             .toList(),
         onChanged: onChanged,
         selectedItemBuilder: selectedItemBuilder,
@@ -113,7 +113,12 @@ class CustomDropdownButton2 extends StatelessWidget {
         ),
         style: const TextStyle(color: Colors.white),
         iconStyleData: IconStyleData(
-          icon: icon ?? Icon(Icons.keyboard_arrow_down_rounded,color: Colors.white,size:2.h,),
+          icon: icon ??
+              Icon(
+                Icons.keyboard_arrow_down_rounded,
+                color: Colors.white,
+                size: 2.h,
+              ),
           iconSize: iconSize ?? 12,
           iconEnabledColor: iconEnabledColor,
           iconDisabledColor: iconDisabledColor,
@@ -126,7 +131,7 @@ class CustomDropdownButton2 extends StatelessWidget {
           decoration: dropdownDecoration ??
               BoxDecoration(
                 color: Appcolors().bottomnavbgcolor,
-                  borderRadius: const BorderRadius.all(Radius.circular(14)),
+                borderRadius: const BorderRadius.all(Radius.circular(14)),
               ),
           elevation: dropdownElevation ?? 8,
           //Null or Offset(0, 0) will open just under the button. You can edit as you want.
@@ -145,7 +150,11 @@ class CustomDropdownButton2 extends StatelessWidget {
         ),
         menuItemStyleData: MenuItemStyleData(
           height: itemHeight ?? 40,
-          padding: itemPadding ?? const EdgeInsets.only(left: 14, right: 14,),
+          padding: itemPadding ??
+              const EdgeInsets.only(
+                left: 14,
+                right: 14,
+              ),
         ),
       ),
     );

@@ -5,14 +5,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:sextconfidential/Bottomnavigation.dart';
-import 'package:sextconfidential/utils/Appcolors.dart';
-import 'package:sextconfidential/utils/CustomMenu.dart';
-import 'package:sextconfidential/utils/Helpingwidgets.dart';
-import 'package:sextconfidential/utils/Networks.dart';
-import 'package:sextconfidential/utils/Scheduleddropdown.dart';
-import 'package:sextconfidential/utils/StringConstants.dart';
-import 'package:sextconfidential/utils/Unpindropdown.dart';
+import '/Bottomnavigation.dart';
+import '/utils/Appcolors.dart';
+import '/utils/CustomMenu.dart';
+import '/utils/Helpingwidgets.dart';
+import '/utils/Networks.dart';
+import '/utils/Scheduleddropdown.dart';
+import '/utils/StringConstants.dart';
+import '/utils/Unpindropdown.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
@@ -178,153 +178,146 @@ class FeeddetailedpageState extends State<Feeddetailedpage> {
                         child: pinnedpost(),
                       ),
                       widget.posttype == 0
-                          ?
-                      widget.pinstatus == "true"?
-                      DropdownButton2(
-                        customButton: Image.asset(
-                          "assets/images/menubtn.png",
-                          height: 4.h,
-                          fit: BoxFit.fill,
-                        ),
-                        items: [
-                          ...UnpinMenuItems.unpinfirstItems.map(
-                                (item) => DropdownMenuItem<UnpinCustomMenuItem>(
-                              value: item,
-                              child:
-                              UnpinMenuItems.buildItem(item),
-                            ),
-                          ),
-                          const DropdownMenuItem<Divider>(
-                              enabled: false,
-                              child: Divider(color: Colors.black,)),
-                          ...UnpinMenuItems.unpinsecondItems.map(
-                                (item) => DropdownMenuItem<
-                                UnpinCustomMenuItem>(
-                              value: item,
-                              child:
-                              UnpinMenuItems.buildItem(item),
-                            ),
-                          ),
-                        ],
-                        onChanged: (value) {
-                          UnpinMenuItems.onChanged(context,
-                              value as UnpinCustomMenuItem);
-                          print("Value:-${value.text}");
-                          if (value.text ==
-                              StringConstants.editpost) {
-                            setState(() {
-                              editpost = true;
-                            });
-                          } else if (value.text ==
-                              StringConstants.deletepost) {
-                            showdeletealert(
-                                context);
-                          } else if (value.text ==
-                              StringConstants.pinpost) {
-                            pinpost(
-                                widget.postid.toString(),true);
-                          }else if(value.text ==StringConstants.unpinpost){
-                            pinpost(
-                                widget.postid.toString(),
-                                false);
-                          }else{
-
-                          }
-                        },
-                        dropdownStyleData:
-                        DropdownStyleData(
-                          width: 160,
-                          padding:
-                          const EdgeInsets.symmetric(
-                              vertical: 5),
-                          decoration: BoxDecoration(
-                            borderRadius:
-                            BorderRadius.circular(10),
-                            color: Appcolors()
-                                .bottomnavbgcolor,
-                          ),
-                          elevation: 8,
-                          offset: const Offset(0, 8),
-                        ),
-                        menuItemStyleData:
-                        MenuItemStyleData(
-                          customHeights: [
-                            ...List<double>.filled(
-                                UnpinMenuItems.unpinfirstItems.length,
-                                35),
-                            8,
-                            ...List<double>.filled(
-                                UnpinMenuItems
-                                    .unpinsecondItems.length,
-                                48),
-                          ],
-                          padding: const EdgeInsets.only(
-                              left: 16, right: 16),
-                        ),
-                      ):
-                      DropdownButtonHideUnderline(
-                              child: DropdownButton2(
-                                customButton: Image.asset(
-                                  "assets/images/menubtn.png",
-                                  height: 4.h,
-                                  fit: BoxFit.fill,
-                                ),
-                                items: [
-                                  ...MenuItems.firstItems.map(
-                                    (item) => DropdownMenuItem<CustomMenuItem>(
-                                      value: item,
-                                      child: MenuItems.buildItem(item),
+                          ? widget.pinstatus == "true"
+                              ? DropdownButton2(
+                                  customButton: Image.asset(
+                                    "assets/images/menubtn.png",
+                                    height: 4.h,
+                                    fit: BoxFit.fill,
+                                  ),
+                                  items: [
+                                    ...UnpinMenuItems.unpinfirstItems.map(
+                                      (item) =>
+                                          DropdownMenuItem<UnpinCustomMenuItem>(
+                                        value: item,
+                                        child: UnpinMenuItems.buildItem(item),
+                                      ),
                                     ),
-                                  ),
-                                  const DropdownMenuItem<Divider>(
-                                      enabled: false, child: Divider()),
-                                  ...MenuItems.secondItems.map(
-                                    (item) => DropdownMenuItem<CustomMenuItem>(
-                                      value: item,
-                                      child: MenuItems.buildItem(item),
+                                    const DropdownMenuItem<Divider>(
+                                        enabled: false,
+                                        child: Divider(
+                                          color: Colors.black,
+                                        )),
+                                    ...UnpinMenuItems.unpinsecondItems.map(
+                                      (item) =>
+                                          DropdownMenuItem<UnpinCustomMenuItem>(
+                                        value: item,
+                                        child: UnpinMenuItems.buildItem(item),
+                                      ),
                                     ),
-                                  ),
-                                ],
-                                onChanged: (value) {
-                                  MenuItems.onChanged(
-                                      context, value as CustomMenuItem);
-                                  print("Value:-${value.text}");
-                                  if (value.text == StringConstants.editpost) {
-                                    setState(() {
-                                      editpost = true;
-                                    });
-                                  } else if (value.text ==
-                                      StringConstants.deletepost) {
-                                    showdeletealert(context);
-                                  } else if (value.text ==
-                                      StringConstants.pinpost) {
-                                    pinpost(widget.postid.toString(), true);
-                                  }
-                                },
-                                dropdownStyleData: DropdownStyleData(
-                                  width: 160,
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 5),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Appcolors().bottomnavbgcolor,
-                                  ),
-                                  elevation: 8,
-                                  offset: const Offset(0, 8),
-                                ),
-                                menuItemStyleData: MenuItemStyleData(
-                                  customHeights: [
-                                    ...List<double>.filled(
-                                        MenuItems.firstItems.length, 35),
-                                    8,
-                                    ...List<double>.filled(
-                                        MenuItems.secondItems.length, 48),
                                   ],
-                                  padding: const EdgeInsets.only(
-                                      left: 16, right: 16),
-                                ),
-                              ),
-                            )
+                                  onChanged: (value) {
+                                    UnpinMenuItems.onChanged(
+                                        context, value as UnpinCustomMenuItem);
+                                    print("Value:-${value.text}");
+                                    if (value.text ==
+                                        StringConstants.editpost) {
+                                      setState(() {
+                                        editpost = true;
+                                      });
+                                    } else if (value.text ==
+                                        StringConstants.deletepost) {
+                                      showdeletealert(context);
+                                    } else if (value.text ==
+                                        StringConstants.pinpost) {
+                                      pinpost(widget.postid.toString(), true);
+                                    } else if (value.text ==
+                                        StringConstants.unpinpost) {
+                                      pinpost(widget.postid.toString(), false);
+                                    } else {}
+                                  },
+                                  dropdownStyleData: DropdownStyleData(
+                                    width: 160,
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 5),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Appcolors().bottomnavbgcolor,
+                                    ),
+                                    elevation: 8,
+                                    offset: const Offset(0, 8),
+                                  ),
+                                  menuItemStyleData: MenuItemStyleData(
+                                    customHeights: [
+                                      ...List<double>.filled(
+                                          UnpinMenuItems.unpinfirstItems.length,
+                                          35),
+                                      8,
+                                      ...List<double>.filled(
+                                          UnpinMenuItems
+                                              .unpinsecondItems.length,
+                                          48),
+                                    ],
+                                    padding: const EdgeInsets.only(
+                                        left: 16, right: 16),
+                                  ),
+                                )
+                              : DropdownButtonHideUnderline(
+                                  child: DropdownButton2(
+                                    customButton: Image.asset(
+                                      "assets/images/menubtn.png",
+                                      height: 4.h,
+                                      fit: BoxFit.fill,
+                                    ),
+                                    items: [
+                                      ...MenuItems.firstItems.map(
+                                        (item) =>
+                                            DropdownMenuItem<CustomMenuItem>(
+                                          value: item,
+                                          child: MenuItems.buildItem(item),
+                                        ),
+                                      ),
+                                      const DropdownMenuItem<Divider>(
+                                          enabled: false, child: Divider()),
+                                      ...MenuItems.secondItems.map(
+                                        (item) =>
+                                            DropdownMenuItem<CustomMenuItem>(
+                                          value: item,
+                                          child: MenuItems.buildItem(item),
+                                        ),
+                                      ),
+                                    ],
+                                    onChanged: (value) {
+                                      MenuItems.onChanged(
+                                          context, value as CustomMenuItem);
+                                      print("Value:-${value.text}");
+                                      if (value.text ==
+                                          StringConstants.editpost) {
+                                        setState(() {
+                                          editpost = true;
+                                        });
+                                      } else if (value.text ==
+                                          StringConstants.deletepost) {
+                                        showdeletealert(context);
+                                      } else if (value.text ==
+                                          StringConstants.pinpost) {
+                                        pinpost(widget.postid.toString(), true);
+                                      }
+                                    },
+                                    dropdownStyleData: DropdownStyleData(
+                                      width: 160,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 5),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Appcolors().bottomnavbgcolor,
+                                      ),
+                                      elevation: 8,
+                                      offset: const Offset(0, 8),
+                                    ),
+                                    menuItemStyleData: MenuItemStyleData(
+                                      customHeights: [
+                                        ...List<double>.filled(
+                                            MenuItems.firstItems.length, 35),
+                                        8,
+                                        ...List<double>.filled(
+                                            MenuItems.secondItems.length, 48),
+                                      ],
+                                      padding: const EdgeInsets.only(
+                                          left: 16, right: 16),
+                                    ),
+                                  ),
+                                )
                           : DropdownButtonHideUnderline(
                               child: DropdownButton2(
                                 customButton: Image.asset(
@@ -905,9 +898,9 @@ class FeeddetailedpageState extends State<Feeddetailedpage> {
         print("Message:-${jsonResponse["message"]}");
         Navigator.pop(context);
         setState(() {
-          if(status){
+          if (status) {
             widget.pinstatus = "true";
-          }else{
+          } else {
             widget.pinstatus = "false";
           }
         });

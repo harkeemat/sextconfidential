@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:sextconfidential/utils/Appcolors.dart';
-import 'package:sextconfidential/utils/Helpingwidgets.dart';
-import 'package:sextconfidential/utils/Networks.dart';
-import 'package:sextconfidential/utils/StringConstants.dart';
+import '/utils/Appcolors.dart';
+import '/utils/Helpingwidgets.dart';
+import '/utils/Networks.dart';
+import '/utils/StringConstants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:sizer/sizer.dart';
@@ -29,6 +29,7 @@ class PayoutInfoScreenState extends State<PayoutInfoScreen> {
     super.initState();
     getsharedpreference();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,8 +90,10 @@ class PayoutInfoScreenState extends State<PayoutInfoScreen> {
                       height: 3.h,
                       width: 3.h,
                       child: Checkbox(
-                        fillColor: MaterialStateProperty.all(Colors.transparent),
-                        overlayColor: MaterialStateProperty.all(Colors.transparent),
+                        fillColor:
+                            MaterialStateProperty.all(Colors.transparent),
+                        overlayColor:
+                            MaterialStateProperty.all(Colors.transparent),
                         checkColor: Appcolors().backgroundcolor,
                         activeColor: Colors.transparent,
                         focusColor: Colors.transparent,
@@ -109,28 +112,28 @@ class PayoutInfoScreenState extends State<PayoutInfoScreen> {
                     ),
                     twelvehouralert
                         ? GradientText(
-                      StringConstants.hoursalert,
-                      style: TextStyle(
-                          fontSize: 12.sp,
-                          // fontFamily: "PulpDisplay",
-                          fontWeight: FontWeight.w500,
-                          color: Appcolors().loginhintcolor),
-                      gradientType: GradientType.linear,
-                      gradientDirection: GradientDirection.ttb,
-                      radius: 8,
-                      colors: [
-                        Appcolors().gradientcolorfirst,
-                        Appcolors().gradientcolorsecond,
-                      ],
-                    )
+                            StringConstants.hoursalert,
+                            style: TextStyle(
+                                fontSize: 12.sp,
+                                // fontFamily: "PulpDisplay",
+                                fontWeight: FontWeight.w500,
+                                color: Appcolors().loginhintcolor),
+                            gradientType: GradientType.linear,
+                            gradientDirection: GradientDirection.ttb,
+                            radius: 8,
+                            colors: [
+                              Appcolors().gradientcolorfirst,
+                              Appcolors().gradientcolorsecond,
+                            ],
+                          )
                         : Text(
-                      StringConstants.hoursalert,
-                      style: TextStyle(
-                          fontSize: 12.sp,
-                          // fontFamily: "PulpDisplay",
-                          fontWeight: FontWeight.w500,
-                          color: Appcolors().loginhintcolor),
-                    )
+                            StringConstants.hoursalert,
+                            style: TextStyle(
+                                fontSize: 12.sp,
+                                // fontFamily: "PulpDisplay",
+                                fontWeight: FontWeight.w500,
+                                color: Appcolors().loginhintcolor),
+                          )
                   ],
                 ),
                 SizedBox(
@@ -160,8 +163,10 @@ class PayoutInfoScreenState extends State<PayoutInfoScreen> {
                       height: 3.h,
                       width: 3.h,
                       child: Checkbox(
-                        fillColor: MaterialStateProperty.all(Colors.transparent),
-                        overlayColor: MaterialStateProperty.all(Colors.transparent),
+                        fillColor:
+                            MaterialStateProperty.all(Colors.transparent),
+                        overlayColor:
+                            MaterialStateProperty.all(Colors.transparent),
                         checkColor: Appcolors().backgroundcolor,
                         activeColor: Colors.transparent,
                         focusColor: Colors.transparent,
@@ -180,28 +185,28 @@ class PayoutInfoScreenState extends State<PayoutInfoScreen> {
                     ),
                     payoutprocessedalert
                         ? GradientText(
-                      StringConstants.payoutprocessed,
-                      style: TextStyle(
-                          fontSize: 12.sp,
-                          // fontFamily: "PulpDisplay",
-                          fontWeight: FontWeight.w500,
-                          color: Appcolors().loginhintcolor),
-                      gradientType: GradientType.linear,
-                      gradientDirection: GradientDirection.ttb,
-                      radius: 8,
-                      colors: [
-                        Appcolors().gradientcolorfirst,
-                        Appcolors().gradientcolorsecond,
-                      ],
-                    )
+                            StringConstants.payoutprocessed,
+                            style: TextStyle(
+                                fontSize: 12.sp,
+                                // fontFamily: "PulpDisplay",
+                                fontWeight: FontWeight.w500,
+                                color: Appcolors().loginhintcolor),
+                            gradientType: GradientType.linear,
+                            gradientDirection: GradientDirection.ttb,
+                            radius: 8,
+                            colors: [
+                              Appcolors().gradientcolorfirst,
+                              Appcolors().gradientcolorsecond,
+                            ],
+                          )
                         : Text(
-                      StringConstants.payoutprocessed,
-                      style: TextStyle(
-                          fontSize: 12.sp,
-                          // fontFamily: "PulpDisplay",
-                          fontWeight: FontWeight.w500,
-                          color: Appcolors().loginhintcolor),
-                    ),
+                            StringConstants.payoutprocessed,
+                            style: TextStyle(
+                                fontSize: 12.sp,
+                                // fontFamily: "PulpDisplay",
+                                fontWeight: FontWeight.w500,
+                                color: Appcolors().loginhintcolor),
+                          ),
                   ],
                 ),
                 SizedBox(
@@ -231,8 +236,10 @@ class PayoutInfoScreenState extends State<PayoutInfoScreen> {
                       height: 3.h,
                       width: 3.h,
                       child: Checkbox(
-                        fillColor: MaterialStateProperty.all(Colors.transparent),
-                        overlayColor: MaterialStateProperty.all(Colors.transparent),
+                        fillColor:
+                            MaterialStateProperty.all(Colors.transparent),
+                        overlayColor:
+                            MaterialStateProperty.all(Colors.transparent),
                         checkColor: Appcolors().backgroundcolor,
                         activeColor: Colors.transparent,
                         focusColor: Colors.transparent,
@@ -285,34 +292,37 @@ class PayoutInfoScreenState extends State<PayoutInfoScreen> {
 
   Future<void> getsharedpreference() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    setState((){
-      token=sharedPreferences?.getString("token");
-      twelvehouralert=sharedPreferences!.getBool("twelvehouralert")??false;
-      payoutprocessedalert=sharedPreferences!.getBool("payoutprocessed")??false;
-      endofpayalert=sharedPreferences!.getBool("endofpayperiod")??false;
+    setState(() {
+      token = sharedPreferences?.getString("token");
+      twelvehouralert = sharedPreferences!.getBool("twelvehouralert") ?? false;
+      payoutprocessedalert =
+          sharedPreferences!.getBool("payoutprocessed") ?? false;
+      endofpayalert = sharedPreferences!.getBool("endofpayperiod") ?? false;
     });
     print("Token value:-$token");
   }
+
   Future<void> payoutinfo() async {
-    Map data ={
-      "token":token,
-      "hours":twelvehouralert.toString(),
-      "processed":payoutprocessedalert.toString(),
-      "endpayperiod":endofpayalert.toString(),
+    Map data = {
+      "token": token,
+      "hours": twelvehouralert.toString(),
+      "processed": payoutprocessedalert.toString(),
+      "endpayperiod": endofpayalert.toString(),
     };
     print("Data:-$data");
     var jsonResponse;
     var response = await http.post(
         Uri.parse(Networks.baseurl + Networks.updatepayoutinfo),
-        body: data
-    );
+        body: data);
     jsonResponse = json.decode(response.body);
     print("jsonResponse:-$jsonResponse");
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
-        Helpingwidgets.failedsnackbar(jsonResponse["message"].toString(), context);
+        Helpingwidgets.failedsnackbar(
+            jsonResponse["message"].toString(), context);
       } else {
-        Helpingwidgets.successsnackbar(jsonResponse["message"].toString(), context);
+        Helpingwidgets.successsnackbar(
+            jsonResponse["message"].toString(), context);
         print("Response:${jsonResponse["message"]}");
         sharedPreferences!.setBool("twelvehouralert", twelvehouralert);
         sharedPreferences!.setBool("payoutprocessed", payoutprocessedalert);
@@ -320,7 +330,8 @@ class PayoutInfoScreenState extends State<PayoutInfoScreen> {
         // Navigator.pop(context);
       }
     } else {
-      Helpingwidgets.failedsnackbar(jsonResponse["message"].toString(), context);
+      Helpingwidgets.failedsnackbar(
+          jsonResponse["message"].toString(), context);
     }
   }
 }

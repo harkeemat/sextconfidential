@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:google_places_flutter/google_places_flutter.dart';
 import 'package:google_places_flutter/model/prediction.dart';
-import 'package:sextconfidential/pojo/googleplacepojo.dart';
+import '/pojo/googleplacepojo.dart';
 // import 'package:searchfield/searchfield.dart';
-import 'package:sextconfidential/utils/Appcolors.dart';
-import 'package:sextconfidential/utils/Networks.dart';
-import 'package:sextconfidential/utils/StringConstants.dart';
+import '/utils/Appcolors.dart';
+import '/utils/Networks.dart';
+import '/utils/StringConstants.dart';
 import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
 
@@ -112,7 +112,8 @@ class LocationdenialScreenState extends State<LocationdenialScreen> {
                             BorderSide(color: Appcolors().logintextformborder),
                       ),
                       prefixIcon: Padding(
-                        padding: EdgeInsets.only(left: 2.w,right: 2.w,top: 1.h,bottom: 1.h),
+                        padding: EdgeInsets.only(
+                            left: 2.w, right: 2.w, top: 1.h, bottom: 1.h),
                         child: Container(
                           // : EdgeInsets.only(top: 3.h,bottom: 3.h),
                           margin: EdgeInsets.only(right: 2.w),
@@ -185,14 +186,10 @@ class LocationdenialScreenState extends State<LocationdenialScreen> {
               },
             ),
             Expanded(
-              child:
-
-
-              ListView.builder(
+              child: ListView.builder(
                 itemCount: selectedItems.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return
-                    Column(
+                  return Column(
                     children: [
                       SizedBox(
                         height: 1.5.h,
@@ -211,14 +208,14 @@ class LocationdenialScreenState extends State<LocationdenialScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             SizedBox(
-                              width:75.w,
-                              child: Text(
-                                selectedItems.elementAt(index),
-                                style: TextStyle(
-                                  fontFamily: "PulpDisplay",
-                                  color: Appcolors().whitecolor,
-                                    fontSize: 12.sp,),overflow: TextOverflow.ellipsis
-                              ),
+                              width: 75.w,
+                              child: Text(selectedItems.elementAt(index),
+                                  style: TextStyle(
+                                    fontFamily: "PulpDisplay",
+                                    color: Appcolors().whitecolor,
+                                    fontSize: 12.sp,
+                                  ),
+                                  overflow: TextOverflow.ellipsis),
                             ),
                             GestureDetector(
                                 onTap: () {
@@ -373,8 +370,7 @@ class LocationdenialScreenState extends State<LocationdenialScreen> {
     // Helpingwidgets.showLoadingDialog(context, key);
     var jsonResponse;
     var response = await http.get(
-      Uri.parse(
-          "${Networks.autocompletebase}$searchdata&key=$kGoogleApiKey"),
+      Uri.parse("${Networks.autocompletebase}$searchdata&key=$kGoogleApiKey"),
     );
     jsonResponse = json.decode(response.body);
     print("jsonResponse:-$jsonResponse");

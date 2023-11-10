@@ -4,12 +4,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:sextconfidential/Bottomnavigation.dart';
-import 'package:sextconfidential/pojo/getprofilepojo.dart';
-import 'package:sextconfidential/utils/Appcolors.dart';
-import 'package:sextconfidential/utils/Helpingwidgets.dart';
-import 'package:sextconfidential/utils/Networks.dart';
-import 'package:sextconfidential/utils/StringConstants.dart';
+import '/Bottomnavigation.dart';
+import '/pojo/getprofilepojo.dart';
+import '/utils/Appcolors.dart';
+import '/utils/Helpingwidgets.dart';
+import '/utils/Networks.dart';
+import '/utils/StringConstants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
@@ -30,8 +30,8 @@ class EditprofilescreenState extends State<Editprofilescreen> {
   Getprofilepojo? getprofilepojo;
   String? token;
   File? imageFile;
-  final GlobalKey<FormState>_key=GlobalKey();
-  GlobalKey<State>key=GlobalKey();
+  final GlobalKey<FormState> _key = GlobalKey();
+  GlobalKey<State> key = GlobalKey();
   String? profilepic;
   @override
   void initState() {
@@ -39,6 +39,7 @@ class EditprofilescreenState extends State<Editprofilescreen> {
     super.initState();
     getsharedpreference();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,58 +84,64 @@ class EditprofilescreenState extends State<Editprofilescreen> {
                       child: Stack(
                         alignment: Alignment.bottomRight,
                         children: [
-                          imageFile==null?
-                          profilepic==null||profilepic==""?
-                          Image.asset("assets/images/userprofile.png",height: 10.h,width: 20.w,):
-                          SizedBox(
-                            width: 30.w,
-                            child: CachedNetworkImage(
-                              alignment: Alignment.topCenter,
-                              imageUrl:
-                                  profilepic.toString(),
-                              imageBuilder: (context, imageProvider) => Container(
-                                width: 30.w,
-                                alignment: Alignment.centerLeft,
-                                height: 15.h,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                    image: imageProvider,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                              placeholder: (context, url) => Container(
-                                child: Center(
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: Appcolors().backgroundcolor,
-                                  ),
-                                ),
-                              ),
-                              errorWidget: (context, url, error) => Container(
-                                width: 30.w,
-                                height: 15.h,
-                                decoration: const BoxDecoration(
-                                    image: DecorationImage(
-                                        image: AssetImage("assets/images/userprofile.png")
+                          imageFile == null
+                              ? profilepic == null || profilepic == ""
+                                  ? Image.asset(
+                                      "assets/images/userprofile.png",
+                                      height: 10.h,
+                                      width: 20.w,
                                     )
+                                  : SizedBox(
+                                      width: 30.w,
+                                      child: CachedNetworkImage(
+                                        alignment: Alignment.topCenter,
+                                        imageUrl: profilepic.toString(),
+                                        imageBuilder:
+                                            (context, imageProvider) =>
+                                                Container(
+                                          width: 30.w,
+                                          alignment: Alignment.centerLeft,
+                                          height: 15.h,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            image: DecorationImage(
+                                              image: imageProvider,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                        placeholder: (context, url) =>
+                                            Container(
+                                          child: Center(
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2,
+                                              color:
+                                                  Appcolors().backgroundcolor,
+                                            ),
+                                          ),
+                                        ),
+                                        errorWidget: (context, url, error) =>
+                                            Container(
+                                          width: 30.w,
+                                          height: 15.h,
+                                          decoration: const BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: AssetImage(
+                                                      "assets/images/userprofile.png"))),
+                                        ),
+                                      ),
+                                    )
+                              : CircleAvatar(
+                                  radius: 7.h,
+                                  backgroundImage: FileImage(imageFile!),
                                 ),
-                              ),
-                            ),
-                          )
-                          :
-                              CircleAvatar(
-                                radius: 7.h,
-                                backgroundImage: FileImage(imageFile!),
-                              )
-                          ,
                           GestureDetector(
                             onTap: () {
                               clickphotofromcamera();
                             },
                             child: Container(
-                                margin: EdgeInsets.only(bottom: 1.h, right: 1.w),
+                                margin:
+                                    EdgeInsets.only(bottom: 1.h, right: 1.w),
                                 padding: EdgeInsets.all(0.8.h),
                                 decoration: BoxDecoration(
                                     shape: BoxShape.circle,
@@ -189,13 +196,13 @@ class EditprofilescreenState extends State<Editprofilescreen> {
                         disabledBorder: InputBorder.none,
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15.0),
-                          borderSide:
-                              BorderSide(color: Appcolors().logintextformborder),
+                          borderSide: BorderSide(
+                              color: Appcolors().logintextformborder),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15.0),
-                          borderSide:
-                              BorderSide(color: Appcolors().logintextformborder),
+                          borderSide: BorderSide(
+                              color: Appcolors().logintextformborder),
                         ),
                         filled: true,
                         isDense: true,
@@ -273,11 +280,12 @@ class EditprofilescreenState extends State<Editprofilescreen> {
                           borderRadius: BorderRadius.circular(15.0),
                           borderSide: BorderSide(
                               color: Appcolors().logintextformborder),
-                        ),focusedErrorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                        borderSide: BorderSide(
-                            color: Appcolors().logintextformborder),
-                      ),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                          borderSide: BorderSide(
+                              color: Appcolors().logintextformborder),
+                        ),
                         isDense: true,
                         filled: true,
                         fillColor: Appcolors().backgroundcolor,
@@ -359,11 +367,12 @@ class EditprofilescreenState extends State<Editprofilescreen> {
                           borderRadius: BorderRadius.circular(15.0),
                           borderSide: BorderSide(
                               color: Appcolors().logintextformborder),
-                        ),focusedErrorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                        borderSide: BorderSide(
-                            color: Appcolors().logintextformborder),
-                      ),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                          borderSide: BorderSide(
+                              color: Appcolors().logintextformborder),
+                        ),
                         filled: true,
                         fillColor: Appcolors().backgroundcolor,
                         hintText: "elexasteele@gmail.com",
@@ -439,11 +448,12 @@ class EditprofilescreenState extends State<Editprofilescreen> {
                           borderRadius: BorderRadius.circular(15.0),
                           borderSide: BorderSide(
                               color: Appcolors().logintextformborder),
-                        ),focusedErrorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                        borderSide: BorderSide(
-                            color: Appcolors().logintextformborder),
-                      ),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                          borderSide: BorderSide(
+                              color: Appcolors().logintextformborder),
+                        ),
                         isDense: true,
                         filled: true,
                         fillColor: Appcolors().backgroundcolor,
@@ -474,7 +484,7 @@ class EditprofilescreenState extends State<Editprofilescreen> {
                   Center(
                     child: GestureDetector(
                       onTap: () {
-                        if(_key.currentState!.validate()){
+                        if (_key.currentState!.validate()) {
                           print("Update profile");
                           updateprofile();
                         }
@@ -520,16 +530,17 @@ class EditprofilescreenState extends State<Editprofilescreen> {
       });
     }
   }
+
   Future<void> getsharedpreference() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    setState((){
-      token=sharedPreferences!.getString("token");
-      token=sharedPreferences!.getString("token");
-      namecontroller.text=sharedPreferences!.getString("stagename")!;
-      biocontroller.text=sharedPreferences!.getString("bio")!;
-      phonenumbercontroller.text=sharedPreferences!.getString("phone")!;
-      emailcontroller.text=sharedPreferences!.getString("email")!;
-      profilepic=sharedPreferences!.getString("profilepic")!;
+    setState(() {
+      token = sharedPreferences!.getString("token");
+      token = sharedPreferences!.getString("token");
+      namecontroller.text = sharedPreferences!.getString("stagename")!;
+      biocontroller.text = sharedPreferences!.getString("bio")!;
+      phonenumbercontroller.text = sharedPreferences!.getString("phone")!;
+      emailcontroller.text = sharedPreferences!.getString("email")!;
+      profilepic = sharedPreferences!.getString("profilepic")!;
     });
     print("Token value:-$token");
     print("profilepic value:-$profilepic");
@@ -537,8 +548,10 @@ class EditprofilescreenState extends State<Editprofilescreen> {
 
   Future<void> updateprofile() async {
     Helpingwidgets.showLoadingDialog(context, key);
-    var request = http.MultipartRequest('post', Uri.parse(
-        Networks.baseurl+Networks.updateprofile),);
+    var request = http.MultipartRequest(
+      'post',
+      Uri.parse(Networks.baseurl + Networks.updateprofile),
+    );
     var jsonData;
     request.headers["Content-Type"] = "multipart/form-data";
     request.fields["stagename"] = namecontroller.text.trim();
@@ -552,9 +565,11 @@ class EditprofilescreenState extends State<Editprofilescreen> {
     print("phone:-${phonenumbercontroller.text.trim()}");
     print("token:-$token");
     // print("Image path:-"+imageFile!.path.toString());
-    if(imageFile!=null){
-      request.files.add(await http.MultipartFile.fromPath("image", imageFile!.path,
-          filename: imageFile!.path),);
+    if (imageFile != null) {
+      request.files.add(
+        await http.MultipartFile.fromPath("image", imageFile!.path,
+            filename: imageFile!.path),
+      );
     }
     var response = await request.send();
     response.stream.transform(utf8.decoder).listen((value) {
@@ -562,28 +577,35 @@ class EditprofilescreenState extends State<Editprofilescreen> {
       print("Json:-$jsonData");
       if (response.statusCode == 200) {
         if (jsonData["status"] == false) {
-          Helpingwidgets.failedsnackbar(jsonData["message"].toString(), context);
+          Helpingwidgets.failedsnackbar(
+              jsonData["message"].toString(), context);
           print("Response:${jsonData["message"]}");
           Navigator.pop(context);
         } else {
-          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-              const Bottomnavigation()), (Route<dynamic> route) => false);
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => const Bottomnavigation()),
+              (Route<dynamic> route) => false);
           Helpingwidgets.successsnackbar("Data Saved!", context);
-          getprofilepojo=Getprofilepojo.fromJson(jsonData);
-          sharedPreferences!.setString("profilepic", jsonData["data"]["image"]==null?"":jsonData["data"]["image"].toString());
-          sharedPreferences!.setString("stagename", jsonData["data"]["stagename"].toString());
-          sharedPreferences!.setString("bio", jsonData["data"]["bio"].toString());
-          sharedPreferences!.setString("phone", jsonData["data"]["phone"].toString());
+          getprofilepojo = Getprofilepojo.fromJson(jsonData);
+          sharedPreferences!.setString(
+              "profilepic",
+              jsonData["data"]["image"] == null
+                  ? ""
+                  : jsonData["data"]["image"].toString());
+          sharedPreferences!
+              .setString("stagename", jsonData["data"]["stagename"].toString());
+          sharedPreferences!
+              .setString("bio", jsonData["data"]["bio"].toString());
+          sharedPreferences!
+              .setString("phone", jsonData["data"]["phone"].toString());
           print("Response:${jsonData["message"]}");
           // Navigator.pop(context);
         }
-      }
-      else {
+      } else {
         Navigator.pop(context);
         Helpingwidgets.failedsnackbar(jsonData["message"].toString(), context);
         print("Response:${jsonData["message"]}");
       }
-    }
-    );
+    });
   }
 }

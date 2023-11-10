@@ -1,12 +1,13 @@
 class Chatmessagespojo {
   Chatmessagespojo({
-      bool? status, 
-      String? message, 
-      List<Data>? data,}){
+    bool? status,
+    String? message,
+    List<Data>? data,
+  }) {
     _status = status;
     _message = message;
     _data = data;
-}
+  }
 
   Chatmessagespojo.fromJson(dynamic json) {
     _status = json['status'];
@@ -21,13 +22,16 @@ class Chatmessagespojo {
   bool? _status;
   String? _message;
   List<Data>? _data;
-Chatmessagespojo copyWith({  bool? status,
-  String? message,
-  List<Data>? data,
-}) => Chatmessagespojo(  status: status ?? _status,
-  message: message ?? _message,
-  data: data ?? _data,
-);
+  Chatmessagespojo copyWith({
+    bool? status,
+    String? message,
+    List<Data>? data,
+  }) =>
+      Chatmessagespojo(
+        status: status ?? _status,
+        message: message ?? _message,
+        data: data ?? _data,
+      );
   bool? get status => _status;
   String? get message => _message;
   List<Data>? get data => _data;
@@ -41,21 +45,21 @@ Chatmessagespojo copyWith({  bool? status,
     }
     return map;
   }
-
 }
-
 
 class Data {
   Data({
-      num? id, 
-      num? fromId, 
-      num? toId, 
-      String? message, 
-      String? messageType, 
-      String? seen, 
-      String? price, 
-      String? type, 
-      String? createdAt,}){
+    num? id,
+    num? fromId,
+    num? toId,
+    String? message,
+    String? messageType,
+    String? seen,
+    String? price,
+    String? type,
+    String? paid_status,
+    String? createdAt,
+  }) {
     _id = id;
     _fromId = fromId;
     _toId = toId;
@@ -64,8 +68,9 @@ class Data {
     _seen = seen;
     _price = price;
     _type = type;
+    _paid_status = paid_status;
     _createdAt = createdAt;
-}
+  }
 
   Data.fromJson(dynamic json) {
     _id = json['id'];
@@ -76,6 +81,7 @@ class Data {
     _seen = json['seen'];
     _price = json['price'];
     _type = json['type'];
+    _paid_status = json['paid_status'];
     _createdAt = json['created_at'];
   }
   num? _id;
@@ -86,26 +92,32 @@ class Data {
   String? _seen;
   String? _price;
   String? _type;
+  String? _paid_status;
   String? _createdAt;
-Data copyWith({  num? id,
-  num? fromId,
-  num? toId,
-  String? message,
-  String? messageType,
-  String? seen,
-  String? price,
-  String? type,
-  String? createdAt,
-}) => Data(  id: id ?? _id,
-  fromId: fromId ?? _fromId,
-  toId: toId ?? _toId,
-  message: message ?? _message,
-  messageType: messageType ?? _messageType,
-  seen: seen ?? _seen,
-  price: price ?? _price,
-  type: type ?? _type,
-  createdAt: createdAt ?? _createdAt,
-);
+  Data copyWith({
+    num? id,
+    num? fromId,
+    num? toId,
+    String? message,
+    String? messageType,
+    String? seen,
+    String? price,
+    String? type,
+    String? paid_status,
+    String? createdAt,
+  }) =>
+      Data(
+        id: id ?? _id,
+        fromId: fromId ?? _fromId,
+        toId: toId ?? _toId,
+        message: message ?? _message,
+        messageType: messageType ?? _messageType,
+        seen: seen ?? _seen,
+        price: price ?? _price,
+        type: type ?? _type,
+        paid_status: paid_status ?? _paid_status,
+        createdAt: createdAt ?? _createdAt,
+      );
   num? get id => _id;
   num? get fromId => _fromId;
   num? get toId => _toId;
@@ -114,6 +126,7 @@ Data copyWith({  num? id,
   String? get seen => _seen;
   String? get price => _price;
   String? get type => _type;
+  String? get paid_status => _paid_status;
   String? get createdAt => _createdAt;
 
   Map<String, dynamic> toJson() {
@@ -126,8 +139,8 @@ Data copyWith({  num? id,
     map['seen'] = _seen;
     map['price'] = _price;
     map['type'] = _type;
+    map['paid_status'] = _paid_status;
     map['created_at'] = _createdAt;
     return map;
   }
-
 }

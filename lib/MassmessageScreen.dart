@@ -8,23 +8,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:sextconfidential/Videoscreen.dart';
-import 'package:sextconfidential/pojo/Getgrouppojo.dart';
-import 'package:sextconfidential/pojo/Getgroupuserpojo.dart';
-import 'package:sextconfidential/pojo/Searchuserpojo.dart';
-import 'package:sextconfidential/pojo/massmassagespojo.dart';
-import 'package:sextconfidential/utils/Appcolors.dart';
-import 'package:sextconfidential/utils/CustomDropdownButton2.dart';
-import 'package:sextconfidential/utils/Helpingwidgets.dart';
-import 'package:sextconfidential/utils/Networks.dart';
-import 'package:sextconfidential/utils/Sidedrawer.dart';
-import 'package:sextconfidential/utils/StringConstants.dart';
+import '/Videoscreen.dart';
+import '/pojo/Getgrouppojo.dart';
+import '/pojo/Getgroupuserpojo.dart';
+import '/pojo/Searchuserpojo.dart';
+import '/pojo/massmassagespojo.dart';
+import '/utils/Appcolors.dart';
+import '/utils/CustomDropdownButton2.dart';
+import '/utils/Helpingwidgets.dart';
+import '/utils/Networks.dart';
+import '/utils/Sidedrawer.dart';
+import '/utils/StringConstants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:sizer/sizer.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:http/http.dart' as http;
-
 
 class MassmessageScreen extends StatefulWidget {
   const MassmessageScreen({super.key});
@@ -72,10 +71,10 @@ class MassmessageScreenState extends State<MassmessageScreen> {
   late StateSetter _setState;
   String? selectedusers;
   Getgrouppojo? getgrouppojo;
-  String? sendtotype="all";
-  int sorttype=1;
+  String? sendtotype = "all";
+  int sorttype = 1;
   Getgroupuserpojo? getgroupuserpojo;
-  final massmessagesfocus= FocusNode();
+  final massmessagesfocus = FocusNode();
   @override
   void initState() {
     // TODO: implement initState
@@ -140,7 +139,13 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                             child: CustomDropdownButton2(
                               hint: "Select Item",
                               dropdownItems: massmessagetype,
-                              value: dropdownvalue==StringConstants.createnewgroup?StringConstants.allavailable:dropdownvalue==StringConstants.createnewgroup?StringConstants.allavailable:dropdownvalue,
+                              value: dropdownvalue ==
+                                      StringConstants.createnewgroup
+                                  ? StringConstants.allavailable
+                                  : dropdownvalue ==
+                                          StringConstants.createnewgroup
+                                      ? StringConstants.allavailable
+                                      : dropdownvalue,
                               dropdownWidth: 45.w,
                               dropdownHeight: 60.h,
                               buttonWidth: 27.w,
@@ -150,17 +155,23 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                                     groupusers.clear();
                                     groupnamecontroller.clear();
                                     createnewgroup(context);
-                                  }else if(value == StringConstants.managecustomgroup){
+                                  } else if (value ==
+                                      StringConstants.managecustomgroup) {
                                     managecustomrgoups(context);
-                                  }else if(value == StringConstants.allavailable){
-                                    sendtotype="all";
-                                  }else if(value==StringConstants.favourites){
-                                    sendtotype="fav";
-                                  } else{
-                                    int index=massmessagetype.indexOf(value!);
+                                  } else if (value ==
+                                      StringConstants.allavailable) {
+                                    sendtotype = "all";
+                                  } else if (value ==
+                                      StringConstants.favourites) {
+                                    sendtotype = "fav";
+                                  } else {
+                                    int index = massmessagetype.indexOf(value!);
                                     print("Element index:-$index");
-                                    setState((){
-                                      sendtotype=getgrouppojo!.data!.elementAt(index-4).id.toString();
+                                    setState(() {
+                                      sendtotype = getgrouppojo!.data!
+                                          .elementAt(index - 4)
+                                          .id
+                                          .toString();
                                     });
                                     print("Element id:-$sendtotype");
                                     dropdownvalue = value;
@@ -232,7 +243,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          if(imageFile==null){
+                          if (imageFile == null) {
                             addmediadialog(context);
                           }
                         },
@@ -296,7 +307,8 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                                             alignment: Alignment.topRight,
                                             children: [
                                               Container(
-                                                padding: const EdgeInsets.all(10),
+                                                padding:
+                                                    const EdgeInsets.all(10),
                                                 // child: Image.file(imageFile!,height:15.h,width:25.w,fit: BoxFit.fill,)),
                                                 child: imageFile!.path.substring(
                                                             imageFile!.path
@@ -350,9 +362,9 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                                                   borderRadius:
                                                       BorderRadius.circular(8)),
                                               child: Text(
-                                                  imagecredit==0?
-                                                      "Free":
-                                                imagecredit.toString(),
+                                                imagecredit == 0
+                                                    ? "Free"
+                                                    : imagecredit.toString(),
                                                 style: TextStyle(
                                                     fontSize: 8.sp,
                                                     fontFamily: "PulpDisplay",
@@ -479,23 +491,23 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                           onChanged: (value) {
                             setState(() {
                               messagehistoryvalue = value!;
-                              switch (messagehistoryvalue){
+                              switch (messagehistoryvalue) {
                                 case "Most Recent":
                                   massmessageslisting(1);
                                   break;
-                                  case "Most Sends":
+                                case "Most Sends":
                                   massmessageslisting(2);
                                   break;
-                                  case "Most read":
+                                case "Most read":
                                   massmessageslisting(3);
                                   break;
-                                  case "Read Rate":
+                                case "Read Rate":
                                   massmessageslisting(4);
                                   break;
-                                  case "Most Unlocks":
+                                case "Most Unlocks":
                                   massmessageslisting(5);
                                   break;
-                                  case "Most Earnings":
+                                case "Most Earnings":
                                   massmessageslisting(6);
                               }
                             });
@@ -510,7 +522,8 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                               ? AnimationLimiter(
                                   child: ListView.builder(
                                     shrinkWrap: true,
-                                    physics: const NeverScrollableScrollPhysics(),
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
                                     itemCount: massmassagespojo!.data!.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
@@ -592,23 +605,25 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                                                                               CircularProgressIndicator(
                                                                             strokeWidth:
                                                                                 2,
-                                                                                color: Appcolors().gradientcolorfirst,
-                                                                              ),
+                                                                            color:
+                                                                                Appcolors().gradientcolorfirst,
+                                                                          ),
                                                                         ),
                                                                       ),
-                                                                          errorWidget: (context, url, error) => Container(
-                                                                            width: 15.w,
-                                                                            height: 4.5.h,
-                                                                            decoration: BoxDecoration(
-                                                                                borderRadius:
+                                                                      errorWidget: (context,
+                                                                              url,
+                                                                              error) =>
+                                                                          Container(
+                                                                        width:
+                                                                            15.w,
+                                                                        height:
+                                                                            4.5.h,
+                                                                        decoration: BoxDecoration(
+                                                                            borderRadius:
                                                                                 BorderRadius.circular(15),
-                                                                                shape:
-                                                                                BoxShape.rectangle,
-                                                                                image: const DecorationImage(
-                                                                                    image: AssetImage("assets/images/imageplaceholder.png"),fit: BoxFit.cover
-                                                                                )
-                                                                            ),
-                                                                          ),
+                                                                            shape: BoxShape.rectangle,
+                                                                            image: const DecorationImage(image: AssetImage("assets/images/imageplaceholder.png"), fit: BoxFit.cover)),
+                                                                      ),
                                                                     ),
                                                                   ),
                                                                   SizedBox(
@@ -880,10 +895,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                                                                 Container(
                                                                   child:
                                                                       GradientText(
-                                                                    "${massmassagespojo!
-                                                                            .data!
-                                                                            .elementAt(index)
-                                                                            .percentage}%",
+                                                                    "${massmassagespojo!.data!.elementAt(index).percentage}%",
                                                                     style: TextStyle(
                                                                         fontSize: 16
                                                                             .sp,
@@ -951,15 +963,16 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                                   alignment: Alignment.center,
                                   height: 20.h,
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Divider(
                                           thickness: 1.2,
                                           height: 1.h,
-                                          color: Appcolors()
-                                              .dividercolor),
+                                          color: Appcolors().dividercolor),
                                       Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: [
@@ -990,8 +1003,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                                     ],
                                   ),
                                 )
-                          :
-                          const SizedBox()
+                          : const SizedBox()
                       // Helpingwidgets().customloader()
                     ],
                   ),
@@ -1361,116 +1373,128 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                               height: 2.h,
                             ),
                             SizedBox(
-                              width: double.infinity,
-                              height: 45.h,
-                              child:
-                              ListView.builder(
-                                shrinkWrap: true,
-                                // physics: NeverScrollableScrollPhysics(),
-                                itemCount: searchuserpojo!.message!.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return Column(
-                                    children: [
-                                      Container(
-                                          alignment: Alignment.center,
-                                          height: 5.h,
-                                          padding: EdgeInsets.only(
-                                              left: 2.w, right: 2.w),
-                                          decoration: BoxDecoration(
-                                              color: groupusers.contains(
-                                                      searchuserpojo!.message!
-                                                          .elementAt(index)
-                                                          .id
-                                                          .toString())
-                                                  ? Appcolors().selectedusercolor
-                                                  : Colors.transparent,
-                                              border: Border.all(
-                                                  color:
-                                                      Appcolors().chatuserborder),
-                                              borderRadius:
-                                                  BorderRadius.circular(1.5.h)),
-                                          width: double.infinity,
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Container(
-                                                alignment: Alignment.centerLeft,
-                                                width: 50.w,
-                                                child: Text(
-                                                  searchuserpojo!.message!
-                                                      .elementAt(index)
-                                                      .dname
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      fontFamily: "PulpDisplay",
-                                                      fontWeight: FontWeight.w400,
-                                                      color: groupusers
-                                                              .contains(index)
+                                width: double.infinity,
+                                height: 45.h,
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  // physics: NeverScrollableScrollPhysics(),
+                                  itemCount: searchuserpojo!.message!.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return Column(
+                                      children: [
+                                        Container(
+                                            alignment: Alignment.center,
+                                            height: 5.h,
+                                            padding: EdgeInsets.only(
+                                                left: 2.w, right: 2.w),
+                                            decoration: BoxDecoration(
+                                                color: groupusers.contains(
+                                                        searchuserpojo!.message!
+                                                            .elementAt(index)
+                                                            .id
+                                                            .toString())
+                                                    ? Appcolors()
+                                                        .selectedusercolor
+                                                    : Colors.transparent,
+                                                border: Border.all(
+                                                    color: Appcolors()
+                                                        .chatuserborder),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        1.5.h)),
+                                            width: double.infinity,
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Container(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  width: 50.w,
+                                                  child: Text(
+                                                    searchuserpojo!.message!
+                                                        .elementAt(index)
+                                                        .dname
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        fontSize: 12.sp,
+                                                        fontFamily:
+                                                            "PulpDisplay",
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color: groupusers
+                                                                .contains(index)
+                                                            ? Appcolors()
+                                                                .bottomnavbgcolor
+                                                            : Appcolors()
+                                                                .whitecolor),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
+                                                GestureDetector(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        if (groupusers.contains(
+                                                            searchuserpojo!
+                                                                .message!
+                                                                .elementAt(
+                                                                    index)
+                                                                .id
+                                                                .toString())) {
+                                                          groupusers.remove(
+                                                              searchuserpojo!
+                                                                  .message!
+                                                                  .elementAt(
+                                                                      index)
+                                                                  .id
+                                                                  .toString());
+                                                        } else {
+                                                          groupusers.add(
+                                                              searchuserpojo!
+                                                                  .message!
+                                                                  .elementAt(
+                                                                      index)
+                                                                  .id
+                                                                  .toString());
+                                                        }
+                                                      });
+                                                    },
+                                                    child: Icon(
+                                                      groupusers.contains(
+                                                              searchuserpojo!
+                                                                  .message!
+                                                                  .elementAt(
+                                                                      index)
+                                                                  .id
+                                                                  .toString())
+                                                          ? Icons.close_sharp
+                                                          : Icons.add,
+                                                      color: groupusers.contains(
+                                                              searchuserpojo!
+                                                                  .message!
+                                                                  .elementAt(
+                                                                      index)
+                                                                  .id
+                                                                  .toString())
                                                           ? Appcolors()
                                                               .bottomnavbgcolor
-                                                          : Appcolors()
-                                                              .whitecolor),
-                                                  overflow: TextOverflow.ellipsis,
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                              ),
-                                              GestureDetector(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      if (groupusers.contains(
-                                                          searchuserpojo!.message!
-                                                              .elementAt(index)
-                                                              .id
-                                                              .toString())) {
-                                                        groupusers.remove(
-                                                            searchuserpojo!
-                                                                .message!
-                                                                .elementAt(index)
-                                                                .id
-                                                                .toString());
-                                                      } else {
-                                                        groupusers.add(
-                                                            searchuserpojo!
-                                                                .message!
-                                                                .elementAt(index)
-                                                                .id
-                                                                .toString());
-                                                      }
-                                                    });
-                                                  },
-                                                  child: Icon(
-                                                    groupusers.contains(
-                                                            searchuserpojo!
-                                                                .message!
-                                                                .elementAt(index)
-                                                                .id
-                                                                .toString())
-                                                        ? Icons.close_sharp
-                                                        : Icons.add,
-                                                    color: groupusers.contains(
-                                                            searchuserpojo!
-                                                                .message!
-                                                                .elementAt(index)
-                                                                .id
-                                                                .toString())
-                                                        ? Appcolors()
-                                                            .bottomnavbgcolor
-                                                        : Colors.white,
-                                                  ))
-                                            ],
-                                          )),
-                                      SizedBox(
-                                        height: 1.5.h,
-                                      ),
-                                    ],
-                                  );
-                                },
-                              )
-                            ),
+                                                          : Colors.white,
+                                                    ))
+                                              ],
+                                            )),
+                                        SizedBox(
+                                          height: 1.5.h,
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                )),
                             SizedBox(
                               height: 2.h,
                             ),
@@ -1479,11 +1503,11 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                                 print("Selected users$groupusers");
                                 print(
                                     "Selected users${groupusers.toString().substring(1, groupusers.toString().length - 1)}");
-                                if(dialogformkey.currentState!.validate()){
-                                  if(groupusers.isEmpty){
+                                if (dialogformkey.currentState!.validate()) {
+                                  if (groupusers.isEmpty) {
                                     // Helpingwidgets.failedsnackbar(
                                     //     "Select Users!", context);
-                                  }else{
+                                  } else {
                                     Navigator.pop(context);
                                     creategroup();
                                   }
@@ -1539,6 +1563,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
           );
         });
   }
+
   Future<void> managecustomrgoups(BuildContext context) {
     return showDialog(
         context: context,
@@ -1604,8 +1629,8 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                                               left: 2.w, right: 2.w),
                                           decoration: BoxDecoration(
                                               border: Border.all(
-                                                  color:
-                                                      Appcolors().chatuserborder),
+                                                  color: Appcolors()
+                                                      .chatuserborder),
                                               borderRadius:
                                                   BorderRadius.circular(1.5.h)),
                                           width: double.infinity,
@@ -1619,13 +1644,19 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                                                 alignment: Alignment.centerLeft,
                                                 width: 40.w,
                                                 child: Text(
-                                                  getgrouppojo!.data!.elementAt(index).groupname.toString(),
+                                                  getgrouppojo!.data!
+                                                      .elementAt(index)
+                                                      .groupname
+                                                      .toString(),
                                                   style: TextStyle(
                                                       fontSize: 12.sp,
                                                       fontFamily: "PulpDisplay",
-                                                      fontWeight: FontWeight.w400,
-                                                      color: Appcolors().whitecolor),
-                                                  overflow: TextOverflow.ellipsis,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      color: Appcolors()
+                                                          .whitecolor),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   textAlign: TextAlign.center,
                                                 ),
                                               ),
@@ -1634,16 +1665,39 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                                                     groupusers.clear();
                                                     groupnamecontroller.clear();
                                                     Navigator.pop(context);
-                                                      getgroupuserlist(getgrouppojo!.data!.elementAt(index).id.toString());
+                                                    getgroupuserlist(
+                                                        getgrouppojo!.data!
+                                                            .elementAt(index)
+                                                            .id
+                                                            .toString());
                                                   },
-                                                  child: Icon(Icons.edit,color:Appcolors().whitecolor,size: 20,)),
+                                                  child: Icon(
+                                                    Icons.edit,
+                                                    color:
+                                                        Appcolors().whitecolor,
+                                                    size: 20,
+                                                  )),
                                               GestureDetector(
                                                   onTap: () {
                                                     Navigator.pop(context);
-                                                    deletegroup(getgrouppojo!.data!.elementAt(index).id.toString(),getgrouppojo!.data!.elementAt(index).groupname.toString(),index);
+                                                    deletegroup(
+                                                        getgrouppojo!.data!
+                                                            .elementAt(index)
+                                                            .id
+                                                            .toString(),
+                                                        getgrouppojo!.data!
+                                                            .elementAt(index)
+                                                            .groupname
+                                                            .toString(),
+                                                        index);
                                                   },
                                                   child: Container(
-                                                      child: Icon(Icons.delete,color:Appcolors().whitecolor,size: 20,))),
+                                                      child: Icon(
+                                                    Icons.delete,
+                                                    color:
+                                                        Appcolors().whitecolor,
+                                                    size: 20,
+                                                  ))),
                                             ],
                                           )),
                                       SizedBox(
@@ -1662,7 +1716,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                                 print("Selected users$groupusers");
                                 print(
                                     "Selected users${groupusers.toString().substring(1, groupusers.toString().length - 1)}");
-                                if(dialogformkey.currentState!.validate()){
+                                if (dialogformkey.currentState!.validate()) {
                                   Navigator.pop(context);
                                   createnewgroup(context);
                                 }
@@ -1719,7 +1773,9 @@ class MassmessageScreenState extends State<MassmessageScreen> {
           );
         });
   }
-  Future<void> updategroup(BuildContext context,String groupname,String groupid) async {
+
+  Future<void> updategroup(
+      BuildContext context, String groupname, String groupid) async {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -1731,7 +1787,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
             //title: Text("Image Picker"),
             content: StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
-                groupnamecontroller.text=groupname;
+                groupnamecontroller.text = groupname;
                 _setState = setState;
                 return Form(
                   key: dialogformkey,
@@ -1875,8 +1931,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                             SizedBox(
                               width: double.infinity,
                               height: 47.h,
-                              child:
-                              ListView.builder(
+                              child: ListView.builder(
                                 shrinkWrap: true,
                                 // physics: NeverScrollableScrollPhysics(),
                                 itemCount: searchuserpojo!.message!.length,
@@ -1890,23 +1945,24 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                                               left: 2.w, right: 2.w),
                                           decoration: BoxDecoration(
                                               color: groupusers.contains(
-                                                  searchuserpojo!.message!
-                                                      .elementAt(index)
-                                                      .id
-                                                      .toString())
-                                                  ? Appcolors().selectedusercolor
+                                                      searchuserpojo!.message!
+                                                          .elementAt(index)
+                                                          .id
+                                                          .toString())
+                                                  ? Appcolors()
+                                                      .selectedusercolor
                                                   : Colors.transparent,
                                               border: Border.all(
-                                                  color:
-                                                  Appcolors().chatuserborder),
+                                                  color: Appcolors()
+                                                      .chatuserborder),
                                               borderRadius:
-                                              BorderRadius.circular(1.5.h)),
+                                                  BorderRadius.circular(1.5.h)),
                                           width: double.infinity,
                                           child: Row(
                                             crossAxisAlignment:
-                                            CrossAxisAlignment.center,
+                                                CrossAxisAlignment.center,
                                             mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
                                               Container(
                                                 alignment: Alignment.centerLeft,
@@ -1919,14 +1975,16 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                                                   style: TextStyle(
                                                       fontSize: 12.sp,
                                                       fontFamily: "PulpDisplay",
-                                                      fontWeight: FontWeight.w400,
+                                                      fontWeight:
+                                                          FontWeight.w400,
                                                       color: groupusers
-                                                          .contains(index)
+                                                              .contains(index)
                                                           ? Appcolors()
-                                                          .bottomnavbgcolor
+                                                              .bottomnavbgcolor
                                                           : Appcolors()
-                                                          .whitecolor),
-                                                  overflow: TextOverflow.ellipsis,
+                                                              .whitecolor),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   textAlign: TextAlign.center,
                                                 ),
                                               ),
@@ -1934,21 +1992,24 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                                                   onTap: () {
                                                     setState(() {
                                                       if (groupusers.contains(
-                                                          searchuserpojo!.message!
+                                                          searchuserpojo!
+                                                              .message!
                                                               .elementAt(index)
                                                               .id
                                                               .toString())) {
                                                         groupusers.remove(
                                                             searchuserpojo!
                                                                 .message!
-                                                                .elementAt(index)
+                                                                .elementAt(
+                                                                    index)
                                                                 .id
                                                                 .toString());
                                                       } else {
                                                         groupusers.add(
                                                             searchuserpojo!
                                                                 .message!
-                                                                .elementAt(index)
+                                                                .elementAt(
+                                                                    index)
                                                                 .id
                                                                 .toString());
                                                       }
@@ -1956,21 +2017,23 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                                                   },
                                                   child: Icon(
                                                     groupusers.contains(
-                                                        searchuserpojo!
-                                                            .message!
-                                                            .elementAt(index)
-                                                            .id
-                                                            .toString())
+                                                            searchuserpojo!
+                                                                .message!
+                                                                .elementAt(
+                                                                    index)
+                                                                .id
+                                                                .toString())
                                                         ? Icons.close_sharp
                                                         : Icons.add,
                                                     color: groupusers.contains(
-                                                        searchuserpojo!
-                                                            .message!
-                                                            .elementAt(index)
-                                                            .id
-                                                            .toString())
+                                                            searchuserpojo!
+                                                                .message!
+                                                                .elementAt(
+                                                                    index)
+                                                                .id
+                                                                .toString())
                                                         ? Appcolors()
-                                                        .bottomnavbgcolor
+                                                            .bottomnavbgcolor
                                                         : Colors.white,
                                                   ))
                                             ],
@@ -1991,8 +2054,9 @@ class MassmessageScreenState extends State<MassmessageScreen> {
                                 print("Selected users$groupusers");
                                 print(
                                     "Selected users${groupusers.toString().substring(1, groupusers.toString().length - 1)}");
-                                if(dialogformkey.currentState!.validate()){
-                                  if(!groupusers.isNotEmpty||groupnamecontroller.text!=""){
+                                if (dialogformkey.currentState!.validate()) {
+                                  if (!groupusers.isNotEmpty ||
+                                      groupnamecontroller.text != "") {
                                     Navigator.pop(context);
                                     updategroupapi(groupid);
                                   }
@@ -2147,10 +2211,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
 
   Future<void> massmessageslisting(int sorttype) async {
     Helpingwidgets.showLoadingDialog(context, key);
-    Map data = {
-      "token": token,
-      "sort": sorttype.toString()
-    };
+    Map data = {"token": token, "sort": sorttype.toString()};
     print("Data:-$data");
     var jsonResponse;
     var response = await http.post(
@@ -2216,12 +2277,13 @@ class MassmessageScreenState extends State<MassmessageScreen> {
           jsonResponse["message"].toString(), context);
     }
   }
-  Future<void> creategroup() async {
 
+  Future<void> creategroup() async {
     Helpingwidgets.showLoadingDialog(context, key);
     Map data = {
       "token": token,
-      "users": groupusers.toString().substring(1, groupusers.toString().length - 1),
+      "users":
+          groupusers.toString().substring(1, groupusers.toString().length - 1),
       "name": groupnamecontroller.text.toString(),
     };
     print("Data:-$data");
@@ -2251,11 +2313,13 @@ class MassmessageScreenState extends State<MassmessageScreen> {
           jsonResponse["message"].toString(), context);
     }
   }
+
   Future<void> updategroupapi(String groupid) async {
     Helpingwidgets.showLoadingDialog(context, key);
     Map data = {
       "group": groupid,
-      "users": groupusers.toString().substring(1, groupusers.toString().length - 1),
+      "users":
+          groupusers.toString().substring(1, groupusers.toString().length - 1),
       "name": groupnamecontroller.text.toString(),
     };
     print("Data:-$data");
@@ -2278,7 +2342,6 @@ class MassmessageScreenState extends State<MassmessageScreen> {
             jsonResponse["message"].toString(), context);
         Navigator.pop(context);
         print("Message:-${jsonResponse["message"]}");
-
       }
     } else {
       setState(() {
@@ -2289,6 +2352,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
           jsonResponse["message"].toString(), context);
     }
   }
+
   Future<void> getgrouplist() async {
     groupnames.clear();
     massmessagetype.clear();
@@ -2312,18 +2376,19 @@ class MassmessageScreenState extends State<MassmessageScreen> {
           massmessagetype.add(StringConstants.allavailable);
           massmessagetype.add(StringConstants.favourites);
           massmessagetype.add(StringConstants.createnewgroup);
-          getgrouppojo=Getgrouppojo.fromJson(jsonResponse);
-          if(getgrouppojo!.data!.isNotEmpty){
+          getgrouppojo = Getgrouppojo.fromJson(jsonResponse);
+          if (getgrouppojo!.data!.isNotEmpty) {
             massmessagetype.add(StringConstants.managecustomgroup);
           }
-          for(int i=0;i<=getgrouppojo!.data!.length-1;i++){
-            massmessagetype.add(getgrouppojo!.data!.elementAt(i).groupname.toString());
-            groupnames.add(getgrouppojo!.data!.elementAt(i).groupname.toString());
+          for (int i = 0; i <= getgrouppojo!.data!.length - 1; i++) {
+            massmessagetype
+                .add(getgrouppojo!.data!.elementAt(i).groupname.toString());
+            groupnames
+                .add(getgrouppojo!.data!.elementAt(i).groupname.toString());
           }
         });
         // Navigator.pop(context);
         print("Message:-${jsonResponse["message"]}");
-
       }
     } else {
       // Navigator.pop(context);
@@ -2331,6 +2396,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
           jsonResponse["message"].toString(), context);
     }
   }
+
   Future<void> getgroupuserlist(String groupid) async {
     Helpingwidgets.showLoadingDialog(context, key);
     Map data = {
@@ -2349,15 +2415,20 @@ class MassmessageScreenState extends State<MassmessageScreen> {
         // Navigator.pop(context);
       } else {
         Navigator.pop(context);
-        setState((){
-          getgroupuserpojo=Getgroupuserpojo.fromJson(jsonResponse);
-          for(int i=0;i<=getgroupuserpojo!.data!.groupmembers!.length-1;i++){
-            groupusers.add(getgroupuserpojo!.data!.groupmembers!.elementAt(i).userid.toString());
+        setState(() {
+          getgroupuserpojo = Getgroupuserpojo.fromJson(jsonResponse);
+          for (int i = 0;
+              i <= getgroupuserpojo!.data!.groupmembers!.length - 1;
+              i++) {
+            groupusers.add(getgroupuserpojo!.data!.groupmembers!
+                .elementAt(i)
+                .userid
+                .toString());
           }
         });
-        updategroup(context,getgroupuserpojo!.data!.groupname.toString(),getgroupuserpojo!.data!.id.toString());
+        updategroup(context, getgroupuserpojo!.data!.groupname.toString(),
+            getgroupuserpojo!.data!.id.toString());
         print("Success Message:-${jsonResponse["message"]}");
-
       }
     } else {
       // Navigator.pop(context);
@@ -2365,7 +2436,8 @@ class MassmessageScreenState extends State<MassmessageScreen> {
           jsonResponse["message"].toString(), context);
     }
   }
-  Future<void> deletegroup(String groupid,String groupname,int index) async {
+
+  Future<void> deletegroup(String groupid, String groupname, int index) async {
     Helpingwidgets.showLoadingDialog(context, key);
     Map data = {
       "group": groupid,
@@ -2388,7 +2460,7 @@ class MassmessageScreenState extends State<MassmessageScreen> {
           getgrouppojo!.data!.removeAt(index);
           massmessagetype.remove(groupname);
           groupnames.remove(groupname);
-          if(groupnames.isEmpty){
+          if (groupnames.isEmpty) {
             massmessagetype.remove(StringConstants.managecustomgroup);
           }
           // getgrouplist();
@@ -2397,7 +2469,6 @@ class MassmessageScreenState extends State<MassmessageScreen> {
             jsonResponse["message"].toString(), context);
         Navigator.pop(context);
         print("Message:-${jsonResponse["message"]}");
-
       }
     } else {
       setState(() {

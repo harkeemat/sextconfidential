@@ -1,6 +1,6 @@
 import 'package:appinio_video_player/appinio_video_player.dart';
 import 'package:flutter/material.dart';
-import 'package:sextconfidential/utils/Appcolors.dart';
+import '/utils/Appcolors.dart';
 import 'package:sizer/sizer.dart';
 
 // ignore: must_be_immutable

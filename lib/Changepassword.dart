@@ -1,31 +1,28 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:sextconfidential/LoginScreen.dart';
-import 'package:sextconfidential/utils/Appcolors.dart';
-import 'package:sextconfidential/utils/Helpingwidgets.dart';
-import 'package:sextconfidential/utils/Networks.dart';
-import 'package:sextconfidential/utils/StringConstants.dart';
+import '/LoginScreen.dart';
+import '/utils/Appcolors.dart';
+import '/utils/Helpingwidgets.dart';
+import '/utils/Networks.dart';
+import '/utils/StringConstants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
 
-
-class Changepassword extends StatefulWidget{
+class Changepassword extends StatefulWidget {
   const Changepassword({super.key});
 
   @override
   ChangepasswordState createState() => ChangepasswordState();
-
-
 }
 
-class ChangepasswordState extends State<Changepassword>{
-  TextEditingController passwordcontroller=TextEditingController();
-  TextEditingController newpasswordcontroller=TextEditingController();
-  TextEditingController confirmnewpasswordcontroller=TextEditingController();
-  final GlobalKey<FormState>_key=GlobalKey();
-  GlobalKey<State>key=GlobalKey();
+class ChangepasswordState extends State<Changepassword> {
+  TextEditingController passwordcontroller = TextEditingController();
+  TextEditingController newpasswordcontroller = TextEditingController();
+  TextEditingController confirmnewpasswordcontroller = TextEditingController();
+  final GlobalKey<FormState> _key = GlobalKey();
+  GlobalKey<State> key = GlobalKey();
   String? token;
   @override
   void initState() {
@@ -33,6 +30,7 @@ class ChangepasswordState extends State<Changepassword>{
     super.initState();
     getsharedpreference();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,23 +39,26 @@ class ChangepasswordState extends State<Changepassword>{
         elevation: 0,
         backgroundColor: Appcolors().bottomnavbgcolor,
         leading: GestureDetector(
-          onTap: (){
+          onTap: () {
             Navigator.pop(context);
             print("Click back");
           },
           child: Container(
-            // color: Colors.white,
+              // color: Colors.white,
               margin: EdgeInsets.only(left: 2.w),
               child: const Icon(Icons.arrow_back_ios_rounded)),
         ),
-        title: Text(StringConstants.changepassword,style: TextStyle(
-            fontSize: 14.sp,
-            fontFamily: "PulpDisplay",
-            fontWeight: FontWeight.w500,
-            color: Appcolors().whitecolor),),
+        title: Text(
+          StringConstants.changepassword,
+          style: TextStyle(
+              fontSize: 14.sp,
+              fontFamily: "PulpDisplay",
+              fontWeight: FontWeight.w500,
+              color: Appcolors().whitecolor),
+        ),
       ),
       body: Container(
-        padding: EdgeInsets.only(left: 3.w,right: 3.w),
+        padding: EdgeInsets.only(left: 3.w, right: 3.w),
         child: SingleChildScrollView(
           child: Form(
             key: _key,
@@ -67,18 +68,24 @@ class ChangepasswordState extends State<Changepassword>{
                 SizedBox(
                   height: 2.h,
                 ),
-                Text(StringConstants.deactivatemesaage,style: TextStyle(
-                    fontSize: 12.sp,
-                    fontFamily: "PulpDisplay",
-                    fontWeight: FontWeight.w500,
-                    color: Appcolors().loginhintcolor),),
+                Text(
+                  StringConstants.deactivatemesaage,
+                  style: TextStyle(
+                      fontSize: 12.sp,
+                      fontFamily: "PulpDisplay",
+                      fontWeight: FontWeight.w500,
+                      color: Appcolors().loginhintcolor),
+                ),
                 SizedBox(
                   height: 2.h,
                 ),
                 Container(
                   child: TextFormField(
                     cursorColor: Appcolors().loginhintcolor,
-                    style: TextStyle(color:Appcolors().whitecolor,fontSize: 12.sp,),
+                    style: TextStyle(
+                      color: Appcolors().whitecolor,
+                      fontSize: 12.sp,
+                    ),
                     controller: passwordcontroller,
                     obscureText: true,
                     decoration: InputDecoration(
@@ -91,34 +98,35 @@ class ChangepasswordState extends State<Changepassword>{
                       disabledBorder: InputBorder.none,
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(
-                            color: Appcolors().logintextformborder),
+                        borderSide:
+                            BorderSide(color: Appcolors().logintextformborder),
                       ),
                       errorBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15.0),
-                        borderSide: BorderSide(
-                            color: Appcolors().logintextformborder),
+                        borderSide:
+                            BorderSide(color: Appcolors().logintextformborder),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15.0),
-                        borderSide: BorderSide(
-                            color: Appcolors().logintextformborder),
-                      ),focusedErrorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                      borderSide: BorderSide(
-                          color: Appcolors().logintextformborder),
-                    ),
+                        borderSide:
+                            BorderSide(color: Appcolors().logintextformborder),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                        borderSide:
+                            BorderSide(color: Appcolors().logintextformborder),
+                      ),
                       filled: true,
                       fillColor: Appcolors().backgroundcolor,
-                      hintText:
-                      StringConstants.oldpassword,
+                      hintText: StringConstants.oldpassword,
                       hintStyle: TextStyle(
                         decoration: TextDecoration.none,
                         fontWeight: FontWeight.w400,
                         fontSize: 12.sp,
                         // fontFamily: 'PulpDisplay',
                         color: Appcolors().loginhintcolor,
-                      ),),
+                      ),
+                    ),
                     onChanged: (value) {
                       setState(() {});
                     },
@@ -134,26 +142,35 @@ class ChangepasswordState extends State<Changepassword>{
                 SizedBox(
                   height: 4.h,
                 ),
-                Text(StringConstants.passwordnote,style: TextStyle(
-                    fontSize: 11.sp,
-                    // fontFamily: "PulpDisplay",
-                    fontWeight: FontWeight.w500,
-                    color: Appcolors().whitecolor),),
+                Text(
+                  StringConstants.passwordnote,
+                  style: TextStyle(
+                      fontSize: 11.sp,
+                      // fontFamily: "PulpDisplay",
+                      fontWeight: FontWeight.w500,
+                      color: Appcolors().whitecolor),
+                ),
                 SizedBox(
                   height: 4.h,
                 ),
-                Text(StringConstants.enternewpassword,style: TextStyle(
-                    fontSize: 12.sp,
-                    fontFamily: "PulpDisplay",
-                    fontWeight: FontWeight.w500,
-                    color: Appcolors().loginhintcolor),),
+                Text(
+                  StringConstants.enternewpassword,
+                  style: TextStyle(
+                      fontSize: 12.sp,
+                      fontFamily: "PulpDisplay",
+                      fontWeight: FontWeight.w500,
+                      color: Appcolors().loginhintcolor),
+                ),
                 SizedBox(
                   height: 1.h,
                 ),
                 Container(
                   child: TextFormField(
                     cursorColor: Appcolors().loginhintcolor,
-                    style: TextStyle(color:Appcolors().whitecolor,fontSize: 12.sp,),
+                    style: TextStyle(
+                      color: Appcolors().whitecolor,
+                      fontSize: 12.sp,
+                    ),
                     controller: newpasswordcontroller,
                     obscureText: true,
                     decoration: InputDecoration(
@@ -166,34 +183,35 @@ class ChangepasswordState extends State<Changepassword>{
                       disabledBorder: InputBorder.none,
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15.0),
-                        borderSide: BorderSide(
-                            color: Appcolors().logintextformborder),
+                        borderSide:
+                            BorderSide(color: Appcolors().logintextformborder),
                       ),
                       errorBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15.0),
-                        borderSide: BorderSide(
-                            color: Appcolors().logintextformborder),
+                        borderSide:
+                            BorderSide(color: Appcolors().logintextformborder),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15.0),
-                        borderSide: BorderSide(
-                            color: Appcolors().logintextformborder),
-                      ),focusedErrorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                      borderSide: BorderSide(
-                          color: Appcolors().logintextformborder),
-                    ),
+                        borderSide:
+                            BorderSide(color: Appcolors().logintextformborder),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                        borderSide:
+                            BorderSide(color: Appcolors().logintextformborder),
+                      ),
                       filled: true,
                       fillColor: Appcolors().backgroundcolor,
-                      hintText:
-                      StringConstants.newpassword,
+                      hintText: StringConstants.newpassword,
                       hintStyle: TextStyle(
                         decoration: TextDecoration.none,
                         fontWeight: FontWeight.w400,
                         fontSize: 12.sp,
                         // fontFamily: 'PulpDisplay',
                         color: Appcolors().loginhintcolor,
-                      ),),
+                      ),
+                    ),
                     onChanged: (value) {
                       setState(() {});
                     },
@@ -209,18 +227,24 @@ class ChangepasswordState extends State<Changepassword>{
                 SizedBox(
                   height: 4.h,
                 ),
-                Text(StringConstants.confirmnewpassword,style: TextStyle(
-                    fontSize: 12.sp,
-                    fontFamily: "PulpDisplay",
-                    fontWeight: FontWeight.w500,
-                    color: Appcolors().loginhintcolor),),
+                Text(
+                  StringConstants.confirmnewpassword,
+                  style: TextStyle(
+                      fontSize: 12.sp,
+                      fontFamily: "PulpDisplay",
+                      fontWeight: FontWeight.w500,
+                      color: Appcolors().loginhintcolor),
+                ),
                 SizedBox(
                   height: 1.h,
                 ),
                 Container(
                   child: TextFormField(
                     cursorColor: Appcolors().loginhintcolor,
-                    style: TextStyle(color:Appcolors().whitecolor,fontSize: 12.sp,),
+                    style: TextStyle(
+                      color: Appcolors().whitecolor,
+                      fontSize: 12.sp,
+                    ),
                     controller: confirmnewpasswordcontroller,
                     obscureText: true,
                     decoration: InputDecoration(
@@ -232,35 +256,36 @@ class ChangepasswordState extends State<Changepassword>{
                       disabledBorder: InputBorder.none,
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15.0),
-                        borderSide: BorderSide(
-                            color: Appcolors().logintextformborder),
+                        borderSide:
+                            BorderSide(color: Appcolors().logintextformborder),
                       ),
                       errorBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15.0),
-                        borderSide: BorderSide(
-                            color: Appcolors().logintextformborder),
+                        borderSide:
+                            BorderSide(color: Appcolors().logintextformborder),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15.0),
-                        borderSide: BorderSide(
-                            color: Appcolors().logintextformborder),
-                      ),focusedErrorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                      borderSide: BorderSide(
-                          color: Appcolors().logintextformborder),
-                    ),
+                        borderSide:
+                            BorderSide(color: Appcolors().logintextformborder),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                        borderSide:
+                            BorderSide(color: Appcolors().logintextformborder),
+                      ),
                       filled: true,
                       isDense: true,
                       fillColor: Appcolors().backgroundcolor,
-                      hintText:
-                      StringConstants.confirmnewpassword,
+                      hintText: StringConstants.confirmnewpassword,
                       hintStyle: TextStyle(
                         decoration: TextDecoration.none,
                         fontWeight: FontWeight.w400,
                         fontSize: 12.sp,
                         // fontFamily: 'PulpDisplay',
                         color: Appcolors().loginhintcolor,
-                      ),),
+                      ),
+                    ),
                     onChanged: (value) {
                       setState(() {});
                     },
@@ -278,8 +303,8 @@ class ChangepasswordState extends State<Changepassword>{
                 ),
                 Center(
                   child: GestureDetector(
-                    onTap: (){
-                      if(_key.currentState!.validate()){
+                    onTap: () {
+                      if (_key.currentState!.validate()) {
                         changepassword();
                       }
                     },
@@ -312,45 +337,46 @@ class ChangepasswordState extends State<Changepassword>{
       ),
     );
   }
+
   Future<void> getsharedpreference() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    setState((){
-      token=sharedPreferences.getString("token");
+    setState(() {
+      token = sharedPreferences.getString("token");
     });
     print("Token value:-$token");
   }
+
   Future<void> changepassword() async {
     Helpingwidgets.showLoadingDialog(context, key);
-    Map data ={
-      "opassword":passwordcontroller.text,
-      "npassword":newpasswordcontroller.text,
-      "cpassword":confirmnewpasswordcontroller.text,
-      "token":token,
+    Map data = {
+      "opassword": passwordcontroller.text,
+      "npassword": newpasswordcontroller.text,
+      "cpassword": confirmnewpasswordcontroller.text,
+      "token": token,
     };
     var jsonResponse;
     var response = await http.post(
         Uri.parse(Networks.baseurl + Networks.changepassword),
-        body: data
-    );
+        body: data);
     jsonResponse = json.decode(response.body);
     print("jsonResponse:-$jsonResponse");
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
-        Helpingwidgets.failedsnackbar(jsonResponse["message"].toString(), context);
+        Helpingwidgets.failedsnackbar(
+            jsonResponse["message"].toString(), context);
         Navigator.pop(context);
       } else {
-        Helpingwidgets.successsnackbar(jsonResponse["message"].toString(), context);
+        Helpingwidgets.successsnackbar(
+            jsonResponse["message"].toString(), context);
         print("Response:${jsonResponse["message"]}");
-        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-            const LoginScreen()), (Route<dynamic> route) => false);
-
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const LoginScreen()),
+            (Route<dynamic> route) => false);
       }
     } else {
-      Helpingwidgets.failedsnackbar(jsonResponse["message"].toString(), context);
+      Helpingwidgets.failedsnackbar(
+          jsonResponse["message"].toString(), context);
       Navigator.pop(context);
-
     }
   }
-
-
 }

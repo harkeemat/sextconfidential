@@ -1,5 +1,5 @@
 # Uncomment this line to define a global platform for your project
-# platform :ios, '11.0'
+# platform :ios, '12.0'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
@@ -30,6 +30,12 @@ flutter_ios_podfile_setup
 target 'Runner' do
   use_frameworks!
   use_modular_headers!
+#  pod 'FirebaseFirestore', :git => 'https://github.com/invertase/firestore-ios-sdk-frameworks.git', :tag => '10.15.0'
+
+pod 'Firebase/Auth'
+pod 'Firebase/Analytics'
+pod 'FBSDKLoginKit'
+pod 'Firebase/Messaging'
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
@@ -38,7 +44,7 @@ post_install do |installer|
 installer.generated_projects.each do |project|
         project.targets.each do |target|
             target.build_configurations.each do |config|
-                config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '10.0'
+                config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
                 # You can remove unused permissions here
                       # for more infomation: https://github.com/BaseflowIT/flutter-permission-handler/blob/master/permission_handler/ios/Classes/PermissionHandlerEnums.h
                       # e.g. when you don't need camera permission, just add 'PERMISSION_CAMERA=0'
@@ -73,7 +79,7 @@ installer.generated_projects.each do |project|
                         # 'PERMISSION_NOTIFICATIONS=1',
 
                         ## dart: PermissionGroup.mediaLibrary
-                        'PERMISSION_MEDIA_LIBRARY=1',
+                        'PERMISSION_MEDIA_LIBRARY=0',
 
                         ## dart: PermissionGroup.sensors
                         # 'PERMISSION_SENSORS=1',
@@ -87,6 +93,7 @@ installer.generated_projects.each do |project|
                         ## dart: PermissionGroup.criticalAlerts
                         # 'PERMISSION_CRITICAL_ALERTS=1',
                       ]
+                      
              end
         end
  end

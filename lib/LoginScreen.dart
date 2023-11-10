@@ -1,17 +1,19 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sextconfidential/Bottomnavigation.dart';
-import 'package:sextconfidential/pojo/getprofilepojo.dart';
-import 'package:sextconfidential/utils/Appcolors.dart';
-import 'package:sextconfidential/utils/Helpingwidgets.dart';
-import 'package:sextconfidential/utils/Networks.dart';
-import 'package:sextconfidential/utils/StringConstants.dart';
+import '/Bottomnavigation.dart';
+import '/Videocallscreen.dart';
+import '/pojo/getprofilepojo.dart';
+import '/utils/Appcolors.dart';
+import '/utils/Helpingwidgets.dart';
+import '/utils/Networks.dart';
+import '/utils/StringConstants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:sizer/sizer.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
@@ -22,6 +24,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class LoginScreenState extends State<LoginScreen> {
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
   TextEditingController emailcontoller = TextEditingController();
   TextEditingController passwordcontoller = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey(); // Create a key
@@ -304,12 +307,14 @@ class LoginScreenState extends State<LoginScreen> {
     var response = await http.post(Uri.parse(Networks.baseurl + Networks.login),
         body: data);
     jsonResponse = json.decode(response.body);
-    print("jsonResponse$jsonResponse");
+
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
+        // ignore: use_build_context_synchronously
         Helpingwidgets.failedsnackbar(
             jsonResponse["message"].toString(), context);
       } else {
+        // ignore: use_build_context_synchronously
         Navigator.pop(context);
         getprofilepojo = Getprofilepojo.fromJson(jsonResponse);
 
@@ -327,10 +332,10 @@ class LoginScreenState extends State<LoginScreen> {
             getprofilepojo!.token!.image == null
                 ? ""
                 : getprofilepojo!.token!.image.toString());
-                sharedPreferences.setString(
+        sharedPreferences.setString(
             "usertype",
             getprofilepojo!.token!.type == null
-                ? "set"
+                ? ""
                 : getprofilepojo!.token!.type.toString());
         sharedPreferences.setString(
             "stagename", getprofilepojo!.token!.stagename.toString());
@@ -353,25 +358,40 @@ class LoginScreenState extends State<LoginScreen> {
                 ? true
                 : false);
         sharedPreferences.setBool("loginstatus", true);
-        
+        String? devicetoken;
+        String? devicetype;
+        if (Platform.isIOS) {
+          devicetoken = await messaging.getAPNSToken();
+          devicetype = "ios";
+          print("FCMToken $devicetoken");
+        } else {
+          devicetoken = await messaging.getToken();
+          devicetype = "android";
+          print("FCMToken $devicetoken");
+        }
         //token update after user login
         Map tokenupdate = {
           "token": getprofilepojo!.token!.id.toString(),
-          "notification_token": await FirebaseMessaging.instance.getToken(),
+          "notification_token": devicetoken,
+          "devicetype": devicetype
         };
-       // print("fdfdfdf${tokenupdate}");
+
         await http.post(Uri.parse(Networks.baseurl + Networks.updatetoken),
             body: tokenupdate);
 
+        // ignore: use_build_context_synchronously
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => const Bottomnavigation()),
             (Route<dynamic> route) => false);
+        // ignore: use_build_context_synchronously
         Helpingwidgets.successsnackbar(
             jsonResponse["message"].toString(), context);
       }
     } else {
+      // ignore: use_build_context_synchronously
       Helpingwidgets.failedsnackbar(
           jsonResponse["message"].toString(), context);
+      // ignore: use_build_context_synchronously
       Navigator.pop(context);
     }
   }

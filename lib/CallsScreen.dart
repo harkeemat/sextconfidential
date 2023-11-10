@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:sextconfidential/utils/Appcolors.dart';
-import 'package:sextconfidential/utils/CustomDropdownButton2.dart';
-import 'package:sextconfidential/utils/Sidedrawer.dart';
-import 'package:sextconfidential/utils/StringConstants.dart';
+import '/utils/Appcolors.dart';
+import '/utils/CustomDropdownButton2.dart';
+import '/utils/Sidedrawer.dart';
+import '/utils/StringConstants.dart';
 import 'package:sizer/sizer.dart';
 
 class CallsScreen extends StatefulWidget {
@@ -15,12 +15,25 @@ class CallsScreen extends StatefulWidget {
 
 class CallsScreenState extends State<CallsScreen> {
   late StateSetter setstate;
-  List<String>items=[StringConstants.allcalls,StringConstants.phonecalls,StringConstants.videocalls];
-  List<String>datesvalue=["2023","2022","2020","2019","2018","2017","2016","2015"];
-  String dropdownvalue=StringConstants.allcalls;
-  String secondfdropdownvalue="2023";
+  List<String> items = [
+    StringConstants.allcalls,
+    StringConstants.phonecalls,
+    StringConstants.videocalls
+  ];
+  List<String> datesvalue = [
+    "2023",
+    "2022",
+    "2020",
+    "2019",
+    "2018",
+    "2017",
+    "2016",
+    "2015"
+  ];
+  String dropdownvalue = StringConstants.allcalls;
+  String secondfdropdownvalue = "2023";
   final GlobalKey<ScaffoldState> _key = GlobalKey(); // Create a key
-  ScrollController scrollController=ScrollController();
+  ScrollController scrollController = ScrollController();
   @override
   void initState() {
     // TODO: implement initState
@@ -61,7 +74,7 @@ class CallsScreenState extends State<CallsScreen> {
       //   ),
       // ),
       body: Container(
-        padding: EdgeInsets.only(left: 3.w,right: 3.w),
+        padding: EdgeInsets.only(left: 3.w, right: 3.w),
         color: Appcolors().backgroundcolor,
         child: Column(
           children: [
@@ -121,32 +134,33 @@ class CallsScreenState extends State<CallsScreen> {
                       verticalOffset: 50.0,
                       child: FadeInAnimation(
                           child: Column(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(2.h),
-                                  border: Border.all(color: Appcolors().chatuserborder)
-                                ),
-                                padding: EdgeInsets.only(top: 2.h,bottom: 2.h,left: 2.w,right: 3.w),
-                                width: double.infinity,
-                        height: 20.h,
-                        child: Column(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(2.h),
+                                border: Border.all(
+                                    color: Appcolors().chatuserborder)),
+                            padding: EdgeInsets.only(
+                                top: 2.h, bottom: 2.h, left: 2.w, right: 3.w),
+                            width: double.infinity,
+                            height: 20.h,
+                            child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Row(
                                   children: [
                                     SizedBox(
-                                      width:40.w,
+                                      width: 40.w,
                                       child: Row(
                                         // mainAxisAlignment: MainAxisAlignment.spaceAround,
                                         children: [
                                           Container(
                                             alignment: Alignment.center,
-                                            width:7.w,
+                                            width: 7.w,
                                             child: Image.asset(
-                                              index%2==0?
-                                              "assets/images/callicon.png":
-                                              "assets/images/videocallicon.png",
+                                              index % 2 == 0
+                                                  ? "assets/images/callicon.png"
+                                                  : "assets/images/videocallicon.png",
                                               height: 2.5.h,
                                             ),
                                           ),
@@ -154,38 +168,49 @@ class CallsScreenState extends State<CallsScreen> {
                                             width: 3.w,
                                           ),
                                           Text(
-                                            index%2==0?
-                                                StringConstants.phonecallon:
-                                            StringConstants.videocallon,
+                                            index % 2 == 0
+                                                ? StringConstants.phonecallon
+                                                : StringConstants.videocallon,
                                             style: TextStyle(
                                                 fontSize: 11.sp,
                                                 // fontFamily: "PulpDisplay",
                                                 fontWeight: FontWeight.w500,
-                                                color: Appcolors().loginhintcolor),
+                                                color:
+                                                    Appcolors().loginhintcolor),
                                           ),
                                         ],
                                       ),
                                     ),
                                     SizedBox(
-                                      width:45.w,
+                                      width: 45.w,
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                      Text("29/04/2023",style: TextStyle(
-                                          fontSize: 11.sp,
-                                          fontFamily: "PulpDisplay",
-                                          fontWeight: FontWeight.w400,
-                                          color: Appcolors().whitecolor),),
-                                          Text("|",style: TextStyle(
-                                          fontSize: 12.sp,
-                                          fontFamily: "PulpDisplay",
-                                          fontWeight: FontWeight.w400,
-                                          color: Appcolors().whitecolor),),
-                                          Text("10:59:03 PM",style: TextStyle(
-                                              fontSize: 11.sp,
-                                              fontFamily: "PulpDisplay",
-                                              fontWeight: FontWeight.w400,
-                                              color: Appcolors().whitecolor),),
+                                          Text(
+                                            "29/04/2023",
+                                            style: TextStyle(
+                                                fontSize: 11.sp,
+                                                fontFamily: "PulpDisplay",
+                                                fontWeight: FontWeight.w400,
+                                                color: Appcolors().whitecolor),
+                                          ),
+                                          Text(
+                                            "|",
+                                            style: TextStyle(
+                                                fontSize: 12.sp,
+                                                fontFamily: "PulpDisplay",
+                                                fontWeight: FontWeight.w400,
+                                                color: Appcolors().whitecolor),
+                                          ),
+                                          Text(
+                                            "10:59:03 PM",
+                                            style: TextStyle(
+                                                fontSize: 11.sp,
+                                                fontFamily: "PulpDisplay",
+                                                fontWeight: FontWeight.w400,
+                                                color: Appcolors().whitecolor),
+                                          ),
                                         ],
                                       ),
                                     )
@@ -194,13 +219,13 @@ class CallsScreenState extends State<CallsScreen> {
                                 Row(
                                   children: [
                                     SizedBox(
-                                      width:40.w,
+                                      width: 40.w,
                                       child: Row(
                                         // mainAxisAlignment: MainAxisAlignment.spaceAround,
                                         children: [
                                           Container(
                                             alignment: Alignment.center,
-                                            width:7.w,
+                                            width: 7.w,
                                             child: Image.asset(
                                               "assets/images/usericon.png",
                                               height: 3.h,
@@ -215,21 +240,26 @@ class CallsScreenState extends State<CallsScreen> {
                                                 fontSize: 12.sp,
                                                 // fontFamily: "PulpDisplay",
                                                 fontWeight: FontWeight.w500,
-                                                color: Appcolors().loginhintcolor),
+                                                color:
+                                                    Appcolors().loginhintcolor),
                                           ),
                                         ],
                                       ),
                                     ),
                                     SizedBox(
-                                      width:45.w,
+                                      width: 45.w,
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                      Text("chris88",style: TextStyle(
-                                          fontSize: 12.sp,
-                                          fontFamily: "PulpDisplay",
-                                          fontWeight: FontWeight.w400,
-                                          color: Appcolors().whitecolor),),
+                                          Text(
+                                            "chris88",
+                                            style: TextStyle(
+                                                fontSize: 12.sp,
+                                                fontFamily: "PulpDisplay",
+                                                fontWeight: FontWeight.w400,
+                                                color: Appcolors().whitecolor),
+                                          ),
                                         ],
                                       ),
                                     )
@@ -238,13 +268,13 @@ class CallsScreenState extends State<CallsScreen> {
                                 Row(
                                   children: [
                                     SizedBox(
-                                      width:40.w,
+                                      width: 40.w,
                                       child: Row(
                                         // mainAxisAlignment: MainAxisAlignment.spaceAround,
                                         children: [
                                           Container(
                                             alignment: Alignment.center,
-                                            width:7.w,
+                                            width: 7.w,
                                             child: Image.asset(
                                               "assets/images/durationicon.png",
                                               height: 2.7.h,
@@ -259,21 +289,26 @@ class CallsScreenState extends State<CallsScreen> {
                                                 fontSize: 12.sp,
                                                 // fontFamily: "PulpDisplay",
                                                 fontWeight: FontWeight.w500,
-                                                color: Appcolors().loginhintcolor),
+                                                color:
+                                                    Appcolors().loginhintcolor),
                                           ),
                                         ],
                                       ),
                                     ),
                                     SizedBox(
-                                      width:45.w,
+                                      width: 45.w,
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                      Text("3m32s",style: TextStyle(
-                                          fontSize: 12.sp,
-                                          fontFamily: "PulpDisplay",
-                                          fontWeight: FontWeight.w400,
-                                          color: Appcolors().whitecolor),),
+                                          Text(
+                                            "3m32s",
+                                            style: TextStyle(
+                                                fontSize: 12.sp,
+                                                fontFamily: "PulpDisplay",
+                                                fontWeight: FontWeight.w400,
+                                                color: Appcolors().whitecolor),
+                                          ),
                                         ],
                                       ),
                                     )
@@ -282,15 +317,16 @@ class CallsScreenState extends State<CallsScreen> {
                                 Row(
                                   children: [
                                     SizedBox(
-                                      width:40.w,
+                                      width: 40.w,
                                       child: Row(
                                         // mainAxisAlignment: MainAxisAlignment.spaceAround,
                                         children: [
                                           Container(
                                             alignment: Alignment.center,
-                                            width:7.w,
+                                            width: 7.w,
                                             child: Image.asset(
-                                              "assets/images/earningicon.png",                                          height: 2.7.h,
+                                              "assets/images/earningicon.png",
+                                              height: 2.7.h,
                                             ),
                                           ),
                                           SizedBox(
@@ -302,34 +338,39 @@ class CallsScreenState extends State<CallsScreen> {
                                                 fontSize: 12.sp,
                                                 // fontFamily: "PulpDisplay",
                                                 fontWeight: FontWeight.w500,
-                                                color: Appcolors().loginhintcolor),
+                                                color:
+                                                    Appcolors().loginhintcolor),
                                           ),
                                         ],
                                       ),
                                     ),
                                     SizedBox(
-                                      width:45.w,
+                                      width: 45.w,
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                      Text("\$36.00",style: TextStyle(
-                                          fontSize: 12.sp,
-                                          fontFamily: "PulpDisplay",
-                                          fontWeight: FontWeight.w400,
-                                          color: Appcolors().whitecolor),),
+                                          Text(
+                                            "\$36.00",
+                                            style: TextStyle(
+                                                fontSize: 12.sp,
+                                                fontFamily: "PulpDisplay",
+                                                fontWeight: FontWeight.w400,
+                                                color: Appcolors().whitecolor),
+                                          ),
                                         ],
                                       ),
                                     )
                                   ],
                                 ),
                               ],
-                        ),
-                      ),
-                              SizedBox(
-                                height: 1.5.h,
-                              ),
-                            ],
-                          )),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 1.5.h,
+                          ),
+                        ],
+                      )),
                     ),
                   );
                 },

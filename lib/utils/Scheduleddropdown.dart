@@ -1,6 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:sextconfidential/utils/Appcolors.dart';
+import '/utils/Appcolors.dart';
 import 'package:sizer/sizer.dart';
 
 import 'StringConstants.dart';
@@ -19,24 +19,28 @@ class _CustomButtonTestState extends State<CustomButtonTest> {
       body: Center(
         child: DropdownButtonHideUnderline(
           child: DropdownButton2(
-            customButton: Image.asset("assets/images/menubtn.png",height: 4.h,),
+            customButton: Image.asset(
+              "assets/images/menubtn.png",
+              height: 4.h,
+            ),
             items: [
               ...ScheduledMenuItems.schedulefirstItems.map(
-                    (item) => DropdownMenuItem<ScheduledCustomMenuItem>(
+                (item) => DropdownMenuItem<ScheduledCustomMenuItem>(
                   value: item,
                   child: ScheduledMenuItems.buildItem(item),
                 ),
               ),
               const DropdownMenuItem<Divider>(enabled: false, child: Divider()),
               ...ScheduledMenuItems.schedulesecondItems.map(
-                    (item) => DropdownMenuItem<ScheduledCustomMenuItem>(
+                (item) => DropdownMenuItem<ScheduledCustomMenuItem>(
                   value: item,
                   child: ScheduledMenuItems.buildItem(item),
                 ),
               ),
             ],
             onChanged: (value) {
-              ScheduledMenuItems.onChanged(context, value as ScheduledCustomMenuItem);
+              ScheduledMenuItems.onChanged(
+                  context, value as ScheduledCustomMenuItem);
             },
             dropdownStyleData: DropdownStyleData(
               width: 160,
@@ -50,9 +54,11 @@ class _CustomButtonTestState extends State<CustomButtonTest> {
             ),
             menuItemStyleData: MenuItemStyleData(
               customHeights: [
-                ...List<double>.filled(ScheduledMenuItems.schedulefirstItems.length, 48),
+                ...List<double>.filled(
+                    ScheduledMenuItems.schedulefirstItems.length, 48),
                 8,
-                ...List<double>.filled(ScheduledMenuItems.schedulesecondItems.length, 48),
+                ...List<double>.filled(
+                    ScheduledMenuItems.schedulesecondItems.length, 48),
               ],
               padding: const EdgeInsets.only(left: 16, right: 16),
             ),
@@ -78,10 +84,17 @@ class ScheduledMenuItems {
     StringConstants.editpost,
     StringConstants.deletepost,
   ];
-  static  const List<ScheduledCustomMenuItem> schedulefirstItems = [editpost,deletepost];
+  static const List<ScheduledCustomMenuItem> schedulefirstItems = [
+    editpost,
+    deletepost
+  ];
   static const List<ScheduledCustomMenuItem> schedulesecondItems = [];
-  static  const ScheduledCustomMenuItem editpost = ScheduledCustomMenuItem(text: "Edit Post", icon: Icons.home);
-  static  const ScheduledCustomMenuItem deletepost = ScheduledCustomMenuItem(text: "Delete Post", icon: Icons.logout,);
+  static const ScheduledCustomMenuItem editpost =
+      ScheduledCustomMenuItem(text: "Edit Post", icon: Icons.home);
+  static const ScheduledCustomMenuItem deletepost = ScheduledCustomMenuItem(
+    text: "Delete Post",
+    icon: Icons.logout,
+  );
 
   static Widget buildItem(ScheduledCustomMenuItem item) {
     return Row(
@@ -104,10 +117,10 @@ class ScheduledMenuItems {
   static onChanged(BuildContext context, ScheduledCustomMenuItem item) {
     switch (item) {
       case editpost:
-      //Do something
+        //Do something
         break;
       case deletepost:
-      //Do something
+        //Do something
         break;
     }
   }

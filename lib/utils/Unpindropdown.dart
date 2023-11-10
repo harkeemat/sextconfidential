@@ -1,6 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:sextconfidential/utils/Appcolors.dart';
+import '/utils/Appcolors.dart';
 import 'package:sizer/sizer.dart';
 
 import 'StringConstants.dart';
@@ -19,17 +19,20 @@ class UnpindropdownState extends State<Unpindropdown> {
       body: Center(
         child: DropdownButtonHideUnderline(
           child: DropdownButton2(
-            customButton: Image.asset("assets/images/menubtn.png",height: 4.h,),
+            customButton: Image.asset(
+              "assets/images/menubtn.png",
+              height: 4.h,
+            ),
             items: [
               ...UnpinMenuItems.unpinfirstItems.map(
-                    (item) => DropdownMenuItem<UnpinCustomMenuItem>(
+                (item) => DropdownMenuItem<UnpinCustomMenuItem>(
                   value: item,
                   child: UnpinMenuItems.buildItem(item),
                 ),
               ),
               const DropdownMenuItem<Divider>(enabled: false, child: Divider()),
               ...UnpinMenuItems.unpinsecondItems.map(
-                    (item) => DropdownMenuItem<UnpinCustomMenuItem>(
+                (item) => DropdownMenuItem<UnpinCustomMenuItem>(
                   value: item,
                   child: UnpinMenuItems.buildItem(item),
                 ),
@@ -50,9 +53,11 @@ class UnpindropdownState extends State<Unpindropdown> {
             ),
             menuItemStyleData: MenuItemStyleData(
               customHeights: [
-                ...List<double>.filled(UnpinMenuItems.unpinfirstItems.length, 48),
+                ...List<double>.filled(
+                    UnpinMenuItems.unpinfirstItems.length, 48),
                 8,
-                ...List<double>.filled(UnpinMenuItems.unpinsecondItems.length, 48),
+                ...List<double>.filled(
+                    UnpinMenuItems.unpinsecondItems.length, 48),
               ],
               padding: const EdgeInsets.only(left: 16, right: 16),
             ),
@@ -78,12 +83,25 @@ class UnpinMenuItems {
     StringConstants.editpost,
     StringConstants.deletepost,
   ];
-  static  const List<UnpinCustomMenuItem> unpinfirstItems = [editpost, copylink, unpinpost,deletepost];
+  static const List<UnpinCustomMenuItem> unpinfirstItems = [
+    editpost,
+    copylink,
+    unpinpost,
+    deletepost
+  ];
   static const List<UnpinCustomMenuItem> unpinsecondItems = [];
-  static  const UnpinCustomMenuItem editpost = UnpinCustomMenuItem(text: "Edit Post", icon: Icons.home);
-  static  const UnpinCustomMenuItem copylink = UnpinCustomMenuItem(text: "Copy Link", icon: Icons.share);
-  static  const UnpinCustomMenuItem unpinpost = UnpinCustomMenuItem(text: "Unpin Post", icon: Icons.settings,);
-  static  const UnpinCustomMenuItem deletepost = UnpinCustomMenuItem(text: "Delete Post", icon: Icons.logout,);
+  static const UnpinCustomMenuItem editpost =
+      UnpinCustomMenuItem(text: "Edit Post", icon: Icons.home);
+  static const UnpinCustomMenuItem copylink =
+      UnpinCustomMenuItem(text: "Copy Link", icon: Icons.share);
+  static const UnpinCustomMenuItem unpinpost = UnpinCustomMenuItem(
+    text: "Unpin Post",
+    icon: Icons.settings,
+  );
+  static const UnpinCustomMenuItem deletepost = UnpinCustomMenuItem(
+    text: "Delete Post",
+    icon: Icons.logout,
+  );
 
   static Widget buildItem(UnpinCustomMenuItem item) {
     return Row(
@@ -106,16 +124,16 @@ class UnpinMenuItems {
   static onChanged(BuildContext context, UnpinCustomMenuItem item) {
     switch (item) {
       case editpost:
-      //Do something
+        //Do something
         break;
       case copylink:
-      //Do something
+        //Do something
         break;
       case unpinpost:
-      //Do something
+        //Do something
         break;
       case deletepost:
-      //Do something
+        //Do something
         break;
     }
   }
