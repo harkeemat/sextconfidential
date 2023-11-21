@@ -25,7 +25,6 @@ import 'package:http/http.dart' as http;
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("checkk${message.data}");
   if (message.data['type'] == 'call') {
     showCallkitIncoming(const Uuid().v4(), message);
   }
@@ -34,13 +33,12 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 Future<void> showCallkitIncoming(String uuid, data) async {
-  print("chchc$data");
   final params = CallKitParams(
-    id: "155",
-    nameCaller: "checkk",
+    id: data!.data['chat_id'],
+    nameCaller: data!.data['name'],
     appName: 'Callkit',
-    avatar: 'https://i.pravatar.cc/100',
-    handle: uuid,
+    avatar: data!.data['profile_pic'],
+    handle: data!.data['body'],
     type: 0,
     duration: 30000,
     textAccept: 'Accept',
@@ -51,7 +49,7 @@ Future<void> showCallkitIncoming(String uuid, data) async {
       subtitle: 'Missed call',
       callbackText: 'Call back',
     ),
-    extra: <String, dynamic>{'userId': '12345678'},
+    extra: data.data,
     headers: <String, dynamic>{'apiKey': uuid, 'platform': 'flutter'},
     android: const AndroidParams(
       isCustomNotification: true,
@@ -88,7 +86,6 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   Debug.enabled = true;
-  WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(<DeviceOrientation>[
     DeviceOrientation.landscapeRight,
     DeviceOrientation.landscapeLeft,
@@ -126,7 +123,7 @@ class _MyAppState extends State<MyApp> {
       return MaterialApp(
         navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
-        title: 'Sext Confidential',
+        title: 'Text Confidential',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
@@ -159,6 +156,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     notificationServices.firebaseInit(context);
     notificationServices.setupInteractMessage(context);
     //initDynamicLinks();
+    listenerEvent(onEvent);
     getsharedpreference();
     Future.delayed(const Duration(seconds: 3), () {
       if (loginstatus == false) {
@@ -185,12 +183,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   }
 
   @override
-  void deactivate() {
-    print("deactivate");
-    super.deactivate();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
@@ -213,6 +205,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   Future<void> listenerEvent(void Function(CallEvent) callback) async {
     try {
       FlutterCallkitIncoming.onEvent.listen((event) async {
+        //print("onEvent${event!.body}");
         switch (event!.event) {
           case Event.actionCallIncoming:
             // TODO: received an incoming call
@@ -222,7 +215,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             // TODO: show screen calling in Flutter
             break;
           case Event.actionCallAccept:
-            callPickFunction(event.body);
+            callPickFunction(event.body['extra']);
             break;
           case Event.actionCallDecline:
             // TODO: declined an incoming call
@@ -288,9 +281,9 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           'identity': jsonResponse['data']['identity'].toString(),
           'type': TwilioRoomType.groupSmall,
         };
-        print("testt$room");
+        print("roomm$tokenupdate");
+        print("Print$room");
         final roomModel = RoomModel.fromMap(Map<String, dynamic>.from(room));
-
         widget.navigation.currentState?.push(
           MaterialPageRoute<ConferencePage>(
             fullscreenDialog: true,

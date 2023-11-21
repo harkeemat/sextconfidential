@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, duplicate_ignore
+
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -28,6 +30,8 @@ import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:sizer/sizer.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:http/http.dart' as http;
+
+import 'ConvertsationScreen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -1009,7 +1013,6 @@ class FeedScreenState extends State<FeedScreen> {
 
     if (pickedFile != null) {
       imageFile = File(pickedFile.path);
-      print("Video path:-${imageFile?.path}");
       createthumbnail();
       // print("Video path:-${pickedFile.path}");
     }
@@ -1025,8 +1028,7 @@ class FeedScreenState extends State<FeedScreen> {
       username = sharedPreferences.getString("stagename");
       usertype = sharedPreferences.getString("usertype")!.toString();
     });
-    print("Token value:-$token");
-    print("profile value:-$userprofilepic");
+
     feedlisting(sorttype!);
   }
 
@@ -1052,15 +1054,7 @@ class FeedScreenState extends State<FeedScreen> {
         postselectedvalue == StringConstants.scheduledpost
             ? "${formattedDate!} $timezone"
             : "";
-    print("token:-${token!}");
-    print("Message:-${messagecontroller.text.trim()}");
-    print("token:-$token");
-    print("Post type:-$postselectedvalue" == StringConstants.scheduledpost
-        ? "Schedule"
-        : postselectedvalue == StringConstants.saveasdraft
-            ? "Save Draft"
-            : "Post");
-    print("scdate:-" "${formattedDate!} $timezone");
+
     // print("Image path:-"+imageFile!.path.toString());
     if (imageFile != null) {
       request.files.add(
@@ -1071,12 +1065,12 @@ class FeedScreenState extends State<FeedScreen> {
     var response = await request.send();
     response.stream.transform(utf8.decoder).listen((value) {
       jsonData = json.decode(value);
-      print("Json:-$jsonData");
+
       if (response.statusCode == 200) {
         if (jsonData["status"] == false) {
           Helpingwidgets.failedsnackbar(
               jsonData["message"].toString(), context);
-          print("Response:${jsonData["message"]}");
+
           Navigator.pop(context);
         } else {
           setState(() {
@@ -1085,13 +1079,13 @@ class FeedScreenState extends State<FeedScreen> {
           messagecontroller.clear();
           Helpingwidgets.successsnackbar(
               jsonData["message"].toString(), context);
-          print("Response:${jsonData["message"]}");
+
           feedlisting(sorttype!);
           Navigator.pop(context);
         }
       } else {
         Helpingwidgets.failedsnackbar(jsonData["message"].toString(), context);
-        print("Response:${jsonData["message"]}");
+
         Navigator.pop(context);
       }
     });
@@ -1103,12 +1097,12 @@ class FeedScreenState extends State<FeedScreen> {
       "token": token,
       "sort": sorttype.toString(),
     };
-    print("Data:-$data");
+
     var jsonResponse;
     var response = await http
         .post(Uri.parse(Networks.baseurl + Networks.myposts), body: data);
     jsonResponse = json.decode(response.body);
-    print("jsonResponse:-$jsonResponse");
+
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
         setState(() {
@@ -1122,7 +1116,7 @@ class FeedScreenState extends State<FeedScreen> {
         setState(() {
           responsestatus = true;
         });
-        print("Message:-${jsonResponse["message"]}");
+
         feedpostspojo = Feedpostspojo.fromJson(jsonResponse);
         Navigator.pop(context);
       }
@@ -1141,12 +1135,12 @@ class FeedScreenState extends State<FeedScreen> {
     Map data = {
       "postid": postid.toString(),
     };
-    print("Data:-$data");
+
     var jsonResponse;
     var response = await http
         .post(Uri.parse(Networks.baseurl + Networks.deletepost), body: data);
     jsonResponse = json.decode(response.body);
-    print("jsonResponse:-$jsonResponse");
+
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
         Navigator.pop(context);
@@ -1156,7 +1150,7 @@ class FeedScreenState extends State<FeedScreen> {
       } else {
         Helpingwidgets.successsnackbar(
             jsonResponse["message"].toString(), context);
-        print("Message:-${jsonResponse["message"]}");
+
         feedlisting(0);
         Navigator.pop(context);
       }
@@ -1173,25 +1167,30 @@ class FeedScreenState extends State<FeedScreen> {
       "postid": postid.toString(),
       "status": status.toString(),
     };
-    print("Data:-$data");
+
     var jsonResponse;
     var response = await http
         .post(Uri.parse(Networks.baseurl + Networks.pinposts), body: data);
     jsonResponse = json.decode(response.body);
-    print("jsonResponse:-$jsonResponse");
+
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
+        // ignore: use_build_context_synchronously
         Navigator.pop(context);
+        // ignore: use_build_context_synchronously
         Helpingwidgets.failedsnackbar(
             jsonResponse["message"].toString(), context);
+        // ignore: use_build_context_synchronously
         Navigator.pop(context);
       } else {
-        print("Message:-${jsonResponse["message"]}");
         feedlisting(0);
+        // ignore: use_build_context_synchronously
         Navigator.pop(context);
       }
     } else {
+      // ignore: use_build_context_synchronously
       Navigator.pop(context);
+      // ignore: use_build_context_synchronously
       Helpingwidgets.failedsnackbar(
           jsonResponse["message"].toString(), context);
     }
@@ -1203,12 +1202,11 @@ class FeedScreenState extends State<FeedScreen> {
       "postid": postid.toString(),
       "text": postcontent.toString(),
     };
-    print("Data:-$data");
     var jsonResponse;
     var response = await http
         .post(Uri.parse(Networks.baseurl + Networks.updatepost), body: data);
     jsonResponse = json.decode(response.body);
-    print("jsonResponse:-$jsonResponse");
+
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
         Navigator.pop(context);
@@ -1218,7 +1216,7 @@ class FeedScreenState extends State<FeedScreen> {
       } else {
         // Helpingwidgets.successsnackbar(
         //     jsonResponse["message"].toString(), context);
-        print("Message:-${jsonResponse["message"]}");
+
         // feedpostspojo!.message!.post!.elementAt(index).="true";
         feedlisting(0);
         setState(() {
@@ -1252,16 +1250,15 @@ class FeedScreenState extends State<FeedScreen> {
       context: context,
     );
     if (pickedTime != null) {
-      print(pickedTime.format(context)); //output 10:51 PM
+      //output 10:51 PM
       DateTime parsedTime =
           DateFormat.jm().parse(pickedTime.format(context).toString());
       //converting to DateTime so that we can further format on different pattern.
-      print(parsedTime); //output 1970-01-01 22:53:00.000
+      //output 1970-01-01 22:53:00.000
       // String formattedTime1 =
       // DateFormat('HH:mma')
       //     .format(parsedTime());
-      print("24 hour time:-$parsedTime");
-      // print(timezone2.toString());
+
       // //DateFormat() is from intl package, you can format the time on any pattern you need.
       setState(() {
         timezone = DateFormat('HH:mm').format(parsedTime);
@@ -1281,7 +1278,6 @@ class FeedScreenState extends State<FeedScreen> {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: feedpostspojo!.message!.post!.length,
               itemBuilder: (BuildContext context, int index) {
-                print("pic${feedpostspojo!.message!.post![index]}");
                 return AnimationConfiguration.staggeredList(
                   position: index,
                   duration: const Duration(milliseconds: 300),
@@ -1292,39 +1288,476 @@ class FeedScreenState extends State<FeedScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Container(
-                            padding: EdgeInsets.all(1.5.h),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Appcolors().chatuserborder),
-                                borderRadius: BorderRadius.circular(2.h)),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        userprofilepic == null ||
-                                                userprofilepic == ""
-                                            ? Image.asset(
-                                                "assets/images/userprofile.png",
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ConvertsationScreen(
+                                            userid: feedpostspojo!
+                                                .message!.post!
+                                                .elementAt(index)
+                                                .id
+                                                .toString(),
+                                            userimage: feedpostspojo!
+                                                .message!.post!
+                                                .elementAt(index)
+                                                .url
+                                                .toString(),
+                                            username: feedpostspojo!
+                                                .message!.post!
+                                                .elementAt(index)
+                                                .stagename
+                                                .toString(),
+                                          )));
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(1.5.h),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: Appcolors().chatuserborder),
+                                  borderRadius: BorderRadius.circular(2.h)),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          SizedBox(
+                                            height: 4.5.h,
+                                            width: 15.w,
+                                            child: CachedNetworkImage(
+                                              imageUrl: feedpostspojo!
+                                                  .message!.post!
+                                                  .elementAt(index)
+                                                  .image
+                                                  .toString(),
+                                              imageBuilder:
+                                                  (context, imageProvider) =>
+                                                      Container(
                                                 width: 15.w,
-                                                height: 4.5.h)
-                                            : SizedBox(
+                                                alignment: Alignment.centerLeft,
                                                 height: 4.5.h,
-                                                width: 15.w,
-                                                child: CachedNetworkImage(
-                                                  imageUrl:
-                                                      userprofilepic.toString(),
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  image: DecorationImage(
+                                                    image: imageProvider,
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                              ),
+                                              placeholder: (context, url) =>
+                                                  Container(
+                                                child: Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    strokeWidth: 2,
+                                                    color: Appcolors()
+                                                        .gradientcolorfirst,
+                                                  ),
+                                                ),
+                                              ),
+                                              // errorWidget: (context, url, error) => errorWidget,
+                                            ),
+                                          ),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                feedpostspojo!.message!.post!
+                                                    .elementAt(index)
+                                                    .stagename
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    fontSize: 14.sp,
+                                                    fontFamily: "PulpDisplay",
+                                                    fontWeight: FontWeight.w400,
+                                                    color:
+                                                        Appcolors().whitecolor),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              Text(
+                                                feedpostspojo!.message!.post!
+                                                    .elementAt(index)
+                                                    .ago
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    fontSize: 10.sp,
+                                                    // fontFamily: "PulpDisplay",
+                                                    fontStyle: FontStyle.italic,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Appcolors()
+                                                        .loginhintcolor),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Offstage(
+                                            offstage: feedpostspojo!
+                                                    .message!.post!
+                                                    .elementAt(index)
+                                                    .pinned
+                                                    .toString() !=
+                                                "true",
+                                            child: pinnedpost(),
+                                          ),
+                                          DropdownButtonHideUnderline(
+                                            child: feedpostspojo!.message!.post!
+                                                        .elementAt(index)
+                                                        .pinned
+                                                        .toString() ==
+                                                    "true"
+                                                ? DropdownButton2(
+                                                    customButton: Image.asset(
+                                                      "assets/images/menubtn.png",
+                                                      height: 4.h,
+                                                      fit: BoxFit.fill,
+                                                    ),
+                                                    items: [
+                                                      ...UnpinMenuItems
+                                                          .unpinfirstItems
+                                                          .map(
+                                                        (item) => DropdownMenuItem<
+                                                            UnpinCustomMenuItem>(
+                                                          value: item,
+                                                          child: UnpinMenuItems
+                                                              .buildItem(item),
+                                                        ),
+                                                      ),
+                                                      const DropdownMenuItem<
+                                                              Divider>(
+                                                          enabled: false,
+                                                          child: Divider()),
+                                                      ...UnpinMenuItems
+                                                          .unpinsecondItems
+                                                          .map(
+                                                        (item) => DropdownMenuItem<
+                                                            UnpinCustomMenuItem>(
+                                                          value: item,
+                                                          child: UnpinMenuItems
+                                                              .buildItem(item),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                    onChanged: (value) {
+                                                      UnpinMenuItems.onChanged(
+                                                          context,
+                                                          value
+                                                              as UnpinCustomMenuItem);
+                                                      print(
+                                                          "Value:-${value.text}");
+                                                      if (value.text ==
+                                                          StringConstants
+                                                              .editpost) {
+                                                        setState(() {
+                                                          editedpostid = index;
+                                                          postcontentcontoller
+                                                                  .text =
+                                                              feedpostspojo!
+                                                                  .message!
+                                                                  .post!
+                                                                  .elementAt(
+                                                                      index)
+                                                                  .text
+                                                                  .toString();
+                                                        });
+                                                      } else if (value.text ==
+                                                          StringConstants
+                                                              .deletepost) {
+                                                        showdeletealert(
+                                                            context,
+                                                            feedpostspojo!
+                                                                .message!.post!
+                                                                .elementAt(
+                                                                    index)
+                                                                .id
+                                                                .toString(),
+                                                            index);
+                                                      } else if (value.text ==
+                                                          StringConstants
+                                                              .pinpost) {
+                                                        pinpost(
+                                                            feedpostspojo!
+                                                                .message!.post!
+                                                                .elementAt(
+                                                                    index)
+                                                                .id
+                                                                .toString(),
+                                                            index,
+                                                            true);
+                                                      } else if (value.text ==
+                                                          StringConstants
+                                                              .unpinpost) {
+                                                        pinpost(
+                                                            feedpostspojo!
+                                                                .message!.post!
+                                                                .elementAt(
+                                                                    index)
+                                                                .id
+                                                                .toString(),
+                                                            index,
+                                                            false);
+                                                      } else {}
+                                                    },
+                                                    dropdownStyleData:
+                                                        DropdownStyleData(
+                                                      width: 160,
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          vertical: 5),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                        color: Appcolors()
+                                                            .bottomnavbgcolor,
+                                                      ),
+                                                      elevation: 8,
+                                                      offset:
+                                                          const Offset(0, 8),
+                                                    ),
+                                                    menuItemStyleData:
+                                                        MenuItemStyleData(
+                                                      customHeights: [
+                                                        ...List<double>.filled(
+                                                            UnpinMenuItems
+                                                                .unpinfirstItems
+                                                                .length,
+                                                            35),
+                                                        8,
+                                                        ...List<double>.filled(
+                                                            UnpinMenuItems
+                                                                .unpinsecondItems
+                                                                .length,
+                                                            48),
+                                                      ],
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 16,
+                                                              right: 16),
+                                                    ),
+                                                  )
+                                                : DropdownButton2(
+                                                    customButton: Image.asset(
+                                                      "assets/images/menubtn.png",
+                                                      height: 4.h,
+                                                      fit: BoxFit.fill,
+                                                    ),
+                                                    items: [
+                                                      ...MenuItems.firstItems
+                                                          .map(
+                                                        (item) =>
+                                                            DropdownMenuItem<
+                                                                CustomMenuItem>(
+                                                          value: item,
+                                                          child: MenuItems
+                                                              .buildItem(item),
+                                                        ),
+                                                      ),
+                                                      const DropdownMenuItem<
+                                                              Divider>(
+                                                          enabled: false,
+                                                          child: Divider()),
+                                                      // ...MenuItems.secondItems.map(
+                                                      //   (item) => DropdownMenuItem<
+                                                      //       CustomMenuItem>(
+                                                      //     value: item,
+                                                      //     child:
+                                                      //         MenuItems.buildItem(item),
+                                                      //   ),
+                                                      // ),
+                                                    ],
+                                                    onChanged: (value) {
+                                                      MenuItems.onChanged(
+                                                          context,
+                                                          value
+                                                              as CustomMenuItem);
+                                                      print("Value:-$value");
+                                                      if (value.text ==
+                                                          StringConstants
+                                                              .editpost) {
+                                                        setState(() {
+                                                          editedpostid = index;
+                                                          postcontentcontoller
+                                                                  .text =
+                                                              feedpostspojo!
+                                                                  .message!
+                                                                  .post!
+                                                                  .elementAt(
+                                                                      index)
+                                                                  .text
+                                                                  .toString();
+                                                        });
+                                                      } else if (value.text ==
+                                                          StringConstants
+                                                              .deletepost) {
+                                                        showdeletealert(
+                                                            context,
+                                                            feedpostspojo!
+                                                                .message!.post!
+                                                                .elementAt(
+                                                                    index)
+                                                                .id
+                                                                .toString(),
+                                                            index);
+                                                      } else if (value.text ==
+                                                          StringConstants
+                                                              .pinpost) {
+                                                        pinpost(
+                                                            feedpostspojo!
+                                                                .message!.post!
+                                                                .elementAt(
+                                                                    index)
+                                                                .id
+                                                                .toString(),
+                                                            index,
+                                                            true);
+                                                      } else if (value.text ==
+                                                          StringConstants
+                                                              .unpinpost) {
+                                                        pinpost(
+                                                            feedpostspojo!
+                                                                .message!.post!
+                                                                .elementAt(
+                                                                    index)
+                                                                .id
+                                                                .toString(),
+                                                            index,
+                                                            false);
+                                                      } else {}
+                                                    },
+                                                    dropdownStyleData:
+                                                        DropdownStyleData(
+                                                      width: 160,
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          vertical: 5),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                        color: Appcolors()
+                                                            .bottomnavbgcolor,
+                                                      ),
+                                                      elevation: 8,
+                                                      offset:
+                                                          const Offset(0, 8),
+                                                    ),
+                                                    menuItemStyleData:
+                                                        MenuItemStyleData(
+                                                      customHeights: [
+                                                        ...List<double>.filled(
+                                                            MenuItems.firstItems
+                                                                .length,
+                                                            35),
+                                                        8,
+                                                        ...List<double>.filled(
+                                                            MenuItems
+                                                                .secondItems
+                                                                .length,
+                                                            48),
+                                                      ],
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 16,
+                                                              right: 16),
+                                                    ),
+                                                  ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 1.5.h,
+                                  ),
+                                  Offstage(
+                                    offstage: feedpostspojo!.message!.post!
+                                            .elementAt(index)
+                                            .url ==
+                                        "",
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Feeddetailedpage(
+                                                      type: feedpostspojo!
+                                                          .message!.post!
+                                                          .elementAt(index)
+                                                          .filetype
+                                                          .toString(),
+                                                      url: feedpostspojo!
+                                                          .message!.post!
+                                                          .elementAt(index)
+                                                          .url
+                                                          .toString(),
+                                                      ago: feedpostspojo!
+                                                          .message!.post!
+                                                          .elementAt(index)
+                                                          .ago
+                                                          .toString(),
+                                                      text: feedpostspojo!
+                                                          .message!.post!
+                                                          .elementAt(index)
+                                                          .text,
+                                                      likes: feedpostspojo!
+                                                          .message!.post!
+                                                          .elementAt(index)
+                                                          .likes
+                                                          .toString(),
+                                                      views: feedpostspojo!
+                                                          .message!.post!
+                                                          .elementAt(index)
+                                                          .views
+                                                          .toString(),
+                                                      unlocks: feedpostspojo!
+                                                          .message!.post!
+                                                          .elementAt(index)
+                                                          .unlocked
+                                                          .toString(),
+                                                      posttype: 0,
+                                                      pinstatus: feedpostspojo!
+                                                          .message!.post!
+                                                          .elementAt(index)
+                                                          .pinned
+                                                          .toString(),
+                                                      postid: feedpostspojo!
+                                                          .message!.post!
+                                                          .elementAt(index)
+                                                          .id
+                                                          .toString(),
+                                                    )));
+                                      },
+                                      child: SizedBox(
+                                          width: double.infinity,
+                                          height: 30.h,
+                                          child: feedpostspojo!.message!.post!
+                                                      .elementAt(index)
+                                                      .filetype ==
+                                                  "jpg"
+                                              ? CachedNetworkImage(
+                                                  imageUrl: feedpostspojo!
+                                                      .message!.post!
+                                                      .elementAt(index)
+                                                      .url
+                                                      .toString(),
                                                   imageBuilder: (context,
                                                           imageProvider) =>
                                                       Container(
@@ -1333,7 +1766,10 @@ class FeedScreenState extends State<FeedScreen> {
                                                         Alignment.centerLeft,
                                                     height: 4.5.h,
                                                     decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20),
+                                                      shape: BoxShape.rectangle,
                                                       image: DecorationImage(
                                                         image: imageProvider,
                                                         fit: BoxFit.cover,
@@ -1351,736 +1787,346 @@ class FeedScreenState extends State<FeedScreen> {
                                                       ),
                                                     ),
                                                   ),
-                                                  // errorWidget: (context, url, error) => errorWidget,
-                                                ),
-                                              ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              username.toString(),
-                                              style: TextStyle(
-                                                  fontSize: 14.sp,
-                                                  fontFamily: "PulpDisplay",
-                                                  fontWeight: FontWeight.w400,
-                                                  color:
-                                                      Appcolors().whitecolor),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                            Text(
-                                              feedpostspojo!.message!.post!
-                                                  .elementAt(index)
-                                                  .ago
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  fontSize: 10.sp,
-                                                  // fontFamily: "PulpDisplay",
-                                                  fontStyle: FontStyle.italic,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: Appcolors()
-                                                      .loginhintcolor),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Offstage(
-                                          offstage: feedpostspojo!
-                                                  .message!.post!
-                                                  .elementAt(index)
-                                                  .pinned
-                                                  .toString() !=
-                                              "true",
-                                          child: pinnedpost(),
-                                        ),
-                                        DropdownButtonHideUnderline(
-                                          child: feedpostspojo!.message!.post!
-                                                      .elementAt(index)
-                                                      .pinned
-                                                      .toString() ==
-                                                  "true"
-                                              ? DropdownButton2(
-                                                  customButton: Image.asset(
-                                                    "assets/images/menubtn.png",
-                                                    height: 4.h,
-                                                    fit: BoxFit.fill,
-                                                  ),
-                                                  items: [
-                                                    ...UnpinMenuItems
-                                                        .unpinfirstItems
-                                                        .map(
-                                                      (item) => DropdownMenuItem<
-                                                          UnpinCustomMenuItem>(
-                                                        value: item,
-                                                        child: UnpinMenuItems
-                                                            .buildItem(item),
-                                                      ),
-                                                    ),
-                                                    const DropdownMenuItem<
-                                                            Divider>(
-                                                        enabled: false,
-                                                        child: Divider()),
-                                                    ...UnpinMenuItems
-                                                        .unpinsecondItems
-                                                        .map(
-                                                      (item) => DropdownMenuItem<
-                                                          UnpinCustomMenuItem>(
-                                                        value: item,
-                                                        child: UnpinMenuItems
-                                                            .buildItem(item),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                  onChanged: (value) {
-                                                    UnpinMenuItems.onChanged(
-                                                        context,
-                                                        value
-                                                            as UnpinCustomMenuItem);
-                                                    print(
-                                                        "Value:-${value.text}");
-                                                    if (value.text ==
-                                                        StringConstants
-                                                            .editpost) {
-                                                      setState(() {
-                                                        editedpostid = index;
-                                                        postcontentcontoller
-                                                                .text =
-                                                            feedpostspojo!
-                                                                .message!.post!
-                                                                .elementAt(
-                                                                    index)
-                                                                .text
-                                                                .toString();
-                                                      });
-                                                    } else if (value.text ==
-                                                        StringConstants
-                                                            .deletepost) {
-                                                      showdeletealert(
-                                                          context,
-                                                          feedpostspojo!
-                                                              .message!.post!
-                                                              .elementAt(index)
-                                                              .id
-                                                              .toString(),
-                                                          index);
-                                                    } else if (value.text ==
-                                                        StringConstants
-                                                            .pinpost) {
-                                                      pinpost(
-                                                          feedpostspojo!
-                                                              .message!.post!
-                                                              .elementAt(index)
-                                                              .id
-                                                              .toString(),
-                                                          index,
-                                                          true);
-                                                    } else if (value.text ==
-                                                        StringConstants
-                                                            .unpinpost) {
-                                                      pinpost(
-                                                          feedpostspojo!
-                                                              .message!.post!
-                                                              .elementAt(index)
-                                                              .id
-                                                              .toString(),
-                                                          index,
-                                                          false);
-                                                    } else {}
-                                                  },
-                                                  dropdownStyleData:
-                                                      DropdownStyleData(
-                                                    width: 160,
-                                                    padding: const EdgeInsets
-                                                        .symmetric(vertical: 5),
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                      color: Appcolors()
-                                                          .bottomnavbgcolor,
-                                                    ),
-                                                    elevation: 8,
-                                                    offset: const Offset(0, 8),
-                                                  ),
-                                                  menuItemStyleData:
-                                                      MenuItemStyleData(
-                                                    customHeights: [
-                                                      ...List<double>.filled(
-                                                          UnpinMenuItems
-                                                              .unpinfirstItems
-                                                              .length,
-                                                          35),
-                                                      8,
-                                                      ...List<double>.filled(
-                                                          UnpinMenuItems
-                                                              .unpinsecondItems
-                                                              .length,
-                                                          48),
-                                                    ],
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 16,
-                                                            right: 16),
-                                                  ),
-                                                )
-                                              : DropdownButton2(
-                                                  customButton: Image.asset(
-                                                    "assets/images/menubtn.png",
-                                                    height: 4.h,
-                                                    fit: BoxFit.fill,
-                                                  ),
-                                                  items: [
-                                                    ...MenuItems.firstItems.map(
-                                                      (item) =>
-                                                          DropdownMenuItem<
-                                                              CustomMenuItem>(
-                                                        value: item,
-                                                        child:
-                                                            MenuItems.buildItem(
-                                                                item),
-                                                      ),
-                                                    ),
-                                                    const DropdownMenuItem<
-                                                            Divider>(
-                                                        enabled: false,
-                                                        child: Divider()),
-                                                    // ...MenuItems.secondItems.map(
-                                                    //   (item) => DropdownMenuItem<
-                                                    //       CustomMenuItem>(
-                                                    //     value: item,
-                                                    //     child:
-                                                    //         MenuItems.buildItem(item),
-                                                    //   ),
-                                                    // ),
-                                                  ],
-                                                  onChanged: (value) {
-                                                    MenuItems.onChanged(
-                                                        context,
-                                                        value
-                                                            as CustomMenuItem);
-                                                    print(
-                                                        "Value:-${value.text}");
-                                                    if (value.text ==
-                                                        StringConstants
-                                                            .editpost) {
-                                                      setState(() {
-                                                        editedpostid = index;
-                                                        postcontentcontoller
-                                                                .text =
-                                                            feedpostspojo!
-                                                                .message!.post!
-                                                                .elementAt(
-                                                                    index)
-                                                                .text
-                                                                .toString();
-                                                      });
-                                                    } else if (value.text ==
-                                                        StringConstants
-                                                            .deletepost) {
-                                                      showdeletealert(
-                                                          context,
-                                                          feedpostspojo!
-                                                              .message!.post!
-                                                              .elementAt(index)
-                                                              .id
-                                                              .toString(),
-                                                          index);
-                                                    } else if (value.text ==
-                                                        StringConstants
-                                                            .pinpost) {
-                                                      pinpost(
-                                                          feedpostspojo!
-                                                              .message!.post!
-                                                              .elementAt(index)
-                                                              .id
-                                                              .toString(),
-                                                          index,
-                                                          true);
-                                                    } else if (value.text ==
-                                                        StringConstants
-                                                            .unpinpost) {
-                                                      pinpost(
-                                                          feedpostspojo!
-                                                              .message!.post!
-                                                              .elementAt(index)
-                                                              .id
-                                                              .toString(),
-                                                          index,
-                                                          false);
-                                                    } else {}
-                                                  },
-                                                  dropdownStyleData:
-                                                      DropdownStyleData(
-                                                    width: 160,
-                                                    padding: const EdgeInsets
-                                                        .symmetric(vertical: 5),
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                      color: Appcolors()
-                                                          .bottomnavbgcolor,
-                                                    ),
-                                                    elevation: 8,
-                                                    offset: const Offset(0, 8),
-                                                  ),
-                                                  menuItemStyleData:
-                                                      MenuItemStyleData(
-                                                    customHeights: [
-                                                      ...List<double>.filled(
-                                                          MenuItems.firstItems
-                                                              .length,
-                                                          35),
-                                                      8,
-                                                      ...List<double>.filled(
-                                                          MenuItems.secondItems
-                                                              .length,
-                                                          48),
-                                                    ],
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 16,
-                                                            right: 16),
-                                                  ),
-                                                ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 1.5.h,
-                                ),
-                                Offstage(
-                                  offstage: feedpostspojo!.message!.post!
-                                          .elementAt(index)
-                                          .url ==
-                                      "",
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  Feeddetailedpage(
-                                                    type: feedpostspojo!
-                                                        .message!.post!
-                                                        .elementAt(index)
-                                                        .filetype
-                                                        .toString(),
-                                                    url: feedpostspojo!
-                                                        .message!.post!
-                                                        .elementAt(index)
-                                                        .url
-                                                        .toString(),
-                                                    ago: feedpostspojo!
-                                                        .message!.post!
-                                                        .elementAt(index)
-                                                        .ago
-                                                        .toString(),
-                                                    text: feedpostspojo!
-                                                        .message!.post!
-                                                        .elementAt(index)
-                                                        .text,
-                                                    likes: feedpostspojo!
-                                                        .message!.post!
-                                                        .elementAt(index)
-                                                        .likes
-                                                        .toString(),
-                                                    views: feedpostspojo!
-                                                        .message!.post!
-                                                        .elementAt(index)
-                                                        .views
-                                                        .toString(),
-                                                    unlocks: feedpostspojo!
-                                                        .message!.post!
-                                                        .elementAt(index)
-                                                        .unlocked
-                                                        .toString(),
-                                                    posttype: 0,
-                                                    pinstatus: feedpostspojo!
-                                                        .message!.post!
-                                                        .elementAt(index)
-                                                        .pinned
-                                                        .toString(),
-                                                    postid: feedpostspojo!
-                                                        .message!.post!
-                                                        .elementAt(index)
-                                                        .id
-                                                        .toString(),
-                                                  )));
-                                    },
-                                    child: SizedBox(
-                                        width: double.infinity,
-                                        height: 30.h,
-                                        child: feedpostspojo!.message!.post!
-                                                    .elementAt(index)
-                                                    .filetype ==
-                                                "jpg"
-                                            ? CachedNetworkImage(
-                                                imageUrl: feedpostspojo!
-                                                    .message!.post!
-                                                    .elementAt(index)
-                                                    .url
-                                                    .toString(),
-                                                imageBuilder:
-                                                    (context, imageProvider) =>
-                                                        Container(
-                                                  width: 15.w,
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  height: 4.5.h,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20),
-                                                    shape: BoxShape.rectangle,
-                                                    image: DecorationImage(
-                                                      image: imageProvider,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  ),
-                                                ),
-                                                placeholder: (context, url) =>
-                                                    Container(
-                                                  child: Center(
-                                                    child:
-                                                        CircularProgressIndicator(
-                                                      strokeWidth: 2,
-                                                      color: Appcolors()
-                                                          .gradientcolorfirst,
-                                                    ),
-                                                  ),
-                                                ),
-                                                errorWidget:
-                                                    (context, url, error) =>
-                                                        Container(
-                                                  width: 15.w,
-                                                  height: 4.5.h,
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              20),
-                                                      shape: BoxShape.rectangle,
-                                                      image: const DecorationImage(
-                                                          image: AssetImage(
-                                                              "assets/images/imageplaceholder.png"),
-                                                          fit: BoxFit.cover)),
-                                                ),
-                                              )
-                                            : feedpostspojo!.message!.post!
-                                                        .elementAt(index)
-                                                        .filetype ==
-                                                    "mp4"
-                                                ? Container(
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          Container(
+                                                    width: 15.w,
+                                                    height: 4.5.h,
                                                     decoration: BoxDecoration(
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(20),
-                                                        image:
-                                                            const DecorationImage(
-                                                                image:
-                                                                    AssetImage(
-                                                                  "assets/images/videodefaultimg.png",
-                                                                ),
-                                                                fit: BoxFit
-                                                                    .fill)),
-                                                    child: Icon(
-                                                      Icons
-                                                          .play_circle_outline_rounded,
-                                                      color: Colors.white,
-                                                      size: 6.h,
-                                                    ),
-                                                  )
-                                                : const SizedBox()),
+                                                        shape:
+                                                            BoxShape.rectangle,
+                                                        image: const DecorationImage(
+                                                            image: AssetImage(
+                                                                "assets/images/imageplaceholder.png"),
+                                                            fit: BoxFit.cover)),
+                                                  ),
+                                                )
+                                              : feedpostspojo!.message!.post!
+                                                          .elementAt(index)
+                                                          .filetype ==
+                                                      "mp4"
+                                                  ? Container(
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(20),
+                                                          image:
+                                                              const DecorationImage(
+                                                                  image:
+                                                                      AssetImage(
+                                                                    "assets/images/videodefaultimg.png",
+                                                                  ),
+                                                                  fit: BoxFit
+                                                                      .fill)),
+                                                      child: Icon(
+                                                        Icons
+                                                            .play_circle_outline_rounded,
+                                                        color: Colors.white,
+                                                        size: 6.h,
+                                                      ),
+                                                    )
+                                                  : const SizedBox()),
+                                    ),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 2.h,
-                                ),
-                                Offstage(
-                                    offstage: feedpostspojo!.message!.post!
-                                            .elementAt(index)
-                                            .text ==
-                                        null,
-                                    child: Column(
+                                  SizedBox(
+                                    height: 2.h,
+                                  ),
+                                  Offstage(
+                                      offstage: feedpostspojo!.message!.post!
+                                              .elementAt(index)
+                                              .text ==
+                                          null,
+                                      child: Column(
+                                        children: [
+                                          editedpostid != index
+                                              ? Text(
+                                                  feedpostspojo!.message!.post!
+                                                      .elementAt(index)
+                                                      .text
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                      fontSize: 12.sp,
+                                                      // fontFamily: "PulpDisplay",
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: Appcolors()
+                                                          .whitecolor),
+                                                  textAlign: TextAlign.start,
+                                                )
+                                              : Container(
+                                                  child: Column(
+                                                  children: [
+                                                    TextFormField(
+                                                      minLines: 3,
+                                                      maxLines: 3,
+                                                      textInputAction:
+                                                          TextInputAction.done,
+                                                      cursorColor: Appcolors()
+                                                          .loginhintcolor,
+                                                      style: TextStyle(
+                                                        color: Appcolors()
+                                                            .whitecolor,
+                                                        fontSize: 12.sp,
+                                                      ),
+                                                      controller:
+                                                          postcontentcontoller,
+                                                      decoration:
+                                                          InputDecoration(
+                                                        // prefix: Container(
+                                                        //   child: SvgPicture.asset("assets/images/astrickicon.svg",width: 5.w,),
+                                                        // ),
+                                                        border:
+                                                            InputBorder.none,
+                                                        // focusedBorder: InputBorder.none,
+                                                        disabledBorder:
+                                                            InputBorder.none,
+                                                        focusedBorder:
+                                                            OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      15.0),
+                                                          borderSide: BorderSide(
+                                                              color: Appcolors()
+                                                                  .logintextformborder),
+                                                        ),
+                                                        enabledBorder:
+                                                            OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      15.0),
+                                                          borderSide: BorderSide(
+                                                              color: Appcolors()
+                                                                  .logintextformborder),
+                                                        ),
+                                                        filled: true,
+                                                        isDense: true,
+                                                        fillColor: Appcolors()
+                                                            .messageboxbgcolor,
+                                                        hintText:
+                                                            StringConstants
+                                                                .writesomething,
+                                                        hintStyle: TextStyle(
+                                                          decoration:
+                                                              TextDecoration
+                                                                  .none,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          fontSize: 12.sp,
+                                                          // fontFamily: 'PulpDisplay',
+                                                          color: Appcolors()
+                                                              .loginhintcolor,
+                                                        ),
+                                                      ),
+                                                      onChanged: (value) {
+                                                        setState(() {});
+                                                      },
+                                                      validator: (value) {
+                                                        if (value!.isEmpty) {
+                                                          return "Please enter Message";
+                                                        } else {
+                                                          return null;
+                                                        }
+                                                      },
+                                                    ),
+                                                    SizedBox(
+                                                      height: 2.h,
+                                                    ),
+                                                    Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        InkWell(
+                                                          onTap: () {
+                                                            editpost(
+                                                                feedpostspojo!
+                                                                    .message!
+                                                                    .post!
+                                                                    .elementAt(
+                                                                        index)
+                                                                    .id
+                                                                    .toString(),
+                                                                index,
+                                                                postcontentcontoller
+                                                                    .text
+                                                                    .toString());
+                                                          },
+                                                          child: Container(
+                                                            alignment: Alignment
+                                                                .center,
+                                                            width: 30.w,
+                                                            decoration: BoxDecoration(
+                                                                image: const DecorationImage(
+                                                                    image: AssetImage(
+                                                                        "assets/images/btnbackgroundgradient.png"),
+                                                                    fit: BoxFit
+                                                                        .fill),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10)),
+                                                            height: 5.h,
+                                                            child: Text(
+                                                              StringConstants
+                                                                  .update,
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      12.sp,
+                                                                  fontFamily:
+                                                                      "PulpDisplay",
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
+                                                                  color: Appcolors()
+                                                                      .backgroundcolor),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              editedpostid =
+                                                                  null;
+                                                            });
+                                                          },
+                                                          child: Container(
+                                                            alignment: Alignment
+                                                                .center,
+                                                            width: 40.w,
+                                                            height: 5.h,
+                                                            child: Text(
+                                                              StringConstants
+                                                                  .cancel,
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      12.sp,
+                                                                  fontFamily:
+                                                                      "PulpDisplay",
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
+                                                                  color: Appcolors()
+                                                                      .whitecolor),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ],
+                                                )),
+                                          SizedBox(
+                                            height: 2.h,
+                                          ),
+                                        ],
+                                      )),
+                                  SizedBox(
+                                    width: 75.w,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
-                                        editedpostid != index
-                                            ? Text(
+                                        SizedBox(
+                                          width: 20.w,
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              SvgPicture.asset(
+                                                  "assets/images/likeicon.svg"),
+                                              Text(
                                                 feedpostspojo!.message!.post!
                                                     .elementAt(index)
-                                                    .text
+                                                    .likes
                                                     .toString(),
                                                 style: TextStyle(
                                                     fontSize: 12.sp,
                                                     // fontFamily: "PulpDisplay",
-                                                    fontWeight: FontWeight.w500,
-                                                    color:
-                                                        Appcolors().whitecolor),
+                                                    fontWeight: FontWeight.w600,
+                                                    color: Appcolors()
+                                                        .loginhintcolor),
                                                 textAlign: TextAlign.start,
-                                              )
-                                            : Container(
-                                                child: Column(
-                                                children: [
-                                                  TextFormField(
-                                                    minLines: 3,
-                                                    maxLines: 3,
-                                                    textInputAction:
-                                                        TextInputAction.done,
-                                                    cursorColor: Appcolors()
-                                                        .loginhintcolor,
-                                                    style: TextStyle(
-                                                      color: Appcolors()
-                                                          .whitecolor,
-                                                      fontSize: 12.sp,
-                                                    ),
-                                                    controller:
-                                                        postcontentcontoller,
-                                                    decoration: InputDecoration(
-                                                      // prefix: Container(
-                                                      //   child: SvgPicture.asset("assets/images/astrickicon.svg",width: 5.w,),
-                                                      // ),
-                                                      border: InputBorder.none,
-                                                      // focusedBorder: InputBorder.none,
-                                                      disabledBorder:
-                                                          InputBorder.none,
-                                                      focusedBorder:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(15.0),
-                                                        borderSide: BorderSide(
-                                                            color: Appcolors()
-                                                                .logintextformborder),
-                                                      ),
-                                                      enabledBorder:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(15.0),
-                                                        borderSide: BorderSide(
-                                                            color: Appcolors()
-                                                                .logintextformborder),
-                                                      ),
-                                                      filled: true,
-                                                      isDense: true,
-                                                      fillColor: Appcolors()
-                                                          .messageboxbgcolor,
-                                                      hintText: StringConstants
-                                                          .writesomething,
-                                                      hintStyle: TextStyle(
-                                                        decoration:
-                                                            TextDecoration.none,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        fontSize: 12.sp,
-                                                        // fontFamily: 'PulpDisplay',
-                                                        color: Appcolors()
-                                                            .loginhintcolor,
-                                                      ),
-                                                    ),
-                                                    onChanged: (value) {
-                                                      setState(() {});
-                                                    },
-                                                    validator: (value) {
-                                                      if (value!.isEmpty) {
-                                                        return "Please enter Message";
-                                                      } else {
-                                                        return null;
-                                                      }
-                                                    },
-                                                  ),
-                                                  SizedBox(
-                                                    height: 2.h,
-                                                  ),
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: [
-                                                      InkWell(
-                                                        onTap: () {
-                                                          editpost(
-                                                              feedpostspojo!
-                                                                  .message!
-                                                                  .post!
-                                                                  .elementAt(
-                                                                      index)
-                                                                  .id
-                                                                  .toString(),
-                                                              index,
-                                                              postcontentcontoller
-                                                                  .text
-                                                                  .toString());
-                                                        },
-                                                        child: Container(
-                                                          alignment:
-                                                              Alignment.center,
-                                                          width: 30.w,
-                                                          decoration: BoxDecoration(
-                                                              image: const DecorationImage(
-                                                                  image: AssetImage(
-                                                                      "assets/images/btnbackgroundgradient.png"),
-                                                                  fit: BoxFit
-                                                                      .fill),
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10)),
-                                                          height: 5.h,
-                                                          child: Text(
-                                                            StringConstants
-                                                                .update,
-                                                            style: TextStyle(
-                                                                fontSize: 12.sp,
-                                                                fontFamily:
-                                                                    "PulpDisplay",
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400,
-                                                                color: Appcolors()
-                                                                    .backgroundcolor),
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      GestureDetector(
-                                                        onTap: () {
-                                                          setState(() {
-                                                            editedpostid = null;
-                                                          });
-                                                        },
-                                                        child: Container(
-                                                          alignment:
-                                                              Alignment.center,
-                                                          width: 40.w,
-                                                          height: 5.h,
-                                                          child: Text(
-                                                            StringConstants
-                                                                .cancel,
-                                                            style: TextStyle(
-                                                                fontSize: 12.sp,
-                                                                fontFamily:
-                                                                    "PulpDisplay",
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400,
-                                                                color: Appcolors()
-                                                                    .whitecolor),
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  )
-                                                ],
-                                              )),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                         SizedBox(
-                                          height: 2.h,
+                                          width: 20.w,
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              SvgPicture.asset(
+                                                  "assets/images/viewsicon.svg"),
+                                              Text(
+                                                feedpostspojo!.message!.post!
+                                                    .elementAt(index)
+                                                    .views
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    fontSize: 12.sp,
+                                                    // fontFamily: "PulpDisplay",
+                                                    fontWeight: FontWeight.w600,
+                                                    color: Appcolors()
+                                                        .loginhintcolor),
+                                                textAlign: TextAlign.start,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 20.w,
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              SvgPicture.asset(
+                                                  "assets/images/unlockicon.svg"),
+                                              Text(
+                                                feedpostspojo!.message!.post!
+                                                    .elementAt(index)
+                                                    .unlocked
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    fontSize: 12.sp,
+                                                    // fontFamily: "PulpDisplay",
+                                                    fontWeight: FontWeight.w600,
+                                                    color: Appcolors()
+                                                        .loginhintcolor),
+                                                textAlign: TextAlign.start,
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ],
-                                    )),
-                                SizedBox(
-                                  width: 75.w,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      SizedBox(
-                                        width: 20.w,
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            SvgPicture.asset(
-                                                "assets/images/likeicon.svg"),
-                                            Text(
-                                              feedpostspojo!.message!.post!
-                                                  .elementAt(index)
-                                                  .likes
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  fontSize: 12.sp,
-                                                  // fontFamily: "PulpDisplay",
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Appcolors()
-                                                      .loginhintcolor),
-                                              textAlign: TextAlign.start,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 20.w,
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            SvgPicture.asset(
-                                                "assets/images/viewsicon.svg"),
-                                            Text(
-                                              feedpostspojo!.message!.post!
-                                                  .elementAt(index)
-                                                  .views
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  fontSize: 12.sp,
-                                                  // fontFamily: "PulpDisplay",
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Appcolors()
-                                                      .loginhintcolor),
-                                              textAlign: TextAlign.start,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 20.w,
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            SvgPicture.asset(
-                                                "assets/images/unlockicon.svg"),
-                                            Text(
-                                              feedpostspojo!.message!.post!
-                                                  .elementAt(index)
-                                                  .unlocked
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  fontSize: 12.sp,
-                                                  // fontFamily: "PulpDisplay",
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Appcolors()
-                                                      .loginhintcolor),
-                                              textAlign: TextAlign.start,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
+                                    ),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 1.h,
-                                ),
-                              ],
+                                  SizedBox(
+                                    height: 1.h,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                           SizedBox(
@@ -2113,34 +2159,294 @@ class FeedScreenState extends State<FeedScreen> {
                     child: FadeInAnimation(
                       child: Column(
                         children: [
-                          Container(
-                            padding: EdgeInsets.all(1.5.h),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Appcolors().chatuserborder),
-                                borderRadius: BorderRadius.circular(2.h)),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        userprofilepic == null ||
-                                                userprofilepic == ""
-                                            ? Image.asset(
-                                                "assets/images/userprofile.png",
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ConvertsationScreen(
+                                            userid: feedpostspojo!
+                                                .message!.post!
+                                                .elementAt(index)
+                                                .id
+                                                .toString(),
+                                            userimage: feedpostspojo!
+                                                .message!.post!
+                                                .elementAt(index)
+                                                .url
+                                                .toString(),
+                                            username: feedpostspojo!
+                                                .message!.post!
+                                                .elementAt(index)
+                                                .stagename
+                                                .toString(),
+                                          )));
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(1.5.h),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: Appcolors().chatuserborder),
+                                  borderRadius: BorderRadius.circular(2.h)),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          SizedBox(
+                                            height: 4.5.h,
+                                            width: 15.w,
+                                            child: CachedNetworkImage(
+                                              imageUrl: feedpostspojo!
+                                                  .message!.post!
+                                                  .elementAt(index)
+                                                  .image
+                                                  .toString(),
+                                              imageBuilder:
+                                                  (context, imageProvider) =>
+                                                      Container(
                                                 width: 15.w,
-                                                height: 4.5.h)
-                                            : SizedBox(
+                                                alignment: Alignment.centerLeft,
                                                 height: 4.5.h,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  image: DecorationImage(
+                                                    image: imageProvider,
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                              ),
+                                              placeholder: (context, url) =>
+                                                  Container(
+                                                child: Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    strokeWidth: 2,
+                                                    color: Appcolors()
+                                                        .gradientcolorfirst,
+                                                  ),
+                                                ),
+                                              ),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      Container(
                                                 width: 15.w,
-                                                child: CachedNetworkImage(
-                                                  imageUrl:
-                                                      userprofilepic.toString(),
+                                                height: 4.5.h,
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
+                                                    shape: BoxShape.circle,
+                                                    image: const DecorationImage(
+                                                        image: AssetImage(
+                                                            "assets/images/userprofile.png"),
+                                                        fit: BoxFit.cover)),
+                                              ),
+                                            ),
+                                          ),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                feedpostspojo!
+                                                    .message!.schedule!
+                                                    .elementAt(index)
+                                                    .stagename
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    fontSize: 14.sp,
+                                                    fontFamily: "PulpDisplay",
+                                                    fontWeight: FontWeight.w400,
+                                                    color:
+                                                        Appcolors().whitecolor),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              Text(
+                                                feedpostspojo!
+                                                    .message!.schedule!
+                                                    .elementAt(index)
+                                                    .ago
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    fontSize: 10.sp,
+                                                    // fontFamily: "PulpDisplay",
+                                                    fontStyle: FontStyle.italic,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Appcolors()
+                                                        .loginhintcolor),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      DropdownButtonHideUnderline(
+                                        child: DropdownButton2(
+                                          customButton: Image.asset(
+                                            "assets/images/menubtn.png",
+                                            height: 4.h,
+                                            fit: BoxFit.fill,
+                                          ),
+                                          items: [
+                                            ...ScheduledMenuItems
+                                                .schedulefirstItems
+                                                .map(
+                                              (item) => DropdownMenuItem<
+                                                  ScheduledCustomMenuItem>(
+                                                value: item,
+                                                child: ScheduledMenuItems
+                                                    .buildItem(item),
+                                              ),
+                                            ),
+                                            const DropdownMenuItem<Divider>(
+                                                enabled: false,
+                                                child: Divider()),
+                                            ...ScheduledMenuItems
+                                                .schedulesecondItems
+                                                .map(
+                                              (item) => DropdownMenuItem<
+                                                  ScheduledCustomMenuItem>(
+                                                value: item,
+                                                child: ScheduledMenuItems
+                                                    .buildItem(item),
+                                              ),
+                                            ),
+                                          ],
+                                          onChanged: (value) {
+                                            ScheduledMenuItems.onChanged(
+                                                context,
+                                                value
+                                                    as ScheduledCustomMenuItem);
+                                            print("Value:-${value.text}");
+                                            if (value.text ==
+                                                StringConstants.editpost) {
+                                              setState(() {
+                                                editedpostid = index;
+                                                postcontentcontoller.text =
+                                                    feedpostspojo!
+                                                        .message!.post!
+                                                        .elementAt(index)
+                                                        .text
+                                                        .toString();
+                                              });
+                                            } else {
+                                              showdeletealert(
+                                                  context,
+                                                  feedpostspojo!.message!.post!
+                                                      .elementAt(index)
+                                                      .id
+                                                      .toString(),
+                                                  index);
+                                            }
+                                          },
+                                          dropdownStyleData: DropdownStyleData(
+                                            width: 160,
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 5),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              color:
+                                                  Appcolors().bottomnavbgcolor,
+                                            ),
+                                            elevation: 8,
+                                            offset: const Offset(0, 8),
+                                          ),
+                                          menuItemStyleData: MenuItemStyleData(
+                                            customHeights: [
+                                              ...List<double>.filled(
+                                                  ScheduledMenuItems
+                                                      .schedulefirstItems
+                                                      .length,
+                                                  35),
+                                              8,
+                                              ...List<double>.filled(
+                                                  ScheduledMenuItems
+                                                      .schedulesecondItems
+                                                      .length,
+                                                  48),
+                                            ],
+                                            padding: const EdgeInsets.only(
+                                                left: 16, right: 16),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 1.5.h,
+                                  ),
+                                  Offstage(
+                                    offstage: feedpostspojo!.message!.schedule!
+                                            .elementAt(index)
+                                            .url ==
+                                        "",
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Feeddetailedpage(
+                                                      type: feedpostspojo!
+                                                          .message!.schedule!
+                                                          .elementAt(index)
+                                                          .filetype
+                                                          .toString(),
+                                                      url: feedpostspojo!
+                                                          .message!.schedule!
+                                                          .elementAt(index)
+                                                          .url
+                                                          .toString(),
+                                                      ago: feedpostspojo!
+                                                          .message!.schedule!
+                                                          .elementAt(index)
+                                                          .ago
+                                                          .toString(),
+                                                      text: feedpostspojo!
+                                                          .message!.schedule!
+                                                          .elementAt(index)
+                                                          .text,
+                                                      likes: feedpostspojo!
+                                                          .message!.schedule!
+                                                          .elementAt(index)
+                                                          .likes
+                                                          .toString(),
+                                                      views: feedpostspojo!
+                                                          .message!.schedule!
+                                                          .elementAt(index)
+                                                          .views
+                                                          .toString(),
+                                                      unlocks: "",
+                                                      posttype: 1,
+                                                      pinstatus: "",
+                                                      postid: feedpostspojo!
+                                                          .message!.schedule!
+                                                          .elementAt(index)
+                                                          .id
+                                                          .toString(),
+                                                    )));
+                                      },
+                                      child: SizedBox(
+                                          width: double.infinity,
+                                          height: 30.h,
+                                          child: feedpostspojo!
+                                                      .message!.schedule!
+                                                      .elementAt(index)
+                                                      .filetype ==
+                                                  "jpg"
+                                              ? CachedNetworkImage(
+                                                  imageUrl: feedpostspojo!
+                                                      .message!.schedule!
+                                                      .elementAt(index)
+                                                      .url
+                                                      .toString(),
                                                   imageBuilder: (context,
                                                           imageProvider) =>
                                                       Container(
@@ -2149,7 +2455,10 @@ class FeedScreenState extends State<FeedScreen> {
                                                         Alignment.centerLeft,
                                                     height: 4.5.h,
                                                     decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20),
+                                                      shape: BoxShape.rectangle,
                                                       image: DecorationImage(
                                                         image: imageProvider,
                                                         fit: BoxFit.cover,
@@ -2167,282 +2476,699 @@ class FeedScreenState extends State<FeedScreen> {
                                                       ),
                                                     ),
                                                   ),
-                                                  errorWidget:
-                                                      (context, url, error) =>
-                                                          Container(
-                                                    width: 15.w,
-                                                    height: 4.5.h,
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(15),
-                                                        shape: BoxShape.circle,
-                                                        image: const DecorationImage(
-                                                            image: AssetImage(
-                                                                "assets/images/userprofile.png"),
-                                                            fit: BoxFit.cover)),
+                                                  // errorWidget: (context, url, error) => errorWidget,
+                                                )
+                                              : feedpostspojo!
+                                                          .message!.schedule!
+                                                          .elementAt(index)
+                                                          .filetype ==
+                                                      "mp4"
+                                                  ? Container(
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(20),
+                                                          image:
+                                                              const DecorationImage(
+                                                                  image:
+                                                                      AssetImage(
+                                                                    "assets/images/videodefaultimg.png",
+                                                                  ),
+                                                                  fit: BoxFit
+                                                                      .fill)),
+                                                      child: Icon(
+                                                        Icons
+                                                            .play_circle_outline_rounded,
+                                                        color: Colors.white,
+                                                        size: 6.h,
+                                                      ),
+                                                    )
+                                                  : const SizedBox()),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 2.h,
+                                  ),
+                                  Offstage(
+                                      offstage: feedpostspojo!
+                                              .message!.schedule!
+                                              .elementAt(index)
+                                              .text ==
+                                          null,
+                                      child: Column(
+                                        children: [
+                                          editedpostid != index
+                                              ? Text(
+                                                  feedpostspojo!
+                                                      .message!.schedule!
+                                                      .elementAt(index)
+                                                      .text
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                      fontSize: 12.sp,
+                                                      // fontFamily: "PulpDisplay",
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: Appcolors()
+                                                          .whitecolor),
+                                                  textAlign: TextAlign.start,
+                                                )
+                                              : Container(
+                                                  child: Column(
+                                                  children: [
+                                                    TextFormField(
+                                                      minLines: 3,
+                                                      maxLines: 3,
+                                                      cursorColor: Appcolors()
+                                                          .loginhintcolor,
+                                                      style: TextStyle(
+                                                        color: Appcolors()
+                                                            .whitecolor,
+                                                        fontSize: 12.sp,
+                                                      ),
+                                                      controller:
+                                                          postcontentcontoller,
+                                                      decoration:
+                                                          InputDecoration(
+                                                        // prefix: Container(
+                                                        //   child: SvgPicture.asset("assets/images/astrickicon.svg",width: 5.w,),
+                                                        // ),
+                                                        border:
+                                                            InputBorder.none,
+                                                        // focusedBorder: InputBorder.none,
+                                                        disabledBorder:
+                                                            InputBorder.none,
+                                                        focusedBorder:
+                                                            OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      15.0),
+                                                          borderSide: BorderSide(
+                                                              color: Appcolors()
+                                                                  .logintextformborder),
+                                                        ),
+                                                        enabledBorder:
+                                                            OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      15.0),
+                                                          borderSide: BorderSide(
+                                                              color: Appcolors()
+                                                                  .logintextformborder),
+                                                        ),
+                                                        filled: true,
+                                                        isDense: true,
+                                                        fillColor: Appcolors()
+                                                            .messageboxbgcolor,
+                                                        hintText:
+                                                            StringConstants
+                                                                .writesomething,
+                                                        hintStyle: TextStyle(
+                                                          decoration:
+                                                              TextDecoration
+                                                                  .none,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          fontSize: 12.sp,
+                                                          // fontFamily: 'PulpDisplay',
+                                                          color: Appcolors()
+                                                              .loginhintcolor,
+                                                        ),
+                                                      ),
+                                                      onChanged: (value) {
+                                                        setState(() {});
+                                                      },
+                                                      validator: (value) {
+                                                        if (value!.isEmpty) {
+                                                          return "Please enter Message";
+                                                        } else {
+                                                          return null;
+                                                        }
+                                                      },
+                                                    ),
+                                                    SizedBox(
+                                                      height: 2.h,
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          width: 30.w,
+                                                          decoration: BoxDecoration(
+                                                              image: const DecorationImage(
+                                                                  image: AssetImage(
+                                                                      "assets/images/btnbackgroundgradient.png"),
+                                                                  fit: BoxFit
+                                                                      .fill),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10)),
+                                                          height: 5.h,
+                                                          child: Text(
+                                                            StringConstants
+                                                                .update,
+                                                            style: TextStyle(
+                                                                fontSize: 12.sp,
+                                                                fontFamily:
+                                                                    "PulpDisplay",
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                color: Appcolors()
+                                                                    .backgroundcolor),
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                          ),
+                                                        ),
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              editedpostid =
+                                                                  null;
+                                                            });
+                                                          },
+                                                          child: Container(
+                                                            alignment: Alignment
+                                                                .center,
+                                                            width: 40.w,
+                                                            height: 5.h,
+                                                            child: Text(
+                                                              StringConstants
+                                                                  .cancel,
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      12.sp,
+                                                                  fontFamily:
+                                                                      "PulpDisplay",
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
+                                                                  color: Appcolors()
+                                                                      .whitecolor),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ],
+                                                )),
+                                          SizedBox(
+                                            height: 2.h,
+                                          ),
+                                        ],
+                                      )),
+                                  // Container(
+                                  //   width: 75.w,
+                                  //   child: Row(
+                                  //     mainAxisAlignment:
+                                  //         MainAxisAlignment.spaceBetween,
+                                  //     crossAxisAlignment:
+                                  //         CrossAxisAlignment.center,
+                                  //     children: [
+                                  //       Container(
+                                  //         width: 20.w,
+                                  //         child: Row(
+                                  //           crossAxisAlignment:
+                                  //               CrossAxisAlignment.start,
+                                  //           mainAxisAlignment:
+                                  //               MainAxisAlignment.spaceEvenly,
+                                  //           children: [
+                                  //             SvgPicture.asset(
+                                  //                 "assets/images/likeicon.svg"),
+                                  //             Text(
+                                  //               feedpostspojo!.message!.schedule!
+                                  //                   .elementAt(index)
+                                  //                   .likes
+                                  //                   .toString(),
+                                  //               style: TextStyle(
+                                  //                   fontSize: 12.sp,
+                                  //                   // fontFamily: "PulpDisplay",
+                                  //                   fontWeight: FontWeight.w600,
+                                  //                   color: Appcolors()
+                                  //                       .loginhintcolor),
+                                  //               textAlign: TextAlign.start,
+                                  //             ),
+                                  //           ],
+                                  //         ),
+                                  //       ),
+                                  //       Container(
+                                  //         width: 20.w,
+                                  //         child: Row(
+                                  //           crossAxisAlignment:
+                                  //               CrossAxisAlignment.end,
+                                  //           mainAxisAlignment:
+                                  //               MainAxisAlignment.spaceEvenly,
+                                  //           children: [
+                                  //             SvgPicture.asset(
+                                  //                 "assets/images/viewsicon.svg"),
+                                  //             Text(
+                                  //               feedpostspojo!.message!.schedule!
+                                  //                   .elementAt(index)
+                                  //                   .views
+                                  //                   .toString(),
+                                  //               style: TextStyle(
+                                  //                   fontSize: 12.sp,
+                                  //                   // fontFamily: "PulpDisplay",
+                                  //                   fontWeight: FontWeight.w600,
+                                  //                   color: Appcolors()
+                                  //                       .loginhintcolor),
+                                  //               textAlign: TextAlign.start,
+                                  //             ),
+                                  //           ],
+                                  //         ),
+                                  //       ),
+                                  //       Container(
+                                  //         width: 20.w,
+                                  //         child: Row(
+                                  //           crossAxisAlignment:
+                                  //               CrossAxisAlignment.end,
+                                  //           mainAxisAlignment:
+                                  //               MainAxisAlignment.spaceEvenly,
+                                  //           children: [
+                                  //             SvgPicture.asset(
+                                  //                 "assets/images/unlockicon.svg"),
+                                  //             Text(
+                                  //               feedpostspojo!.message!.schedule!
+                                  //                   .elementAt(index)
+                                  //                   .unlocked
+                                  //                   .toString(),
+                                  //               style: TextStyle(
+                                  //                   fontSize: 12.sp,
+                                  //                   // fontFamily: "PulpDisplay",
+                                  //                   fontWeight: FontWeight.w600,
+                                  //                   color: Appcolors()
+                                  //                       .loginhintcolor),
+                                  //               textAlign: TextAlign.start,
+                                  //             ),
+                                  //           ],
+                                  //         ),
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  // ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 1.5.h,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          )
+        : emptydata();
+  }
+
+  Widget savetodraft() {
+    return feedpostspojo!.message!.saveDraft!.isNotEmpty
+        ? AnimationLimiter(
+            child: ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: feedpostspojo!.message!.saveDraft!.length,
+              itemBuilder: (BuildContext context, int index) {
+                return AnimationConfiguration.staggeredList(
+                  position: index,
+                  duration: const Duration(milliseconds: 300),
+                  child: SlideAnimation(
+                    verticalOffset: 50.0,
+                    child: FadeInAnimation(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ConvertsationScreen(
+                                            userid: feedpostspojo!
+                                                .message!.post!
+                                                .elementAt(index)
+                                                .id
+                                                .toString(),
+                                            userimage: feedpostspojo!
+                                                .message!.post!
+                                                .elementAt(index)
+                                                .url
+                                                .toString(),
+                                            username: feedpostspojo!
+                                                .message!.post!
+                                                .elementAt(index)
+                                                .stagename
+                                                .toString(),
+                                          )));
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(1.5.h),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: Appcolors().chatuserborder),
+                                  borderRadius: BorderRadius.circular(2.h)),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(
+                                            height: 4.5.h,
+                                            width: 15.w,
+                                            child: CachedNetworkImage(
+                                              imageUrl: feedpostspojo!
+                                                  .message!.post!
+                                                  .elementAt(index)
+                                                  .image
+                                                  .toString(),
+                                              imageBuilder:
+                                                  (context, imageProvider) =>
+                                                      Container(
+                                                width: 15.w,
+                                                alignment: Alignment.centerLeft,
+                                                height: 4.5.h,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  image: DecorationImage(
+                                                    image: imageProvider,
+                                                    fit: BoxFit.cover,
                                                   ),
                                                 ),
                                               ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              username.toString(),
-                                              style: TextStyle(
-                                                  fontSize: 14.sp,
-                                                  fontFamily: "PulpDisplay",
-                                                  fontWeight: FontWeight.w400,
-                                                  color:
-                                                      Appcolors().whitecolor),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                            Text(
-                                              feedpostspojo!.message!.schedule!
-                                                  .elementAt(index)
-                                                  .ago
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  fontSize: 10.sp,
-                                                  // fontFamily: "PulpDisplay",
-                                                  fontStyle: FontStyle.italic,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: Appcolors()
-                                                      .loginhintcolor),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    DropdownButtonHideUnderline(
-                                      child: DropdownButton2(
-                                        customButton: Image.asset(
-                                          "assets/images/menubtn.png",
-                                          height: 4.h,
-                                          fit: BoxFit.fill,
-                                        ),
-                                        items: [
-                                          ...ScheduledMenuItems
-                                              .schedulefirstItems
-                                              .map(
-                                            (item) => DropdownMenuItem<
-                                                ScheduledCustomMenuItem>(
-                                              value: item,
-                                              child:
-                                                  ScheduledMenuItems.buildItem(
-                                                      item),
+                                              placeholder: (context, url) =>
+                                                  Container(
+                                                child: Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    strokeWidth: 2,
+                                                    color: Appcolors()
+                                                        .gradientcolorfirst,
+                                                  ),
+                                                ),
+                                              ),
+                                              // errorWidget: (context, url, error) => errorWidget,
                                             ),
                                           ),
-                                          const DropdownMenuItem<Divider>(
-                                              enabled: false, child: Divider()),
-                                          ...ScheduledMenuItems
-                                              .schedulesecondItems
-                                              .map(
-                                            (item) => DropdownMenuItem<
-                                                ScheduledCustomMenuItem>(
-                                              value: item,
-                                              child:
-                                                  ScheduledMenuItems.buildItem(
-                                                      item),
-                                            ),
-                                          ),
-                                        ],
-                                        onChanged: (value) {
-                                          ScheduledMenuItems.onChanged(context,
-                                              value as ScheduledCustomMenuItem);
-                                          print("Value:-${value.text}");
-                                          if (value.text ==
-                                              StringConstants.editpost) {
-                                            setState(() {
-                                              editedpostid = index;
-                                              postcontentcontoller.text =
-                                                  feedpostspojo!.message!.post!
-                                                      .elementAt(index)
-                                                      .text
-                                                      .toString();
-                                            });
-                                          } else {
-                                            showdeletealert(
-                                                context,
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
                                                 feedpostspojo!.message!.post!
                                                     .elementAt(index)
-                                                    .id
+                                                    .stagename
                                                     .toString(),
-                                                index);
-                                          }
-                                        },
-                                        dropdownStyleData: DropdownStyleData(
-                                          width: 160,
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 5),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            color: Appcolors().bottomnavbgcolor,
+                                                style: TextStyle(
+                                                    fontSize: 14.sp,
+                                                    fontFamily: "PulpDisplay",
+                                                    fontWeight: FontWeight.w400,
+                                                    color:
+                                                        Appcolors().whitecolor),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              Text(
+                                                feedpostspojo!
+                                                    .message!.saveDraft!
+                                                    .elementAt(index)
+                                                    .ago
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    fontSize: 10.sp,
+                                                    // fontFamily: "PulpDisplay",
+                                                    fontStyle: FontStyle.italic,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Appcolors()
+                                                        .loginhintcolor),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ],
                                           ),
-                                          elevation: 8,
-                                          offset: const Offset(0, 8),
-                                        ),
-                                        menuItemStyleData: MenuItemStyleData(
-                                          customHeights: [
-                                            ...List<double>.filled(
-                                                ScheduledMenuItems
-                                                    .schedulefirstItems.length,
-                                                35),
-                                            8,
-                                            ...List<double>.filled(
-                                                ScheduledMenuItems
-                                                    .schedulesecondItems.length,
-                                                48),
+                                        ],
+                                      ),
+                                      DropdownButtonHideUnderline(
+                                        child: DropdownButton2(
+                                          customButton: Image.asset(
+                                            "assets/images/menubtn.png",
+                                            height: 4.h,
+                                            fit: BoxFit.fill,
+                                          ),
+                                          items: [
+                                            ...ScheduledMenuItems
+                                                .schedulefirstItems
+                                                .map(
+                                              (item) => DropdownMenuItem<
+                                                  ScheduledCustomMenuItem>(
+                                                value: item,
+                                                child: ScheduledMenuItems
+                                                    .buildItem(item),
+                                              ),
+                                            ),
+                                            const DropdownMenuItem<Divider>(
+                                                enabled: false,
+                                                child: Divider()),
+                                            ...ScheduledMenuItems
+                                                .schedulesecondItems
+                                                .map(
+                                              (item) => DropdownMenuItem<
+                                                  ScheduledCustomMenuItem>(
+                                                value: item,
+                                                child: ScheduledMenuItems
+                                                    .buildItem(item),
+                                              ),
+                                            ),
                                           ],
-                                          padding: const EdgeInsets.only(
-                                              left: 16, right: 16),
+                                          onChanged: (value) {
+                                            ScheduledMenuItems.onChanged(
+                                                context,
+                                                value
+                                                    as ScheduledCustomMenuItem);
+                                            print("Value:-${value.text}");
+                                            if (value.text ==
+                                                StringConstants.editpost) {
+                                              setState(() {
+                                                editedpostid = index;
+                                              });
+                                            } else if (value.text ==
+                                                StringConstants.deletepost) {
+                                              showdeletealert(
+                                                  context,
+                                                  feedpostspojo!
+                                                      .message!.saveDraft!
+                                                      .elementAt(index)
+                                                      .id
+                                                      .toString(),
+                                                  index);
+                                            }
+                                          },
+                                          dropdownStyleData: DropdownStyleData(
+                                            width: 160,
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 5),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              color:
+                                                  Appcolors().bottomnavbgcolor,
+                                            ),
+                                            elevation: 8,
+                                            offset: const Offset(0, 8),
+                                          ),
+                                          menuItemStyleData: MenuItemStyleData(
+                                            customHeights: [
+                                              ...List<double>.filled(
+                                                  ScheduledMenuItems
+                                                      .schedulefirstItems
+                                                      .length,
+                                                  35),
+                                              8,
+                                              ...List<double>.filled(
+                                                  ScheduledMenuItems
+                                                      .schedulesecondItems
+                                                      .length,
+                                                  48),
+                                            ],
+                                            padding: const EdgeInsets.only(
+                                                left: 16, right: 16),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 1.5.h,
-                                ),
-                                Offstage(
-                                  offstage: feedpostspojo!.message!.schedule!
-                                          .elementAt(index)
-                                          .url ==
-                                      "",
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  Feeddetailedpage(
-                                                    type: feedpostspojo!
-                                                        .message!.schedule!
-                                                        .elementAt(index)
-                                                        .filetype
-                                                        .toString(),
-                                                    url: feedpostspojo!
-                                                        .message!.schedule!
-                                                        .elementAt(index)
-                                                        .url
-                                                        .toString(),
-                                                    ago: feedpostspojo!
-                                                        .message!.schedule!
-                                                        .elementAt(index)
-                                                        .ago
-                                                        .toString(),
-                                                    text: feedpostspojo!
-                                                        .message!.schedule!
-                                                        .elementAt(index)
-                                                        .text,
-                                                    likes: feedpostspojo!
-                                                        .message!.schedule!
-                                                        .elementAt(index)
-                                                        .likes
-                                                        .toString(),
-                                                    views: feedpostspojo!
-                                                        .message!.schedule!
-                                                        .elementAt(index)
-                                                        .views
-                                                        .toString(),
-                                                    unlocks: "",
-                                                    posttype: 1,
-                                                    pinstatus: "",
-                                                    postid: feedpostspojo!
-                                                        .message!.schedule!
-                                                        .elementAt(index)
-                                                        .id
-                                                        .toString(),
-                                                  )));
-                                    },
-                                    child: SizedBox(
-                                        width: double.infinity,
-                                        height: 30.h,
-                                        child: feedpostspojo!.message!.schedule!
-                                                    .elementAt(index)
-                                                    .filetype ==
-                                                "jpg"
-                                            ? CachedNetworkImage(
-                                                imageUrl: feedpostspojo!
-                                                    .message!.schedule!
-                                                    .elementAt(index)
-                                                    .url
-                                                    .toString(),
-                                                imageBuilder:
-                                                    (context, imageProvider) =>
-                                                        Container(
-                                                  width: 15.w,
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  height: 4.5.h,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20),
-                                                    shape: BoxShape.rectangle,
-                                                    image: DecorationImage(
-                                                      image: imageProvider,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  ),
-                                                ),
-                                                placeholder: (context, url) =>
-                                                    Container(
-                                                  child: Center(
-                                                    child:
-                                                        CircularProgressIndicator(
-                                                      strokeWidth: 2,
-                                                      color: Appcolors()
-                                                          .gradientcolorfirst,
-                                                    ),
-                                                  ),
-                                                ),
-                                                // errorWidget: (context, url, error) => errorWidget,
-                                              )
-                                            : feedpostspojo!.message!.schedule!
-                                                        .elementAt(index)
-                                                        .filetype ==
-                                                    "mp4"
-                                                ? Container(
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(20),
-                                                        image:
-                                                            const DecorationImage(
-                                                                image:
-                                                                    AssetImage(
-                                                                  "assets/images/videodefaultimg.png",
-                                                                ),
-                                                                fit: BoxFit
-                                                                    .fill)),
-                                                    child: Icon(
-                                                      Icons
-                                                          .play_circle_outline_rounded,
-                                                      color: Colors.white,
-                                                      size: 6.h,
-                                                    ),
-                                                  )
-                                                : const SizedBox()),
+                                      // GestureDetector(
+                                      //     onTap: () {
+                                      //       print("Click click");
+                                      //       // showMemberMenu();
+                                      //     },
+                                      //     child: SvgPicture.asset(
+                                      //       "assets/images/feedmenubtn.svg",
+                                      //       width: 10.w,
+                                      //       height: 5.h,
+                                      //     ))
+                                    ],
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 2.h,
-                                ),
-                                Offstage(
-                                    offstage: feedpostspojo!.message!.schedule!
+                                  SizedBox(
+                                    height: 1.5.h,
+                                  ),
+                                  Offstage(
+                                    offstage: feedpostspojo!.message!.saveDraft!
+                                            .elementAt(index)
+                                            .url ==
+                                        "",
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Feeddetailedpage(
+                                                      type: feedpostspojo!
+                                                          .message!.saveDraft!
+                                                          .elementAt(index)
+                                                          .filetype
+                                                          .toString(),
+                                                      url: feedpostspojo!
+                                                          .message!.saveDraft!
+                                                          .elementAt(index)
+                                                          .url
+                                                          .toString(),
+                                                      ago: feedpostspojo!
+                                                          .message!.saveDraft!
+                                                          .elementAt(index)
+                                                          .ago
+                                                          .toString(),
+                                                      text: feedpostspojo!
+                                                          .message!.saveDraft!
+                                                          .elementAt(index)
+                                                          .text,
+                                                      likes: feedpostspojo!
+                                                          .message!.saveDraft!
+                                                          .elementAt(index)
+                                                          .likes
+                                                          .toString(),
+                                                      views: feedpostspojo!
+                                                          .message!.saveDraft!
+                                                          .elementAt(index)
+                                                          .views
+                                                          .toString(),
+                                                      unlocks: "",
+                                                      posttype: 2,
+                                                      postid: feedpostspojo!
+                                                          .message!.saveDraft!
+                                                          .elementAt(index)
+                                                          .id
+                                                          .toString(),
+                                                      pinstatus: "",
+                                                    )));
+                                      },
+                                      child: SizedBox(
+                                          width: double.infinity,
+                                          height: 30.h,
+                                          child: feedpostspojo!
+                                                      .message!.saveDraft!
+                                                      .elementAt(index)
+                                                      .filetype ==
+                                                  "jpg"
+                                              ? CachedNetworkImage(
+                                                  imageUrl: feedpostspojo!
+                                                      .message!.saveDraft!
+                                                      .elementAt(index)
+                                                      .url
+                                                      .toString(),
+                                                  imageBuilder: (context,
+                                                          imageProvider) =>
+                                                      Container(
+                                                    width: 15.w,
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    height: 4.5.h,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20),
+                                                      shape: BoxShape.rectangle,
+                                                      image: DecorationImage(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  placeholder: (context, url) =>
+                                                      Container(
+                                                    child: Center(
+                                                      child:
+                                                          CircularProgressIndicator(
+                                                        strokeWidth: 2,
+                                                        color: Appcolors()
+                                                            .gradientcolorfirst,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  // errorWidget: (context, url, error) => errorWidget,
+                                                )
+                                              : feedpostspojo!
+                                                          .message!.saveDraft!
+                                                          .elementAt(index)
+                                                          .filetype ==
+                                                      "mp4"
+                                                  ? Container(
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(20),
+                                                          image:
+                                                              const DecorationImage(
+                                                                  image:
+                                                                      AssetImage(
+                                                                    "assets/images/videodefaultimg.png",
+                                                                  ),
+                                                                  fit: BoxFit
+                                                                      .fill)),
+                                                      child: Icon(
+                                                        Icons
+                                                            .play_circle_outline_rounded,
+                                                        color: Colors.white,
+                                                        size: 6.h,
+                                                      ),
+                                                    )
+                                                  : const SizedBox()),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 2.h,
+                                  ),
+                                  Offstage(
+                                    offstage: feedpostspojo!.message!.saveDraft!
                                             .elementAt(index)
                                             .text ==
                                         null,
                                     child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         editedpostid != index
                                             ? Text(
                                                 feedpostspojo!
-                                                    .message!.schedule!
+                                                    .message!.saveDraft!
                                                     .elementAt(index)
                                                     .text
                                                     .toString(),
@@ -2595,699 +3321,96 @@ class FeedScreenState extends State<FeedScreen> {
                                           height: 2.h,
                                         ),
                                       ],
-                                    )),
-                                // Container(
-                                //   width: 75.w,
-                                //   child: Row(
-                                //     mainAxisAlignment:
-                                //         MainAxisAlignment.spaceBetween,
-                                //     crossAxisAlignment:
-                                //         CrossAxisAlignment.center,
-                                //     children: [
-                                //       Container(
-                                //         width: 20.w,
-                                //         child: Row(
-                                //           crossAxisAlignment:
-                                //               CrossAxisAlignment.start,
-                                //           mainAxisAlignment:
-                                //               MainAxisAlignment.spaceEvenly,
-                                //           children: [
-                                //             SvgPicture.asset(
-                                //                 "assets/images/likeicon.svg"),
-                                //             Text(
-                                //               feedpostspojo!.message!.schedule!
-                                //                   .elementAt(index)
-                                //                   .likes
-                                //                   .toString(),
-                                //               style: TextStyle(
-                                //                   fontSize: 12.sp,
-                                //                   // fontFamily: "PulpDisplay",
-                                //                   fontWeight: FontWeight.w600,
-                                //                   color: Appcolors()
-                                //                       .loginhintcolor),
-                                //               textAlign: TextAlign.start,
-                                //             ),
-                                //           ],
-                                //         ),
-                                //       ),
-                                //       Container(
-                                //         width: 20.w,
-                                //         child: Row(
-                                //           crossAxisAlignment:
-                                //               CrossAxisAlignment.end,
-                                //           mainAxisAlignment:
-                                //               MainAxisAlignment.spaceEvenly,
-                                //           children: [
-                                //             SvgPicture.asset(
-                                //                 "assets/images/viewsicon.svg"),
-                                //             Text(
-                                //               feedpostspojo!.message!.schedule!
-                                //                   .elementAt(index)
-                                //                   .views
-                                //                   .toString(),
-                                //               style: TextStyle(
-                                //                   fontSize: 12.sp,
-                                //                   // fontFamily: "PulpDisplay",
-                                //                   fontWeight: FontWeight.w600,
-                                //                   color: Appcolors()
-                                //                       .loginhintcolor),
-                                //               textAlign: TextAlign.start,
-                                //             ),
-                                //           ],
-                                //         ),
-                                //       ),
-                                //       Container(
-                                //         width: 20.w,
-                                //         child: Row(
-                                //           crossAxisAlignment:
-                                //               CrossAxisAlignment.end,
-                                //           mainAxisAlignment:
-                                //               MainAxisAlignment.spaceEvenly,
-                                //           children: [
-                                //             SvgPicture.asset(
-                                //                 "assets/images/unlockicon.svg"),
-                                //             Text(
-                                //               feedpostspojo!.message!.schedule!
-                                //                   .elementAt(index)
-                                //                   .unlocked
-                                //                   .toString(),
-                                //               style: TextStyle(
-                                //                   fontSize: 12.sp,
-                                //                   // fontFamily: "PulpDisplay",
-                                //                   fontWeight: FontWeight.w600,
-                                //                   color: Appcolors()
-                                //                       .loginhintcolor),
-                                //               textAlign: TextAlign.start,
-                                //             ),
-                                //           ],
-                                //         ),
-                                //       ),
-                                //     ],
-                                //   ),
-                                // ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 1.5.h,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          )
-        : emptydata();
-  }
-
-  Widget savetodraft() {
-    return feedpostspojo!.message!.saveDraft!.isNotEmpty
-        ? AnimationLimiter(
-            child: ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: feedpostspojo!.message!.saveDraft!.length,
-              itemBuilder: (BuildContext context, int index) {
-                return AnimationConfiguration.staggeredList(
-                  position: index,
-                  duration: const Duration(milliseconds: 300),
-                  child: SlideAnimation(
-                    verticalOffset: 50.0,
-                    child: FadeInAnimation(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(1.5.h),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Appcolors().chatuserborder),
-                                borderRadius: BorderRadius.circular(2.h)),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        userprofilepic == null ||
-                                                userprofilepic == ""
-                                            ? Image.asset(
-                                                "assets/images/userprofile.png",
-                                                width: 15.w,
-                                                height: 4.5.h)
-                                            : SizedBox(
-                                                height: 4.5.h,
-                                                width: 15.w,
-                                                child: CachedNetworkImage(
-                                                  imageUrl:
-                                                      userprofilepic.toString(),
-                                                  imageBuilder: (context,
-                                                          imageProvider) =>
-                                                      Container(
-                                                    width: 15.w,
-                                                    alignment:
-                                                        Alignment.centerLeft,
-                                                    height: 4.5.h,
-                                                    decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      image: DecorationImage(
-                                                        image: imageProvider,
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  placeholder: (context, url) =>
-                                                      Container(
-                                                    child: Center(
-                                                      child:
-                                                          CircularProgressIndicator(
-                                                        strokeWidth: 2,
-                                                        color: Appcolors()
-                                                            .gradientcolorfirst,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  // errorWidget: (context, url, error) => errorWidget,
-                                                ),
-                                              ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              username.toString(),
-                                              style: TextStyle(
-                                                  fontSize: 14.sp,
-                                                  fontFamily: "PulpDisplay",
-                                                  fontWeight: FontWeight.w400,
-                                                  color:
-                                                      Appcolors().whitecolor),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                            Text(
-                                              feedpostspojo!.message!.saveDraft!
-                                                  .elementAt(index)
-                                                  .ago
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  fontSize: 10.sp,
-                                                  // fontFamily: "PulpDisplay",
-                                                  fontStyle: FontStyle.italic,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: Appcolors()
-                                                      .loginhintcolor),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ],
-                                        ),
-                                      ],
                                     ),
-                                    DropdownButtonHideUnderline(
-                                      child: DropdownButton2(
-                                        customButton: Image.asset(
-                                          "assets/images/menubtn.png",
-                                          height: 4.h,
-                                          fit: BoxFit.fill,
-                                        ),
-                                        items: [
-                                          ...ScheduledMenuItems
-                                              .schedulefirstItems
-                                              .map(
-                                            (item) => DropdownMenuItem<
-                                                ScheduledCustomMenuItem>(
-                                              value: item,
-                                              child:
-                                                  ScheduledMenuItems.buildItem(
-                                                      item),
-                                            ),
-                                          ),
-                                          const DropdownMenuItem<Divider>(
-                                              enabled: false, child: Divider()),
-                                          ...ScheduledMenuItems
-                                              .schedulesecondItems
-                                              .map(
-                                            (item) => DropdownMenuItem<
-                                                ScheduledCustomMenuItem>(
-                                              value: item,
-                                              child:
-                                                  ScheduledMenuItems.buildItem(
-                                                      item),
-                                            ),
-                                          ),
-                                        ],
-                                        onChanged: (value) {
-                                          ScheduledMenuItems.onChanged(context,
-                                              value as ScheduledCustomMenuItem);
-                                          print("Value:-${value.text}");
-                                          if (value.text ==
-                                              StringConstants.editpost) {
-                                            setState(() {
-                                              editedpostid = index;
-                                            });
-                                          } else if (value.text ==
-                                              StringConstants.deletepost) {
-                                            showdeletealert(
-                                                context,
-                                                feedpostspojo!
-                                                    .message!.saveDraft!
-                                                    .elementAt(index)
-                                                    .id
-                                                    .toString(),
-                                                index);
-                                          }
-                                        },
-                                        dropdownStyleData: DropdownStyleData(
-                                          width: 160,
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 5),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            color: Appcolors().bottomnavbgcolor,
-                                          ),
-                                          elevation: 8,
-                                          offset: const Offset(0, 8),
-                                        ),
-                                        menuItemStyleData: MenuItemStyleData(
-                                          customHeights: [
-                                            ...List<double>.filled(
-                                                ScheduledMenuItems
-                                                    .schedulefirstItems.length,
-                                                35),
-                                            8,
-                                            ...List<double>.filled(
-                                                ScheduledMenuItems
-                                                    .schedulesecondItems.length,
-                                                48),
-                                          ],
-                                          padding: const EdgeInsets.only(
-                                              left: 16, right: 16),
-                                        ),
-                                      ),
-                                    ),
-                                    // GestureDetector(
-                                    //     onTap: () {
-                                    //       print("Click click");
-                                    //       // showMemberMenu();
-                                    //     },
-                                    //     child: SvgPicture.asset(
-                                    //       "assets/images/feedmenubtn.svg",
-                                    //       width: 10.w,
-                                    //       height: 5.h,
-                                    //     ))
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 1.5.h,
-                                ),
-                                Offstage(
-                                  offstage: feedpostspojo!.message!.saveDraft!
-                                          .elementAt(index)
-                                          .url ==
-                                      "",
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  Feeddetailedpage(
-                                                    type: feedpostspojo!
-                                                        .message!.saveDraft!
-                                                        .elementAt(index)
-                                                        .filetype
-                                                        .toString(),
-                                                    url: feedpostspojo!
-                                                        .message!.saveDraft!
-                                                        .elementAt(index)
-                                                        .url
-                                                        .toString(),
-                                                    ago: feedpostspojo!
-                                                        .message!.saveDraft!
-                                                        .elementAt(index)
-                                                        .ago
-                                                        .toString(),
-                                                    text: feedpostspojo!
-                                                        .message!.saveDraft!
-                                                        .elementAt(index)
-                                                        .text,
-                                                    likes: feedpostspojo!
-                                                        .message!.saveDraft!
-                                                        .elementAt(index)
-                                                        .likes
-                                                        .toString(),
-                                                    views: feedpostspojo!
-                                                        .message!.saveDraft!
-                                                        .elementAt(index)
-                                                        .views
-                                                        .toString(),
-                                                    unlocks: "",
-                                                    posttype: 2,
-                                                    postid: feedpostspojo!
-                                                        .message!.saveDraft!
-                                                        .elementAt(index)
-                                                        .id
-                                                        .toString(),
-                                                    pinstatus: "",
-                                                  )));
-                                    },
-                                    child: SizedBox(
-                                        width: double.infinity,
-                                        height: 30.h,
-                                        child: feedpostspojo!
-                                                    .message!.saveDraft!
-                                                    .elementAt(index)
-                                                    .filetype ==
-                                                "jpg"
-                                            ? CachedNetworkImage(
-                                                imageUrl: feedpostspojo!
-                                                    .message!.saveDraft!
-                                                    .elementAt(index)
-                                                    .url
-                                                    .toString(),
-                                                imageBuilder:
-                                                    (context, imageProvider) =>
-                                                        Container(
-                                                  width: 15.w,
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  height: 4.5.h,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20),
-                                                    shape: BoxShape.rectangle,
-                                                    image: DecorationImage(
-                                                      image: imageProvider,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  ),
-                                                ),
-                                                placeholder: (context, url) =>
-                                                    Container(
-                                                  child: Center(
-                                                    child:
-                                                        CircularProgressIndicator(
-                                                      strokeWidth: 2,
-                                                      color: Appcolors()
-                                                          .gradientcolorfirst,
-                                                    ),
-                                                  ),
-                                                ),
-                                                // errorWidget: (context, url, error) => errorWidget,
-                                              )
-                                            : feedpostspojo!.message!.saveDraft!
-                                                        .elementAt(index)
-                                                        .filetype ==
-                                                    "mp4"
-                                                ? Container(
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(20),
-                                                        image:
-                                                            const DecorationImage(
-                                                                image:
-                                                                    AssetImage(
-                                                                  "assets/images/videodefaultimg.png",
-                                                                ),
-                                                                fit: BoxFit
-                                                                    .fill)),
-                                                    child: Icon(
-                                                      Icons
-                                                          .play_circle_outline_rounded,
-                                                      color: Colors.white,
-                                                      size: 6.h,
-                                                    ),
-                                                  )
-                                                : const SizedBox()),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 2.h,
-                                ),
-                                Offstage(
-                                  offstage: feedpostspojo!.message!.saveDraft!
-                                          .elementAt(index)
-                                          .text ==
-                                      null,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      editedpostid != index
-                                          ? Text(
-                                              feedpostspojo!.message!.saveDraft!
-                                                  .elementAt(index)
-                                                  .text
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  fontSize: 12.sp,
-                                                  // fontFamily: "PulpDisplay",
-                                                  fontWeight: FontWeight.w500,
-                                                  color:
-                                                      Appcolors().whitecolor),
-                                              textAlign: TextAlign.start,
-                                            )
-                                          : Container(
-                                              child: Column(
-                                              children: [
-                                                TextFormField(
-                                                  minLines: 3,
-                                                  maxLines: 3,
-                                                  cursorColor: Appcolors()
-                                                      .loginhintcolor,
-                                                  style: TextStyle(
-                                                    color:
-                                                        Appcolors().whitecolor,
-                                                    fontSize: 12.sp,
-                                                  ),
-                                                  controller:
-                                                      postcontentcontoller,
-                                                  decoration: InputDecoration(
-                                                    // prefix: Container(
-                                                    //   child: SvgPicture.asset("assets/images/astrickicon.svg",width: 5.w,),
-                                                    // ),
-                                                    border: InputBorder.none,
-                                                    // focusedBorder: InputBorder.none,
-                                                    disabledBorder:
-                                                        InputBorder.none,
-                                                    focusedBorder:
-                                                        OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15.0),
-                                                      borderSide: BorderSide(
-                                                          color: Appcolors()
-                                                              .logintextformborder),
-                                                    ),
-                                                    enabledBorder:
-                                                        OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15.0),
-                                                      borderSide: BorderSide(
-                                                          color: Appcolors()
-                                                              .logintextformborder),
-                                                    ),
-                                                    filled: true,
-                                                    isDense: true,
-                                                    fillColor: Appcolors()
-                                                        .messageboxbgcolor,
-                                                    hintText: StringConstants
-                                                        .writesomething,
-                                                    hintStyle: TextStyle(
-                                                      decoration:
-                                                          TextDecoration.none,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      fontSize: 12.sp,
-                                                      // fontFamily: 'PulpDisplay',
-                                                      color: Appcolors()
-                                                          .loginhintcolor,
-                                                    ),
-                                                  ),
-                                                  onChanged: (value) {
-                                                    setState(() {});
-                                                  },
-                                                  validator: (value) {
-                                                    if (value!.isEmpty) {
-                                                      return "Please enter Message";
-                                                    } else {
-                                                      return null;
-                                                    }
-                                                  },
-                                                ),
-                                                SizedBox(
-                                                  height: 2.h,
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Container(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      width: 30.w,
-                                                      decoration: BoxDecoration(
-                                                          image: const DecorationImage(
-                                                              image: AssetImage(
-                                                                  "assets/images/btnbackgroundgradient.png"),
-                                                              fit: BoxFit.fill),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      10)),
-                                                      height: 5.h,
-                                                      child: Text(
-                                                        StringConstants.update,
-                                                        style: TextStyle(
-                                                            fontSize: 12.sp,
-                                                            fontFamily:
-                                                                "PulpDisplay",
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                            color: Appcolors()
-                                                                .backgroundcolor),
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                      ),
-                                                    ),
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        setState(() {
-                                                          editedpostid = null;
-                                                        });
-                                                      },
-                                                      child: Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        width: 40.w,
-                                                        height: 5.h,
-                                                        child: Text(
-                                                          StringConstants
-                                                              .cancel,
-                                                          style: TextStyle(
-                                                              fontSize: 12.sp,
-                                                              fontFamily:
-                                                                  "PulpDisplay",
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                              color: Appcolors()
-                                                                  .whitecolor),
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                )
-                                              ],
-                                            )),
-                                      SizedBox(
-                                        height: 2.h,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                // Container(
-                                //   width: 75.w,
-                                //   child: Row(
-                                //     mainAxisAlignment:
-                                //         MainAxisAlignment.spaceBetween,
-                                //     crossAxisAlignment:
-                                //         CrossAxisAlignment.center,
-                                //     children: [
-                                //       Container(
-                                //         width: 20.w,
-                                //         child: Row(
-                                //           crossAxisAlignment:
-                                //               CrossAxisAlignment.start,
-                                //           mainAxisAlignment:
-                                //               MainAxisAlignment.spaceEvenly,
-                                //           children: [
-                                //             SvgPicture.asset(
-                                //                 "assets/images/likeicon.svg"),
-                                //             Text(
-                                //               feedpostspojo!.message!.saveDraft!
-                                //                   .elementAt(index)
-                                //                   .likes
-                                //                   .toString(),
-                                //               style: TextStyle(
-                                //                   fontSize: 12.sp,
-                                //                   // fontFamily: "PulpDisplay",
-                                //                   fontWeight: FontWeight.w600,
-                                //                   color: Appcolors()
-                                //                       .loginhintcolor),
-                                //               textAlign: TextAlign.start,
-                                //             ),
-                                //           ],
-                                //         ),
-                                //       ),
-                                //       Container(
-                                //         width: 20.w,
-                                //         child: Row(
-                                //           crossAxisAlignment:
-                                //               CrossAxisAlignment.end,
-                                //           mainAxisAlignment:
-                                //               MainAxisAlignment.spaceEvenly,
-                                //           children: [
-                                //             SvgPicture.asset(
-                                //                 "assets/images/viewsicon.svg"),
-                                //             Text(
-                                //               feedpostspojo!.message!.saveDraft!
-                                //                   .elementAt(index)
-                                //                   .views
-                                //                   .toString(),
-                                //               style: TextStyle(
-                                //                   fontSize: 12.sp,
-                                //                   // fontFamily: "PulpDisplay",
-                                //                   fontWeight: FontWeight.w600,
-                                //                   color: Appcolors()
-                                //                       .loginhintcolor),
-                                //               textAlign: TextAlign.start,
-                                //             ),
-                                //           ],
-                                //         ),
-                                //       ),
-                                //       Container(
-                                //         width: 20.w,
-                                //         child: Row(
-                                //           crossAxisAlignment:
-                                //               CrossAxisAlignment.end,
-                                //           mainAxisAlignment:
-                                //               MainAxisAlignment.spaceEvenly,
-                                //           children: [
-                                //             SvgPicture.asset(
-                                //                 "assets/images/unlockicon.svg"),
-                                //             Text(
-                                //               "40",
-                                //               style: TextStyle(
-                                //                   fontSize: 12.sp,
-                                //                   // fontFamily: "PulpDisplay",
-                                //                   fontWeight: FontWeight.w600,
-                                //                   color: Appcolors()
-                                //                       .loginhintcolor),
-                                //               textAlign: TextAlign.start,
-                                //             ),
-                                //           ],
-                                //         ),
-                                //       ),
-                                //     ],
-                                //   ),
-                                // ),
-                              ],
+                                  // Container(
+                                  //   width: 75.w,
+                                  //   child: Row(
+                                  //     mainAxisAlignment:
+                                  //         MainAxisAlignment.spaceBetween,
+                                  //     crossAxisAlignment:
+                                  //         CrossAxisAlignment.center,
+                                  //     children: [
+                                  //       Container(
+                                  //         width: 20.w,
+                                  //         child: Row(
+                                  //           crossAxisAlignment:
+                                  //               CrossAxisAlignment.start,
+                                  //           mainAxisAlignment:
+                                  //               MainAxisAlignment.spaceEvenly,
+                                  //           children: [
+                                  //             SvgPicture.asset(
+                                  //                 "assets/images/likeicon.svg"),
+                                  //             Text(
+                                  //               feedpostspojo!.message!.saveDraft!
+                                  //                   .elementAt(index)
+                                  //                   .likes
+                                  //                   .toString(),
+                                  //               style: TextStyle(
+                                  //                   fontSize: 12.sp,
+                                  //                   // fontFamily: "PulpDisplay",
+                                  //                   fontWeight: FontWeight.w600,
+                                  //                   color: Appcolors()
+                                  //                       .loginhintcolor),
+                                  //               textAlign: TextAlign.start,
+                                  //             ),
+                                  //           ],
+                                  //         ),
+                                  //       ),
+                                  //       Container(
+                                  //         width: 20.w,
+                                  //         child: Row(
+                                  //           crossAxisAlignment:
+                                  //               CrossAxisAlignment.end,
+                                  //           mainAxisAlignment:
+                                  //               MainAxisAlignment.spaceEvenly,
+                                  //           children: [
+                                  //             SvgPicture.asset(
+                                  //                 "assets/images/viewsicon.svg"),
+                                  //             Text(
+                                  //               feedpostspojo!.message!.saveDraft!
+                                  //                   .elementAt(index)
+                                  //                   .views
+                                  //                   .toString(),
+                                  //               style: TextStyle(
+                                  //                   fontSize: 12.sp,
+                                  //                   // fontFamily: "PulpDisplay",
+                                  //                   fontWeight: FontWeight.w600,
+                                  //                   color: Appcolors()
+                                  //                       .loginhintcolor),
+                                  //               textAlign: TextAlign.start,
+                                  //             ),
+                                  //           ],
+                                  //         ),
+                                  //       ),
+                                  //       Container(
+                                  //         width: 20.w,
+                                  //         child: Row(
+                                  //           crossAxisAlignment:
+                                  //               CrossAxisAlignment.end,
+                                  //           mainAxisAlignment:
+                                  //               MainAxisAlignment.spaceEvenly,
+                                  //           children: [
+                                  //             SvgPicture.asset(
+                                  //                 "assets/images/unlockicon.svg"),
+                                  //             Text(
+                                  //               "40",
+                                  //               style: TextStyle(
+                                  //                   fontSize: 12.sp,
+                                  //                   // fontFamily: "PulpDisplay",
+                                  //                   fontWeight: FontWeight.w600,
+                                  //                   color: Appcolors()
+                                  //                       .loginhintcolor),
+                                  //               textAlign: TextAlign.start,
+                                  //             ),
+                                  //           ],
+                                  //         ),
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  // ),
+                                ],
+                              ),
                             ),
                           ),
                           SizedBox(

@@ -1,22 +1,27 @@
 class Feedpostspojo {
   Feedpostspojo({
-      bool? status, 
-      Message? message,}){
+    bool? status,
+    Message? message,
+  }) {
     _status = status;
     _message = message;
-}
+  }
 
   Feedpostspojo.fromJson(dynamic json) {
     _status = json['status'];
-    _message = json['message'] != null ? Message.fromJson(json['message']) : null;
+    _message =
+        json['message'] != null ? Message.fromJson(json['message']) : null;
   }
   bool? _status;
   Message? _message;
-Feedpostspojo copyWith({  bool? status,
-  Message? message,
-}) => Feedpostspojo(  status: status ?? _status,
-  message: message ?? _message,
-);
+  Feedpostspojo copyWith({
+    bool? status,
+    Message? message,
+  }) =>
+      Feedpostspojo(
+        status: status ?? _status,
+        message: message ?? _message,
+      );
   bool? get status => _status;
   Message? get message => _message;
 
@@ -28,18 +33,18 @@ Feedpostspojo copyWith({  bool? status,
     }
     return map;
   }
-
 }
 
 class Message {
   Message({
-      List<Schedule>? schedule, 
-      List<SaveDraft>? saveDraft, 
-      List<Post>? post,}){
+    List<Schedule>? schedule,
+    List<SaveDraft>? saveDraft,
+    List<Post>? post,
+  }) {
     _schedule = schedule;
     _saveDraft = saveDraft;
     _post = post;
-}
+  }
 
   Message.fromJson(dynamic json) {
     if (json['Schedule'] != null) {
@@ -64,13 +69,16 @@ class Message {
   List<Schedule>? _schedule;
   List<SaveDraft>? _saveDraft;
   List<Post>? _post;
-Message copyWith({  List<Schedule>? schedule,
-  List<SaveDraft>? saveDraft,
-  List<Post>? post,
-}) => Message(  schedule: schedule ?? _schedule,
-  saveDraft: saveDraft ?? _saveDraft,
-  post: post ?? _post,
-);
+  Message copyWith({
+    List<Schedule>? schedule,
+    List<SaveDraft>? saveDraft,
+    List<Post>? post,
+  }) =>
+      Message(
+        schedule: schedule ?? _schedule,
+        saveDraft: saveDraft ?? _saveDraft,
+        post: post ?? _post,
+      );
   List<Schedule>? get schedule => _schedule;
   List<SaveDraft>? get saveDraft => _saveDraft;
   List<Post>? get post => _post;
@@ -88,24 +96,24 @@ Message copyWith({  List<Schedule>? schedule,
     }
     return map;
   }
-
 }
 
-
 class Post {
-  Post({
-      String? ago, 
-      num? id, 
-      String? url, 
-      String? filetype, 
-      String? text, 
-      String? views, 
-      String? likes, 
-      String? price, 
-      String? scheduledate, 
-      String? unlocked, 
-      String? earning, 
-      String? pinned,}){
+  Post(
+      {String? ago,
+      num? id,
+      String? url,
+      String? filetype,
+      String? text,
+      String? views,
+      String? likes,
+      String? price,
+      String? scheduledate,
+      String? unlocked,
+      String? earning,
+      String? pinned,
+      String? stagename,
+      String? image}) {
     _ago = ago;
     _id = id;
     _url = url;
@@ -118,7 +126,9 @@ class Post {
     _unlocked = unlocked;
     _earning = earning;
     _pinned = pinned;
-}
+    _stagename = stagename;
+    _image = image;
+  }
 
   Post.fromJson(dynamic json) {
     _ago = json['ago'];
@@ -133,6 +143,8 @@ class Post {
     _unlocked = json['unlocked'];
     _earning = json['earning'];
     _pinned = json['pinned'];
+    _stagename = json['stagename'];
+    _image = json['image'];
   }
   String? _ago;
   num? _id;
@@ -146,31 +158,40 @@ class Post {
   String? _unlocked;
   String? _earning;
   String? _pinned;
-Post copyWith({  String? ago,
-  num? id,
-  String? url,
-  String? filetype,
-  String? text,
-  String? views,
-  String? likes,
-  String? price,
-  String? scheduledate,
-  String? unlocked,
-  String? earning,
-  String? pinned,
-}) => Post(  ago: ago ?? _ago,
-  id: id ?? _id,
-  url: url ?? _url,
-  filetype: filetype ?? _filetype,
-  text: text ?? _text,
-  views: views ?? _views,
-  likes: likes ?? _likes,
-  price: price ?? _price,
-  scheduledate: scheduledate ?? _scheduledate,
-  unlocked: unlocked ?? _unlocked,
-  earning: earning ?? _earning,
-  pinned: pinned ?? _pinned,
-);
+  String? _stagename;
+  String? _image;
+  Post copyWith({
+    String? ago,
+    num? id,
+    String? url,
+    String? filetype,
+    String? text,
+    String? views,
+    String? likes,
+    String? price,
+    String? scheduledate,
+    String? unlocked,
+    String? earning,
+    String? pinned,
+    String? stagename,
+    String? image,
+  }) =>
+      Post(
+        ago: ago ?? _ago,
+        id: id ?? _id,
+        url: url ?? _url,
+        filetype: filetype ?? _filetype,
+        text: text ?? _text,
+        views: views ?? _views,
+        likes: likes ?? _likes,
+        price: price ?? _price,
+        scheduledate: scheduledate ?? _scheduledate,
+        unlocked: unlocked ?? _unlocked,
+        earning: earning ?? _earning,
+        pinned: pinned ?? _pinned,
+        stagename: stagename ?? _stagename,
+        image: image ?? _image,
+      );
   String? get ago => _ago;
   num? get id => _id;
   String? get url => _url;
@@ -183,6 +204,8 @@ Post copyWith({  String? ago,
   String? get unlocked => _unlocked;
   String? get earning => _earning;
   String? get pinned => _pinned;
+  String? get stagename => _stagename;
+  String? get image => _image;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -198,26 +221,27 @@ Post copyWith({  String? ago,
     map['unlocked'] = _unlocked;
     map['earning'] = _earning;
     map['pinned'] = _pinned;
+    map['stagename'] = _stagename;
+    map['image'] = _image;
     return map;
   }
-
 }
 
-
-
 class SaveDraft {
-  SaveDraft({
-      String? ago, 
-      num? id, 
-      String? url, 
-      String? filetype, 
-      String? text, 
-      String? views, 
-      String? likes, 
-      String? price, 
-      String? scheduledate, 
-      String? earning, 
-      String? pinned,}){
+  SaveDraft(
+      {String? ago,
+      num? id,
+      String? url,
+      String? filetype,
+      String? text,
+      String? views,
+      String? likes,
+      String? price,
+      String? scheduledate,
+      String? earning,
+      String? pinned,
+      String? stagename,
+      String? image}) {
     _ago = ago;
     _id = id;
     _url = url;
@@ -229,7 +253,9 @@ class SaveDraft {
     _scheduledate = scheduledate;
     _earning = earning;
     _pinned = pinned;
-}
+    _stagename = stagename;
+    _image = image;
+  }
 
   SaveDraft.fromJson(dynamic json) {
     _ago = json['ago'];
@@ -243,6 +269,8 @@ class SaveDraft {
     _scheduledate = json['scheduledate'];
     _earning = json['earning'];
     _pinned = json['pinned'];
+    _stagename = json['stagename'];
+    _image = json['image'];
   }
   String? _ago;
   num? _id;
@@ -255,29 +283,38 @@ class SaveDraft {
   String? _scheduledate;
   String? _earning;
   String? _pinned;
-SaveDraft copyWith({  String? ago,
-  num? id,
-  String? url,
-  String? filetype,
-  String? text,
-  String? views,
-  String? likes,
-  String? price,
-  String? scheduledate,
-  String? earning,
-  String? pinned,
-}) => SaveDraft(  ago: ago ?? _ago,
-  id: id ?? _id,
-  url: url ?? _url,
-  filetype: filetype ?? _filetype,
-  text: text ?? _text,
-  views: views ?? _views,
-  likes: likes ?? _likes,
-  price: price ?? _price,
-  scheduledate: scheduledate ?? _scheduledate,
-  earning: earning ?? _earning,
-  pinned: pinned ?? _pinned,
-);
+  String? _stagename;
+  String? _image;
+  SaveDraft copyWith({
+    String? ago,
+    num? id,
+    String? url,
+    String? filetype,
+    String? text,
+    String? views,
+    String? likes,
+    String? price,
+    String? scheduledate,
+    String? earning,
+    String? pinned,
+    String? stagename,
+    String? image,
+  }) =>
+      SaveDraft(
+        ago: ago ?? _ago,
+        id: id ?? _id,
+        url: url ?? _url,
+        filetype: filetype ?? _filetype,
+        text: text ?? _text,
+        views: views ?? _views,
+        likes: likes ?? _likes,
+        price: price ?? _price,
+        scheduledate: scheduledate ?? _scheduledate,
+        earning: earning ?? _earning,
+        pinned: pinned ?? _pinned,
+        stagename: stagename ?? _stagename,
+        image: image ?? _image,
+      );
   String? get ago => _ago;
   num? get id => _id;
   String? get url => _url;
@@ -289,6 +326,8 @@ SaveDraft copyWith({  String? ago,
   String? get scheduledate => _scheduledate;
   String? get earning => _earning;
   String? get pinned => _pinned;
+  String? get stagename => _stagename;
+  String? get image => _image;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -303,25 +342,29 @@ SaveDraft copyWith({  String? ago,
     map['scheduledate'] = _scheduledate;
     map['earning'] = _earning;
     map['pinned'] = _pinned;
+    map['stagename'] = _stagename;
+    map['image'] = _image;
     return map;
   }
-
 }
 
 class Schedule {
   Schedule({
-      String? ago, 
-      num? id, 
-      String? url, 
-      String? filetype, 
-      String? text, 
-      String? views, 
-      String? likes, 
-      String? price, 
-      String? scheduledate, 
-      String? unlocked, 
-      String? earning, 
-      String? pinned,}){
+    String? ago,
+    num? id,
+    String? url,
+    String? filetype,
+    String? text,
+    String? views,
+    String? likes,
+    String? price,
+    String? scheduledate,
+    String? unlocked,
+    String? earning,
+    String? pinned,
+    String? stagename,
+    String? image,
+  }) {
     _ago = ago;
     _id = id;
     _url = url;
@@ -334,7 +377,9 @@ class Schedule {
     _unlocked = unlocked;
     _earning = earning;
     _pinned = pinned;
-}
+    _stagename = stagename;
+    _image = image;
+  }
 
   Schedule.fromJson(dynamic json) {
     _ago = json['ago'];
@@ -349,6 +394,8 @@ class Schedule {
     _unlocked = json['unlocked'];
     _earning = json['earning'];
     _pinned = json['pinned'];
+    _stagename = json['stagename'];
+    _image = json['image'];
   }
   String? _ago;
   num? _id;
@@ -362,31 +409,39 @@ class Schedule {
   String? _unlocked;
   String? _earning;
   String? _pinned;
-Schedule copyWith({  String? ago,
-  num? id,
-  String? url,
-  String? filetype,
-  String? text,
-  String? views,
-  String? likes,
-  String? price,
-  String? scheduledate,
-  String? unlocked,
-  String? earning,
-  String? pinned,
-}) => Schedule(  ago: ago ?? _ago,
-  id: id ?? _id,
-  url: url ?? _url,
-  filetype: filetype ?? _filetype,
-  text: text ?? _text,
-  views: views ?? _views,
-  likes: likes ?? _likes,
-  price: price ?? _price,
-  scheduledate: scheduledate ?? _scheduledate,
-  unlocked: unlocked ?? _unlocked,
-  earning: earning ?? _earning,
-  pinned: pinned ?? _pinned,
-);
+  String? _stagename;
+  String? _image;
+  Schedule copyWith(
+          {String? ago,
+          num? id,
+          String? url,
+          String? filetype,
+          String? text,
+          String? views,
+          String? likes,
+          String? price,
+          String? scheduledate,
+          String? unlocked,
+          String? earning,
+          String? pinned,
+          String? stagename,
+          String? image}) =>
+      Schedule(
+        ago: ago ?? _ago,
+        id: id ?? _id,
+        url: url ?? _url,
+        filetype: filetype ?? _filetype,
+        text: text ?? _text,
+        views: views ?? _views,
+        likes: likes ?? _likes,
+        price: price ?? _price,
+        scheduledate: scheduledate ?? _scheduledate,
+        unlocked: unlocked ?? _unlocked,
+        earning: earning ?? _earning,
+        pinned: pinned ?? _pinned,
+        stagename: stagename ?? _stagename,
+        image: image ?? _image,
+      );
   String? get ago => _ago;
   num? get id => _id;
   String? get url => _url;
@@ -399,6 +454,8 @@ Schedule copyWith({  String? ago,
   String? get unlocked => _unlocked;
   String? get earning => _earning;
   String? get pinned => _pinned;
+  String? get stagename => _stagename;
+  String? get image => _image;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -414,7 +471,8 @@ Schedule copyWith({  String? ago,
     map['unlocked'] = _unlocked;
     map['earning'] = _earning;
     map['pinned'] = _pinned;
+    map['stagename'] = _stagename;
+    map['image'] = _image;
     return map;
   }
-
 }

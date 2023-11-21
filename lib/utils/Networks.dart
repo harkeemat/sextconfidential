@@ -1,5 +1,5 @@
 class Networks {
-  static String baseurl = "https://www.sextconfidential.com/api/";
+  static String baseurl = "https://www.sextconfidential.com/dev/api/";
   // static String baseurl = "https://coderzbar.info/dev/sexo/api/";
   static String login = "login";
   static String changepassword = "changepassword";
