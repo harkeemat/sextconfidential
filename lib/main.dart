@@ -281,8 +281,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           'identity': jsonResponse['data']['identity'].toString(),
           'type': TwilioRoomType.groupSmall,
         };
-        print("roomm$tokenupdate");
-        print("Print$room");
+
         final roomModel = RoomModel.fromMap(Map<String, dynamic>.from(room));
         widget.navigation.currentState?.push(
           MaterialPageRoute<ConferencePage>(

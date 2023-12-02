@@ -59,6 +59,7 @@ class Data {
     String? type,
     String? paid_status,
     String? createdAt,
+    int? online,
   }) {
     _id = id;
     _fromId = fromId;
@@ -70,6 +71,7 @@ class Data {
     _type = type;
     _paid_status = paid_status;
     _createdAt = createdAt;
+    _online = online;
   }
 
   Data.fromJson(dynamic json) {
@@ -83,6 +85,7 @@ class Data {
     _type = json['type'];
     _paid_status = json['paid_status'];
     _createdAt = json['created_at'];
+    _online = json['online'];
   }
   num? _id;
   num? _fromId;
@@ -94,6 +97,7 @@ class Data {
   String? _type;
   String? _paid_status;
   String? _createdAt;
+  int? _online;
   Data copyWith({
     num? id,
     num? fromId,
@@ -105,6 +109,7 @@ class Data {
     String? type,
     String? paid_status,
     String? createdAt,
+    int? online,
   }) =>
       Data(
         id: id ?? _id,
@@ -117,6 +122,7 @@ class Data {
         type: type ?? _type,
         paid_status: paid_status ?? _paid_status,
         createdAt: createdAt ?? _createdAt,
+        online: online ?? _online,
       );
   num? get id => _id;
   num? get fromId => _fromId;
@@ -128,6 +134,7 @@ class Data {
   String? get type => _type;
   String? get paid_status => _paid_status;
   String? get createdAt => _createdAt;
+  int? get online => _online;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -141,6 +148,7 @@ class Data {
     map['type'] = _type;
     map['paid_status'] = _paid_status;
     map['created_at'] = _createdAt;
+    map['online'] = _online;
     return map;
   }
 }

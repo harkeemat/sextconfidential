@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -24,7 +25,9 @@ class Chatusersscreen extends StatefulWidget {
   ChatusersscreenState createState() => ChatusersscreenState();
 }
 
-class ChatusersscreenState extends State<Chatusersscreen> {
+class ChatusersscreenState extends State<Chatusersscreen>
+    with WidgetsBindingObserver {
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
   TextEditingController searchcontroller = TextEditingController();
   List<String> chattype = [
     StringConstants.mostrecent,
@@ -37,11 +40,12 @@ class ChatusersscreenState extends State<Chatusersscreen> {
     StringConstants.hidden,
     StringConstants.unanswered,
   ];
+  AppLifecycleState? _appLifecycleState;
   Chatuserpojo? chatuserpojo;
   Chatuserpojo? searchchatuserpojo;
   String chatselectedtype = StringConstants.mostrecent;
   final GlobalKey<ScaffoldState> _key = GlobalKey(); // Create a key
-  late String token;
+  String? token;
   String usertype = '';
   GlobalKey<State> key = GlobalKey();
   bool? responsestatus = false;
@@ -50,6 +54,28 @@ class ChatusersscreenState extends State<Chatusersscreen> {
     // TODO: implement initState
     super.initState();
     getsharedpreference();
+    firebase();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    setState(() {
+      _appLifecycleState = state;
+      //print("change$_appLifecycleState");
+    });
+  }
+
+  void firebase() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      chatuserlisting(2);
+    });
   }
 
   @override
@@ -761,40 +787,43 @@ class ChatusersscreenState extends State<Chatusersscreen> {
   Future<void> getsharedpreference() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
-      token = sharedPreferences.getString("token")!;
+      token = sharedPreferences.getString("token")!.toString();
       usertype = sharedPreferences.getString("usertype")!.toString(); //
+      chatuserlisting(2);
       //usertype = sharedPreferences.getString("type")??'';
-      // print("Token value:-" + token);
     });
     //setState(() {
 
-    print("usertype$usertype");
     //});
     //var dateUtc = DateTime.now().toUtc();
     // print("dateUtc: $dateUtc");
     //var dateLocal = dateUtc.toLocal();
     // print("local: $dateLocal");
-    chatuserlisting(2);
   }
 
   Future<void> chatuserlisting(int sorttype) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
     Helpingwidgets.showLoadingDialog(context, key);
     Map data = {
-      "token": token,
+      "token": sharedPreferences.getString("token").toString(),
       "sort": sorttype.toString(),
     };
+    print("refreshList");
     //print("Data:-" + data.toString());
     var jsonResponse;
     var response = await http
         .post(Uri.parse(Networks.baseurl + Networks.chatlist), body: data);
     jsonResponse = json.decode(response.body);
-    //print("jsonResponse:-" + jsonResponse.toString());
+    //print("jsonResponse:-$jsonResponse");
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
         setState(() {
           responsestatus = true;
         });
+        // ignore: use_build_context_synchronously
         Navigator.pop(context);
+        // ignore: use_build_context_synchronously
         Helpingwidgets.failedsnackbar(
             jsonResponse["message"].toString(), context);
       } else {

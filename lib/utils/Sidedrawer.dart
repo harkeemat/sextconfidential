@@ -33,16 +33,7 @@ class SidedrawerState extends State<Sidedrawer> {
   static List<String> drawertitles = [];
 
   int onlinestatus = 0;
-  static List<String> drawerimages = [
-    "assets/images/callunselecticon.png",
-    "assets/images/videocallicon.png",
-    "assets/images/payoutinfo.png",
-    "assets/images/locationdenialicon.png",
-    "assets/images/locationicon.png",
-    "assets/images/changepassword.png",
-    "assets/images/deactivateacc.png",
-    "assets/images/logout.png",
-  ];
+  static List<String> drawerimages = [];
   String? username, profilepic, token, usertype;
   SharedPreferences? sharedPreferences;
 
@@ -248,60 +239,98 @@ class SidedrawerState extends State<Sidedrawer> {
                             : const SizedBox(),
                         GestureDetector(
                           onTap: () {
-                            setState(() {
-                              switch (index) {
-                                case 2:
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const PayoutInfoScreen()));
-                                  break;
-                                case 3:
-                                  {
-                                    Navigator.pop(context);
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const TimezoneScreen()));
-                                    break;
-                                  }
-                                case 4:
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const LocationdenialScreen()));
-                                  break;
-                                case 5:
-                                  {
-                                    Navigator.pop(context);
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const Changepassword()));
-                                    break;
-                                  }
-                                case 6:
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const Deactivateaccscreen()));
-                                  break;
-                                case 7:
-                                  {
-                                    sharedPreferences!.clear();
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const LoginScreen()));
-                                  }
-                              }
-                            });
+                            usertype == 'user'
+                                ? setState(() {
+                                    switch (index) {
+                                      case 1:
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const LocationdenialScreen()));
+                                        break;
+                                      case 2:
+                                        {
+                                          Navigator.pop(context);
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const Changepassword()));
+                                          break;
+                                        }
+                                      case 3:
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const Deactivateaccscreen()));
+                                        break;
+                                      case 4:
+                                        {
+                                          sharedPreferences!.clear();
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const LoginScreen()));
+                                        }
+                                    }
+                                  })
+                                : setState(() {
+                                    switch (index) {
+                                      case 2:
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const PayoutInfoScreen()));
+                                        break;
+                                      case 3:
+                                        {
+                                          Navigator.pop(context);
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const TimezoneScreen()));
+                                          break;
+                                        }
+                                      case 4:
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const LocationdenialScreen()));
+                                        break;
+                                      case 5:
+                                        {
+                                          Navigator.pop(context);
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const Changepassword()));
+                                          break;
+                                        }
+                                      case 6:
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const Deactivateaccscreen()));
+                                        break;
+                                      case 7:
+                                        {
+                                          sharedPreferences!.clear();
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const LoginScreen()));
+                                        }
+                                    }
+                                  });
                           },
                           child: Container(
                             margin: EdgeInsets.only(left: 4.w),
@@ -401,6 +430,13 @@ class SidedrawerState extends State<Sidedrawer> {
         StringConstants.deactivateaccount,
         StringConstants.logout,
       ];
+      drawerimages = [
+        "assets/images/locationdenialicon.png",
+        "assets/images/locationicon.png",
+        "assets/images/changepassword.png",
+        "assets/images/deactivateacc.png",
+        "assets/images/logout.png",
+      ];
     } else {
       drawertitles = [
         StringConstants.phonecalls,
@@ -412,6 +448,16 @@ class SidedrawerState extends State<Sidedrawer> {
         StringConstants.deactivateaccount,
         StringConstants.logout,
       ];
+      drawerimages = [
+        "assets/images/callunselecticon.png",
+        "assets/images/videocallicon.png",
+        "assets/images/payoutinfo.png",
+        "assets/images/locationdenialicon.png",
+        "assets/images/locationicon.png",
+        "assets/images/changepassword.png",
+        "assets/images/deactivateacc.png",
+        "assets/images/logout.png",
+      ];
     }
   }
 
@@ -422,12 +468,12 @@ class SidedrawerState extends State<Sidedrawer> {
       "video_calls": switchlist[0] == true ? "yes" : "no",
       "phone_calls": switchlist[1] == true ? "yes" : "no",
     };
-    print("Data:-$data");
+
     var jsonResponse;
     var response = await http
         .post(Uri.parse(Networks.baseurl + Networks.updateonline), body: data);
     jsonResponse = json.decode(response.body);
-    print("jsonResponse:-$jsonResponse");
+
     if (response.statusCode == 200) {
       if (jsonResponse["status"] == false) {
         Helpingwidgets.failedsnackbar(

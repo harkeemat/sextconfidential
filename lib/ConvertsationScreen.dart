@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
+import 'dart:io';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:intl/intl.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,6 +14,7 @@ import 'package:flutter_sound/public/tau.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:textconfidential/Bottomnavigation.dart';
 import '/Imagewithlock.dart';
 // import 'package:record_mp3/record_mp3.dart';
 import '/UserprofileScreen.dart';
@@ -50,6 +53,7 @@ class ConvertsationScreen extends StatefulWidget {
 }
 
 class ConvertsationScreenState extends State<ConvertsationScreen> {
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
   TextEditingController messagecontroller = TextEditingController();
   int counter = 0;
   String? usertype;
@@ -74,9 +78,11 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
   final ScrollController _controller = ScrollController();
   String? chatcurrentdate;
   int messageslength = 0;
+  int online = 0;
   FlutterSound flutterSound = FlutterSound();
   final recorder = FlutterSoundRecorder();
   late final RoomBloc roomBloc;
+  var responseSave;
   @override
   void initState() {
     // TODO: implement initState
@@ -84,6 +90,13 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
     getsharedpreference();
     initRecorder();
     checkPermission();
+    firebase();
+  }
+
+  void firebase() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      chatconversationlisting();
+    });
   }
 
   @override
@@ -110,7 +123,10 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
           leading: GestureDetector(
             onTap: () {
               _timer!.cancel();
-              Navigator.pop(context);
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                      builder: (context) => const Bottomnavigation()),
+                  (Route<dynamic> route) => false);
               //print("Click back");
             },
             child: Container(
@@ -193,15 +209,17 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
                                     color: Appcolors().whitecolor),
                                 textAlign: TextAlign.start,
                               ),
-                              Text(
-                                StringConstants.onlinenow,
-                                style: TextStyle(
-                                    fontSize: 8.sp,
-                                    // fontFamily: "PulpDisplay",
-                                    fontWeight: FontWeight.w400,
-                                    color: Appcolors().onlinecolor),
-                                textAlign: TextAlign.center,
-                              ),
+                              online == 1
+                                  ? Text(
+                                      StringConstants.onlinenow,
+                                      style: TextStyle(
+                                          fontSize: 8.sp,
+                                          // fontFamily: "PulpDisplay",
+                                          fontWeight: FontWeight.w400,
+                                          color: Appcolors().onlinecolor),
+                                      textAlign: TextAlign.center,
+                                    )
+                                  : const SizedBox(),
                             ],
                           ),
                         ],
@@ -212,15 +230,17 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      FittedBox(
-                        child: IconButton(
-                          icon: const Icon(Icons.video_call),
-                          highlightColor: Appcolors().gradientcolorfirst,
-                          onPressed: () {
-                            submit(context, widget.userid.toString());
-                          },
-                        ),
-                      ),
+                      usertype == 'user'
+                          ? FittedBox(
+                              child: IconButton(
+                                icon: const Icon(Icons.video_call),
+                                highlightColor: Appcolors().gradientcolorfirst,
+                                onPressed: () {
+                                  submit(context, widget.userid.toString());
+                                },
+                              ),
+                            )
+                          : SizedBox()
                     ],
                   ),
                 ])),
@@ -263,6 +283,11 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
                                             child: InkWell(
                                               onTap: () {
                                                 setState(() {
+                                                  online = chatmessagespojo!
+                                                      .data!
+                                                      .elementAt(index)
+                                                      .online!
+                                                      .toInt();
                                                   showuploaddialog = false;
                                                   emojiShowing = false;
                                                   // micstatus = false;
@@ -292,7 +317,7 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
                                                                     .createdAt
                                                                     .toString()
                                                                     .substring(
-                                                                        0, 13)
+                                                                        0, 10)
                                                             ? daydivider(
                                                                 chatmessagespojo!
                                                                     .data!
@@ -301,7 +326,7 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
                                                                     .createdAt
                                                                     .toString()
                                                                     .substring(
-                                                                        0, 13))
+                                                                        0, 10))
                                                             : const SizedBox(),
                                                         chatmessagespojo!.data!
                                                                     .elementAt(
@@ -829,136 +854,59 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
         .elementAt(index)
         .createdAt
         .toString()
-        .substring(0, 13);
+        .substring(0, 10);
     // });
     return Column(
       children: [
         chatmessagespojo!.data!.elementAt(index).messageType.toString() ==
-                "text"
-            ? Container(
-                margin: EdgeInsets.only(left: 2.w, right: 2.w),
-                alignment: Alignment.centerRight,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(1.5.h),
-                      decoration: BoxDecoration(
-                          image: const DecorationImage(
-                              image: AssetImage(
-                                "assets/images/btnbackgroundgradient.png",
-                              ),
-                              fit: BoxFit.fill),
-                          borderRadius: BorderRadius.circular(15)),
-                      child: Text(
-                        chatmessagespojo!.data!
-                            .elementAt(index)
-                            .message
-                            .toString(),
-                        style: TextStyle(
-                            fontSize: 11.sp,
-                            // fontFamily: "PulpDisplay",
-                            fontWeight: FontWeight.w500,
-                            color: Appcolors().blackcolor),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 0.5.h,
-                    ),
-                    messagetime(index),
-                    SizedBox(
-                      height: 1.h,
-                    ),
-                  ],
-                ),
-              )
-            : chatmessagespojo!.data!.elementAt(index).messageType == "mp4"
+                "loading"
+            ? SizedBox(
+                height: 200,
+                child: Container(
+                    margin: EdgeInsets.only(left: 2.w, right: 2.w),
+                    alignment: Alignment.centerRight,
+                    child: const Center(child: CircularProgressIndicator())))
+            : chatmessagespojo!.data!.elementAt(index).messageType.toString() ==
+                    "text"
                 ? Container(
                     margin: EdgeInsets.only(left: 2.w, right: 2.w),
-                    width: double.infinity,
                     alignment: Alignment.centerRight,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        InkWell(
-                          onTap: () {
-                            chatmessagespojo!.data!
-                                        .elementAt(index)
-                                        .paid_status
-                                        .toString() ==
-                                    'no'
-                                ? showDialog(
-                                    context: context,
-                                    builder: (ctx) =>
-                                        paymentwidgets(ctx, index),
-                                  )
-                                : Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Videoscreen(
-                                            videopath: chatmessagespojo!.data!
-                                                .elementAt(index)
-                                                .message
-                                                .toString())));
-                          },
-                          child: chatmessagespojo!.data!
-                                      .elementAt(index)
-                                      .paid_status
-                                      .toString() ==
-                                  'no'
-                              ? ImageWithLock(
-                                  imageUrl: "assets/images/videodefaultimg.png",
-                                  price: chatmessagespojo!.data!
-                                      .elementAt(index)
-                                      .price
-                                      .toString(),
-                                  isLocked: chatmessagespojo!.data!
-                                              .elementAt(index)
-                                              .paid_status
-                                              .toString() ==
-                                          'no'
-                                      ? true
-                                      : false)
-                              : Container(
-                                  height: 15.h,
-                                  width: 40.w,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      image: const DecorationImage(
-                                          image: AssetImage(
-                                            "assets/images/videodefaultimg.png",
-                                          ),
-                                          fit: BoxFit.fill)),
-                                  child: Icon(
-                                    Icons.play_circle_outline_rounded,
-                                    color: Colors.white,
-                                    size: 6.h,
+                        Container(
+                          padding: EdgeInsets.all(1.5.h),
+                          decoration: BoxDecoration(
+                              image: const DecorationImage(
+                                  image: AssetImage(
+                                    "assets/images/btnbackgroundgradient.png",
                                   ),
-                                ),
+                                  fit: BoxFit.fill),
+                              borderRadius: BorderRadius.circular(15)),
+                          child: Text(
+                            chatmessagespojo!.data!
+                                .elementAt(index)
+                                .message
+                                .toString(),
+                            style: TextStyle(
+                                fontSize: 11.sp,
+                                // fontFamily: "PulpDisplay",
+                                fontWeight: FontWeight.w500,
+                                color: Appcolors().blackcolor),
+                          ),
                         ),
                         SizedBox(
                           height: 0.5.h,
                         ),
                         messagetime(index),
                         SizedBox(
-                          height: 2.h,
+                          height: 1.h,
                         ),
                       ],
                     ),
                   )
-                : chatmessagespojo!.data!
-                            .elementAt(index)
-                            .messageType
-                            .toString() ==
-                        "mp3"
-                    ? voicemessage(
-                        chatmessagespojo!.data!
-                            .elementAt(index)
-                            .message
-                            .toString(),
-                        index)
-                    : Container(
+                : chatmessagespojo!.data!.elementAt(index).messageType == "mp4"
+                    ? Container(
                         margin: EdgeInsets.only(left: 2.w, right: 2.w),
                         width: double.infinity,
                         alignment: Alignment.centerRight,
@@ -978,24 +926,24 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
                                         builder: (ctx) =>
                                             paymentwidgets(ctx, index),
                                       )
-                                    : Helpingwidgets().mediaimagedialog(
+                                    : Navigator.push(
                                         context,
-                                        chatmessagespojo!.data!
-                                            .elementAt(index)
-                                            .message
-                                            .toString());
+                                        MaterialPageRoute(
+                                            builder: (context) => Videoscreen(
+                                                videopath: chatmessagespojo!
+                                                    .data!
+                                                    .elementAt(index)
+                                                    .message
+                                                    .toString())));
                               },
-                              child: SizedBox(
-                                height: 15.h,
-                                width: 40.w,
-                                child: SizedBox(
-                                  height: 15.h,
-                                  width: 40.w,
-                                  child: ImageWithLock(
-                                      imageUrl: chatmessagespojo!.data!
+                              child: chatmessagespojo!.data!
                                           .elementAt(index)
-                                          .message
-                                          .toString(),
+                                          .paid_status
+                                          .toString() ==
+                                      'no'
+                                  ? ImageWithLock(
+                                      imageUrl:
+                                          "assets/images/videodefaultimg.png",
                                       price: chatmessagespojo!.data!
                                           .elementAt(index)
                                           .price
@@ -1006,9 +954,24 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
                                                   .toString() ==
                                               'no'
                                           ? true
-                                          : false),
-                                ),
-                              ),
+                                          : false)
+                                  : Container(
+                                      height: 15.h,
+                                      width: 40.w,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          image: const DecorationImage(
+                                              image: AssetImage(
+                                                "assets/images/videodefaultimg.png",
+                                              ),
+                                              fit: BoxFit.fill)),
+                                      child: Icon(
+                                        Icons.play_circle_outline_rounded,
+                                        color: Colors.white,
+                                        size: 6.h,
+                                      ),
+                                    ),
                             ),
                             SizedBox(
                               height: 0.5.h,
@@ -1019,19 +982,92 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
                             ),
                           ],
                         ),
-                      ),
+                      )
+                    : chatmessagespojo!.data!
+                                .elementAt(index)
+                                .messageType
+                                .toString() ==
+                            "mp3"
+                        ? voicemessage(
+                            chatmessagespojo!.data!
+                                .elementAt(index)
+                                .message
+                                .toString(),
+                            index)
+                        : Container(
+                            margin: EdgeInsets.only(left: 2.w, right: 2.w),
+                            width: double.infinity,
+                            alignment: Alignment.centerRight,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    chatmessagespojo!.data!
+                                                .elementAt(index)
+                                                .paid_status
+                                                .toString() ==
+                                            'no'
+                                        ? showDialog(
+                                            context: context,
+                                            builder: (ctx) =>
+                                                paymentwidgets(ctx, index),
+                                          )
+                                        : Helpingwidgets().mediaimagedialog(
+                                            context,
+                                            chatmessagespojo!.data!
+                                                .elementAt(index)
+                                                .message
+                                                .toString());
+                                  },
+                                  child: SizedBox(
+                                    height: 15.h,
+                                    width: 40.w,
+                                    child: SizedBox(
+                                      height: 15.h,
+                                      width: 40.w,
+                                      child: ImageWithLock(
+                                          imageUrl: chatmessagespojo!.data!
+                                              .elementAt(index)
+                                              .message
+                                              .toString(),
+                                          price: chatmessagespojo!.data!
+                                              .elementAt(index)
+                                              .price
+                                              .toString(),
+                                          isLocked: chatmessagespojo!.data!
+                                                      .elementAt(index)
+                                                      .paid_status
+                                                      .toString() ==
+                                                  'no'
+                                              ? true
+                                              : false),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 0.5.h,
+                                ),
+                                messagetime(index),
+                                SizedBox(
+                                  height: 2.h,
+                                ),
+                              ],
+                            ),
+                          ),
       ],
     );
   }
 
   Widget sendermessage(int index) {
-    // setState((){
+    //setState(() {
     chatcurrentdate = chatmessagespojo!.data!
         .elementAt(index)
         .createdAt
         .toString()
-        .substring(0, 13);
-    // });
+        .substring(0, 10);
+    //});
 
     return Column(
       children: [
@@ -1041,38 +1077,21 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
             alignment: Alignment.centerLeft,
             children: [
               chatmessagespojo!.data!.elementAt(index).messageType.toString() ==
-                      "text"
-                  ? Container(
-                      // alignment: Alignment.centerLeft,
-                      margin: EdgeInsets.only(left: 6.w),
-                      padding: EdgeInsets.only(
-                          right: 4.w, left: 8.w, top: 2.h, bottom: 2.h),
-                      decoration: BoxDecoration(
-                        color: Appcolors().profileboxcolor,
-                        borderRadius: BorderRadius.circular(20),
-                        shape: BoxShape.rectangle,
-                      ),
-                      // height: 7.h,
-                      // width: 80.w,
-                      child: Text(
-                        chatmessagespojo!.data!
-                            .elementAt(index)
-                            .message
-                            .toString(),
-                        style: TextStyle(
-                            fontSize: 11.sp,
-                            // fontFamily: "PulpDisplay",
-                            fontWeight: FontWeight.w500,
-                            // fontStyle: FontStyle.italic,
-                            color: Appcolors().whitecolor),
-                      ),
-                    )
+                      "loading"
+                  ? SizedBox(
+                      height: 200,
+                      child: Container(
+                          margin: EdgeInsets.only(left: 2.w, right: 2.w),
+                          alignment: Alignment.centerRight,
+                          child:
+                              const Center(child: CircularProgressIndicator())))
                   : chatmessagespojo!.data!
                               .elementAt(index)
                               .messageType
                               .toString() ==
-                          "mp4"
+                          "text"
                       ? Container(
+                          // alignment: Alignment.centerLeft,
                           margin: EdgeInsets.only(left: 6.w),
                           padding: EdgeInsets.only(
                               right: 4.w, left: 8.w, top: 2.h, bottom: 2.h),
@@ -1081,86 +1100,27 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
                             borderRadius: BorderRadius.circular(20),
                             shape: BoxShape.rectangle,
                           ),
-                          height: 15.h,
-                          width: 40.w,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  chatmessagespojo!.data!
-                                              .elementAt(index)
-                                              .paid_status
-                                              .toString() ==
-                                          'no'
-                                      ? showDialog(
-                                          context: context,
-                                          builder: (ctx) =>
-                                              paymentwidgets(ctx, index),
-                                        )
-                                      : Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => Videoscreen(
-                                                  videopath: chatmessagespojo!
-                                                      .data!
-                                                      .elementAt(index)
-                                                      .message
-                                                      .toString())));
-                                },
-                                child: chatmessagespojo!.data!
-                                            .elementAt(index)
-                                            .paid_status
-                                            .toString() ==
-                                        'no'
-                                    ? ImageWithLock(
-                                        imageUrl:
-                                            "assets/images/videodefaultimg.png",
-                                        price: chatmessagespojo!.data!
-                                            .elementAt(index)
-                                            .price
-                                            .toString(),
-                                        isLocked: chatmessagespojo!.data!
-                                                    .elementAt(index)
-                                                    .paid_status
-                                                    .toString() ==
-                                                'no'
-                                            ? true
-                                            : false)
-                                    : Container(
-                                        height: 10.h,
-                                        width: 40.w,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                            image: const DecorationImage(
-                                                image: AssetImage(
-                                                  "assets/images/videodefaultimg.png",
-                                                ),
-                                                fit: BoxFit.cover)),
-                                        child: Icon(
-                                          Icons.play_circle_outline_rounded,
-                                          color: Colors.white,
-                                          size: 3.h,
-                                        ),
-                                      ),
-                              ),
-                            ],
+                          // height: 7.h,
+                          // width: 80.w,
+                          child: Text(
+                            chatmessagespojo!.data!
+                                .elementAt(index)
+                                .message
+                                .toString(),
+                            style: TextStyle(
+                                fontSize: 11.sp,
+                                // fontFamily: "PulpDisplay",
+                                fontWeight: FontWeight.w500,
+                                // fontStyle: FontStyle.italic,
+                                color: Appcolors().whitecolor),
                           ),
                         )
                       : chatmessagespojo!.data!
                                   .elementAt(index)
                                   .messageType
                                   .toString() ==
-                              "mp3"
-                          ? voicemessage(
-                              chatmessagespojo!.data!
-                                  .elementAt(index)
-                                  .message
-                                  .toString(),
-                              index)
-                          : Container(
+                              "mp4"
+                          ? Container(
                               margin: EdgeInsets.only(left: 6.w),
                               padding: EdgeInsets.only(
                                   right: 4.w, left: 8.w, top: 2.h, bottom: 2.h),
@@ -1171,43 +1131,137 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
                               ),
                               height: 15.h,
                               width: 40.w,
-                              child: InkWell(
-                                onTap: () {
-                                  chatmessagespojo!.data!
-                                              .elementAt(index)
-                                              .paid_status
-                                              .toString() ==
-                                          'no'
-                                      ? showDialog(
-                                          context: context,
-                                          builder: (ctx) =>
-                                              paymentwidgets(ctx, index),
-                                        )
-                                      : Helpingwidgets().mediaimagedialog(
-                                          context,
-                                          chatmessagespojo!.data!
-                                              .elementAt(index)
-                                              .message
-                                              .toString());
-                                },
-                                child: ImageWithLock(
-                                    imageUrl: chatmessagespojo!.data!
-                                        .elementAt(index)
-                                        .message
-                                        .toString(),
-                                    price: chatmessagespojo!.data!
-                                        .elementAt(index)
-                                        .price
-                                        .toString(),
-                                    isLocked: chatmessagespojo!.data!
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      chatmessagespojo!.data!
+                                                  .elementAt(index)
+                                                  .paid_status
+                                                  .toString() ==
+                                              'no'
+                                          ? showDialog(
+                                              context: context,
+                                              builder: (ctx) =>
+                                                  paymentwidgets(ctx, index),
+                                            )
+                                          : Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      Videoscreen(
+                                                          videopath:
+                                                              chatmessagespojo!
+                                                                  .data!
+                                                                  .elementAt(
+                                                                      index)
+                                                                  .message
+                                                                  .toString())));
+                                    },
+                                    child: chatmessagespojo!.data!
                                                 .elementAt(index)
                                                 .paid_status
                                                 .toString() ==
                                             'no'
-                                        ? true
-                                        : false),
+                                        ? ImageWithLock(
+                                            imageUrl:
+                                                "assets/images/videodefaultimg.png",
+                                            price: chatmessagespojo!.data!
+                                                .elementAt(index)
+                                                .price
+                                                .toString(),
+                                            isLocked: chatmessagespojo!.data!
+                                                        .elementAt(index)
+                                                        .paid_status
+                                                        .toString() ==
+                                                    'no'
+                                                ? true
+                                                : false)
+                                        : Container(
+                                            height: 10.h,
+                                            width: 40.w,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                                image: const DecorationImage(
+                                                    image: AssetImage(
+                                                      "assets/images/videodefaultimg.png",
+                                                    ),
+                                                    fit: BoxFit.cover)),
+                                            child: Icon(
+                                              Icons.play_circle_outline_rounded,
+                                              color: Colors.white,
+                                              size: 3.h,
+                                            ),
+                                          ),
+                                  ),
+                                ],
                               ),
-                            ),
+                            )
+                          : chatmessagespojo!.data!
+                                      .elementAt(index)
+                                      .messageType
+                                      .toString() ==
+                                  "mp3"
+                              ? voicemessage(
+                                  chatmessagespojo!.data!
+                                      .elementAt(index)
+                                      .message
+                                      .toString(),
+                                  index)
+                              : Container(
+                                  margin: EdgeInsets.only(left: 6.w),
+                                  padding: EdgeInsets.only(
+                                      right: 4.w,
+                                      left: 8.w,
+                                      top: 2.h,
+                                      bottom: 2.h),
+                                  decoration: BoxDecoration(
+                                    color: Appcolors().profileboxcolor,
+                                    borderRadius: BorderRadius.circular(20),
+                                    shape: BoxShape.rectangle,
+                                  ),
+                                  height: 15.h,
+                                  width: 40.w,
+                                  child: InkWell(
+                                    onTap: () {
+                                      chatmessagespojo!.data!
+                                                  .elementAt(index)
+                                                  .paid_status
+                                                  .toString() ==
+                                              'no'
+                                          ? showDialog(
+                                              context: context,
+                                              builder: (ctx) =>
+                                                  paymentwidgets(ctx, index),
+                                            )
+                                          : Helpingwidgets().mediaimagedialog(
+                                              context,
+                                              chatmessagespojo!.data!
+                                                  .elementAt(index)
+                                                  .message
+                                                  .toString());
+                                    },
+                                    child: ImageWithLock(
+                                        imageUrl: chatmessagespojo!.data!
+                                            .elementAt(index)
+                                            .message
+                                            .toString(),
+                                        price: chatmessagespojo!.data!
+                                            .elementAt(index)
+                                            .price
+                                            .toString(),
+                                        isLocked: chatmessagespojo!.data!
+                                                    .elementAt(index)
+                                                    .paid_status
+                                                    .toString() ==
+                                                'no'
+                                            ? true
+                                            : false),
+                                  ),
+                                ),
               Container(
                 height: 6.h,
                 width: 11.w,
@@ -1300,7 +1354,6 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
         TextButton(
           onPressed: () {
             var status = payment(chatmessagespojo!.data!.elementAt(index).id);
-            print("status$status");
             Navigator.of(context).pop();
           },
           child: Container(
@@ -1405,13 +1458,14 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
   }
 
   _getFromGallery() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.gallery,
-      maxWidth: 1800,
-      maxHeight: 1800,
+    final XFile? pickedFile = await ImagePicker().pickMedia(
+      maxWidth: 10000,
+      maxHeight: 10000,
+      imageQuality: 100,
     );
     if (pickedFile != null) {
       setState(() {
+        print("filecheck$pickedFile");
         imageFile = File(pickedFile.path);
         //print("Image path:-${pickedFile.path}");
         sendmessage();
@@ -1420,18 +1474,19 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
   }
 
   clickphotofromcamera() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,
-      maxWidth: 1800,
-      maxHeight: 1800,
+    final pickedFile = await ImagePicker().pickVideo(
+        source: ImageSource.camera,
+        preferredCameraDevice: CameraDevice.front,
+        maxDuration: const Duration(minutes: 10));
+    XFile? xfilePick = pickedFile;
+    setState(
+      () {
+        if (xfilePick != null) {
+          imageFile = File(pickedFile!.path);
+          sendmessage();
+        }
+      },
     );
-    if (pickedFile != null) {
-      setState(() {
-        imageFile = File(pickedFile.path);
-        // print("Image path:-${pickedFile.path}");
-        sendmessage();
-      });
-    }
   }
 
   Future<void> pickVideo() async {
@@ -1573,8 +1628,8 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
       userprofilepic = sharedPreferences.getString("profilepic");
       username = sharedPreferences.getString("stagename");
       usertype = sharedPreferences.getString("usertype")!.toString();
-      chatconversationlisting();
     });
+    chatconversationlisting();
     //print("Token value:-$token");
     if (!mounted) {
       return;
@@ -1585,6 +1640,9 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
         //print("Chat conversin api call");
       });
     });
+    if (!mounted) {
+      return;
+    }
   }
 
   Future<void> chatconversationlisting() async {
@@ -1609,12 +1667,12 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
             jsonResponse["message"].toString(), context);
         Navigator.pop(context);
       } else {
-        //print("jsonResponse:-$jsonResponse");
         setState(() {
+          responseSave = jsonResponse;
           responsestatus = true;
-          //print("Message:-${jsonResponse["message"]}");
 
           chatmessagespojo = Chatmessagespojo.fromJson(jsonResponse);
+          //print("response${chatmessagespojo!.data![0]}");
           //print("323232:-$chatmessagespojo");
           // chatmessagespojo2=chatmessagespojonew;
           //   if(chatmessagespojo!=chatmessagespojo2){
@@ -1622,49 +1680,95 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
           //   }else {
           //     chatmessagespojo ??= chatmessagespojo2;
           //   }
-          messageslength = chatmessagespojo!.data!.length;
-          if (messageslength < chatmessagespojo!.data!.length &&
-              messageslength != 0) {
-            _controller.jumpTo(_controller.position.maxScrollExtent);
-            _controller.animateTo(_controller.position.maxScrollExtent,
-                duration: const Duration(milliseconds: 10000),
-                curve: Curves.easeOut);
-            //print("New message received!");
-          }
-          //messageslength = chatmessagespojo!.data!.length;
         });
+
+        messageslength = chatmessagespojo!.data!.length;
+
+        if (messageslength < chatmessagespojo!.data!.length &&
+            messageslength != 0) {
+          //print("Message:-${_controller.position.pixels}");
+          _controller.jumpTo(_controller.position.maxScrollExtent);
+          _controller.animateTo(_controller.position.maxScrollExtent,
+              duration: const Duration(milliseconds: 10),
+              curve: Curves.easeOut);
+          //print("New message received!");
+        }
+
+        //messageslength = chatmessagespojo!.data!.length;
+
         if (_controller.position.pixels ==
                 _controller.position.minScrollExtent ||
             _controller.position.pixels ==
                 _controller.position.maxScrollExtent) {
-          _controller.jumpTo(_controller.position.maxScrollExtent);
+          //_controller.jumpTo(_controller.position.maxScrollExtent);
           _controller.animateTo(_controller.position.maxScrollExtent,
-              duration: const Duration(milliseconds: 10000),
+              duration: const Duration(milliseconds: 10),
               curve: Curves.easeOut);
         }
       }
+      //_timer?.cancel();
     } else {
       // Navigator.pop(context);
       setState(() {
         responsestatus = true;
       });
+      // ignore: use_build_context_synchronously
       Helpingwidgets.failedsnackbar(
           jsonResponse["message"].toString(), context);
     }
   }
 
   Future<void> sendmessage() async {
-    // Helpingwidgets.showLoadingDialog(context, key);
+    //print("checkkkkk");
+    //Helpingwidgets.showLoadingDialog(context, key);
     var request = http.MultipartRequest(
       'post',
       Uri.parse(Networks.baseurl + Networks.chatmessagesend),
     );
-    var jsonData;
+
+    //var jsonData;
     request.headers["Content-Type"] = "multipart/form-data";
     request.fields["toid"] = widget.userid.toString();
     request.fields["token"] = token!;
     request.fields["price"] = counter.toString();
-    //print("token:-${token!}");
+    //print("testttt${imageFile!.path}");
+    //print("fileeee${request}");
+    var now = DateTime.now();
+    var formatter = DateFormat('dd/MM/yyyy hh:mm a');
+    String formattedDate = formatter.format(now);
+    //print("check$formattedDate");
+    var chatData = {
+      "id": 1000,
+      "from_id": int.tryParse(token.toString()),
+      "to_id": int.tryParse(widget.userid.toString()),
+      "message": imageFile == null ? messagecontroller.text : '',
+      "message_type": imageFile != null ? "loading" : 'text',
+      "seen": "1",
+      "price": "0.00",
+      "paid_status": "free",
+      "type": "free",
+      "created_at": formattedDate.toString()
+    };
+
+    responseSave['data'].add(chatData);
+    setState(() {
+      _timer!.cancel();
+
+      chatmessagespojo = Chatmessagespojo.fromJson(responseSave);
+
+      messageslength = chatmessagespojo!.data!.length;
+      if (messageslength < chatmessagespojo!.data!.length &&
+          messageslength != 0) {
+        _controller.jumpTo(_controller.position.maxScrollExtent);
+        _controller.animateTo(_controller.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 10), curve: Curves.easeOut);
+        //print("New message received!");
+      }
+      //messageslength = chatmessagespojo!.data!.length;
+    });
+
+    //print("index:-${responseSave}");
+
     //print("Message:-${messagecontroller.text.trim()}");
     if (imageFile != null) {
       //print("Image message send");
@@ -1678,30 +1782,40 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
       request.fields["file"] = messagecontroller.text;
     }
     var response = await request.send();
+    setState(() {
+      imageFile = null;
+      messagecontroller.clear();
+      //_timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      //print("Chat conversin api call$response");
+      //});
+    });
+
     response.stream.transform(utf8.decoder).listen((value) {
-      jsonData = json.decode(value);
-      //print("Json:-$jsonData");
+      //jsonData = json.decode(value);
+
       if (response.statusCode == 200) {
-        if (jsonData["status"] == false) {
-          Helpingwidgets.failedsnackbar(
-              jsonData["message"].toString(), context);
-          //print("Response:${jsonData["message"]}");
-          Navigator.pop(context);
-        } else {
-          setState(() {
-            imageFile = null;
-          });
-          messagecontroller.clear();
-          // Helpingwidgets.successsnackbar(
-          //     jsonData["message"].toString(), context);
-          //print("Response:${jsonData["message"]}");
-          // Navigator.pop(context);
-        }
-      } else {
-        Helpingwidgets.failedsnackbar(jsonData["message"].toString(), context);
-        // print("Response:${jsonData["message"]}");
+        chatconversationlisting();
+        //if (jsonData["status"] == false) {
+        //Helpingwidgets.failedsnackbar(
+        //jsonData["message"].toString(), context);
+        //print("Response:${jsonData["message"]}");
+        Navigator.pop(context);
+        // } else {
+        setState(() {
+          imageFile = null;
+        });
+        messagecontroller.clear();
+        //Helpingwidgets.successsnackbar(
+        //jsonData["message"].toString(), context);
+        //print("Response:${jsonData["message"]}");
         // Navigator.pop(context);
+        //}
       }
+      //else {
+      //Helpingwidgets.failedsnackbar(jsonData["message"].toString(), context);
+      // print("Response:${jsonData["message"]}");
+      // Navigator.pop(context);
+      //}
     });
   }
 
@@ -1715,11 +1829,11 @@ class ConvertsationScreenState extends State<ConvertsationScreen> {
 
   Widget messagetime(int index) {
     return Text(
-      "Sent  ${chatmessagespojo!.data!.elementAt(index).createdAt.toString().substring(14, 22)}",
+      "Sent  ${chatmessagespojo!.data!.elementAt(index).createdAt.toString().substring(11, 19)}",
       // "Send for ${chatmessagespojo!.data!.elementAt(index).type}"=="free"?+chatmessagespojo!.data!.elementAt(index).createdAt.toString().substring(0,10),
       style: TextStyle(
           fontSize: 10.sp,
-          // fontFamily: "PulpDisplay",
+          // fontFamily: "PulpDisplay",SSS
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.italic,
           color: Appcolors().loginhintcolor),
